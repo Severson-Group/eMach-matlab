@@ -1,11 +1,11 @@
-classdef comp_base
-    %COMP_BASE Abstract base class for components
+classdef compBase
+    %COMPBASE Abstract base class for components
     %   Sets up and validates universial properties
     
     properties (GetAccess = 'public', SetAccess = 'protected') 
         name;     %Name of the component
         material;   %Arc material, a material object                     
-        location = clocation();   %The location of the arc, a clocation object.
+        location = clocation();   %The location of the arc, a clocation object.        
     end
     
     methods(Access = protected)
