@@ -5,7 +5,7 @@ classdef comp_arc < comp_base
     %   lies upon, with the x axis pointing toward the arc center.
     
     
-    properties (GetAccess = 'public', SetAccess = 'protected') %(GetAccess = 'public', SetAccess = 'protected')        
+    properties (GetAccess = 'public', SetAccess = 'protected')
         dim_th;     %Thickness of the arc
         dim_ro;     %Outer radius of the arc
         dim_alpha;  %Angular span of the arc in radains
