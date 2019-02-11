@@ -14,7 +14,7 @@ classdef compBase
             %validate the global properties
             validateattributes(obj.name,{'char'},{'nonempty'})             
             validateattributes(obj.location, {'clocation'}, {'nonempty'})
-            validateattributes(obj.material, {'cmaterial'}, {'nonempty'})
+            validateattributes(obj.material, {'matGeneric'}, {'nonempty'})
         end
     end
     
