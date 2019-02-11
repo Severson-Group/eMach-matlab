@@ -5,6 +5,10 @@ classdef dimInch < dimLinear
      
    
     methods
+        function obj = dimInch(vargin)
+            obj = obj@dimLinear(vargin);
+        end
+        
         function new = toMillimeter(obj)            
             %TOMILLIMETER Convert this dimension to mm
                         

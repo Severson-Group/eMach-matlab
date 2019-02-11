@@ -5,6 +5,10 @@ classdef dimDegree < dimAngular
      
    
     methods
+        function obj = dimDegree(vargin)
+            obj = obj@dimAngular(vargin);
+        end
+        
         function new = toRadians(obj)
             %TORADIANS Convert this dimension to degrees
             
