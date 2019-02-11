@@ -1,13 +1,13 @@
 classdef compArc < compBase
     %COMPARC Describes an arc of a hollow cylinder.
-    %   properties are set upon class creation, cannot be modified
+    %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is the center of the circle that this arc
     %   lies upon, with the x axis pointing toward the arc center.
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_th;     %Thickness of the arc: class type dimLinear. If 
-        dim_ro;     %Outer radius of the arc: class type dimLinear
+        dim_d_a;     %Thickness of the arc: class type dimLinear. If 
+        dim_r_o;     %Outer radius of the arc: class type dimLinear
         dim_alpha;  %Angular span of the arc: class type dimAngular
         dim_depth;  %Axial depth of the arc: class type dimLinear
     end

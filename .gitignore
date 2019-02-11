@@ -20,3 +20,11 @@ octave-workspace
 
 *.mat
 *.moto
+
+# Latex files:
+*.aux
+*.dvi
+*.ps
+*.eps
+*.log
+
