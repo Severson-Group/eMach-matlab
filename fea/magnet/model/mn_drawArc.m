@@ -13,6 +13,9 @@ function [segments] = mn_drawArc(mn, compArcObj)
     
 %When handling the location settings, only deal with xy coordinates because 
 %MagNet always draws in the xy reference frame.
+
+validateattributes(compArcObj,{'compArc'},{'nonempty'})
+
 shift_xy = compArcObj.location.anchor_xyz(1:2);
 rotate_xy = compArcObj.location.rotate_xyz(3).toRadians;
 
