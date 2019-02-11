@@ -1,4 +1,4 @@
-classdef clocation
+classdef compLocation
     %CLOCATION Indicates a component's location
     %   Detailed explanation goes here
     
@@ -8,7 +8,7 @@ classdef clocation
     end
     
     methods
-        function obj = clocation(varargin)
+        function obj = compLocation(varargin)
             obj = createProperties(obj,nargin,varargin);            
             validateattributes(obj.anchor_xyz,{'dimLinear'}, {'size', [1,3]})
             validateattributes(obj.rotate_xyz,{'dimAngular'}, {'size', [1,3]})            

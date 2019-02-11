@@ -5,7 +5,7 @@ classdef compBase
     properties (GetAccess = 'public', SetAccess = 'protected') 
         name;     %Name of the component
         material;   %Arc material, a material object                     
-        location = clocation();   %The location of the arc, a clocation object.        
+        location = compLocation();   %The location of the arc, a clocation object.        
     end
     
     methods(Access = protected)
@@ -13,7 +13,7 @@ classdef compBase
             
             %validate the global properties
             validateattributes(obj.name,{'char'},{'nonempty'})             
-            validateattributes(obj.location, {'clocation'}, {'nonempty'})
+            validateattributes(obj.location, {'compLocation'}, {'nonempty'})
             validateattributes(obj.material, {'matGeneric'}, {'nonempty'})
         end
     end
