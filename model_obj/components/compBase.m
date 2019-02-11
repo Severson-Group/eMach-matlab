@@ -9,7 +9,7 @@ classdef compBase
     end
     
     methods(Access = protected)
-        function validate_props(obj)            
+        function validateProps(obj)            
             
             %validate the global properties
             validateattributes(obj.name,{'char'},{'nonempty'})             
@@ -19,7 +19,7 @@ classdef compBase
     end
     
     methods(Abstract = true, Access = protected)
-        obj = create_props(obj, len, args)
+        obj = createProps(obj, len, args)
             %All child classes must implement this function to support
             %contruction based on value pairs
     end

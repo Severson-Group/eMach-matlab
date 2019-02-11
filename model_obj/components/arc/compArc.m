@@ -14,19 +14,19 @@ classdef compArc < compBase
     
     methods
         function obj = compArc(varargin)
-            obj = obj.create_props(nargin,varargin);            
-            obj.validate_props();            
+            obj = obj.createProps(nargin,varargin);            
+            obj.validateProps();            
         end
                 
 
     end
     
      methods(Access = protected)
-         function validate_props(obj)
+         function validateProps(obj)
             %VALIDATE_PROPS Validate the properties of this component
              
             %1. use the superclass method to validate the properties 
-            validate_props@compBase(obj);   
+            validateProps@compBase(obj);   
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_d_a,{'dimLinear'},{'nonnegative','nonempty'})            
@@ -35,7 +35,7 @@ classdef compArc < compBase
             validateattributes(obj.dim_alpha,{'dimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
          end
                   
-         function obj = create_props(obj, len, args)
+         function obj = createProps(obj, len, args)
              %CREATE_PROPS Add support for value pair constructor
              
              validateattributes(len, {'numeric'}, {'even'});
