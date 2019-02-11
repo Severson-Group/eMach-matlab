@@ -29,8 +29,8 @@ classdef compArc < compBase
             validate_props@compBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_th,{'dimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_ro,{'dimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_d_a,{'dimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_r_o,{'dimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_depth,{'dimLinear'},{'nonnegative', 'nonempty'})
             validateattributes(obj.dim_alpha,{'dimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
          end
