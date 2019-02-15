@@ -26,8 +26,8 @@ classdef compHollowRect < compBase
             validateProps@compBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_t,{'dimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_l_i,{'dimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_t,{'dimLinear'},{'nonnegative','nonempty'});          
+            validateattributes(obj.dim_l_i,{'dimLinear'},{'nonnegative','nonempty'});
          end
                   
          function obj = createProps(obj, len, args)

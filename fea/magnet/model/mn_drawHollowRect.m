@@ -1,15 +1,16 @@
 function [segments] = mn_drawHollowRect(mn, compHollowRectObj)
-%MN_DRAWHollowRect Draw a hollow rectangle object in a MagNet document.
-%   This function draws an arc based on the compArcObj description. It
+%MN_DRAWHOLLOWRECT Draw a hollow rectangle object in a MagNet document.
+%   This function draws a hollow rectangle based on the compHollowRectObj description. It
 %   assumes that MagNet is configured to use the linear units provided by
-%   compArcObj (i.e., mm vs inches).
+%   compHollowRectObj (i.e., mm vs inches).
 %
 %   Variables:
 %       mn                 - MagNet activexserver object
 %       compHollowRectObj  - Rectangle specification object
 %   Returns an array of the interface objects: 
-%       [outer arc, inner arc, counter-clockwise radial segment, other
-%       radial segment]
+%       [inner line 1, inner line 2, inner line 3, inner line 4, outer line
+%       1, outer line 2, outer line 3, outer line 4];
+
     
 %When handling the location settings, only deal with xy coordinates because 
 %MagNet always draws in the xy reference frame.
