@@ -20,22 +20,20 @@ validateattributes(compHollowRectObj,{'compHollowRect'},{'nonempty'})
 shift_xy = compHollowRectObj.location.anchor_xyz(1:2);
 rotate_xy = compHollowRectObj.location.rotate_xyz(3).toRadians;
 
-center = [0,0] + shift_xy(1:2); 
+axis = [0,0] + shift_xy(1:2); 
+outer_length=compHollowRectObj.dim_l_o;
+thickness=compHollowRectObj.dim_t;
+length_inner=outer_length-thickness;
 
+[line_inner1] = mn_dv_newline(mn, [axis(1)+thickness,axis(2)+thickness],[axis(1)+thickness,length_inner+axis(2)]);
+[line_inner2] = mn_dv_newline(mn, [axis(1)+thickness,length_inner+axis(2)],[length_inner+axis(1),length_inner+axis(2)]);
+[line_inner3] = mn_dv_newline(mn, [length_inner+axis(1),length_inner+axis(2)],[length_inner+axis(1),thickness+axis(2)]);
+[line_inner4] = mn_dv_newline(mn, [length_inner+axis(1),thickness+axis(2)],[thickness+axis(1),thickness+axis(2)]);
 
-inner_points=compHollowRectObj.dim_l_i*[-0.5,0.5];
-outer_points=[inner_points(1)-compHollowRectObj.dim_t, inner_points(2)+compHollowRectObj.dim_t];
-
-
-%% Inner Rectangle
-[line_inner1] = mn_dv_newline(mn, [inner_points(1),inner_points(1)],[inner_points(1),inner_points(2)]);
-[line_inner2] = mn_dv_newline(mn, [inner_points(1),inner_points(2)],[inner_points(2),inner_points(2)]);
-[line_inner3] = mn_dv_newline(mn, [inner_points(2),inner_points(2)],[inner_points(2),inner_points(1)]);
-[line_inner4] = mn_dv_newline(mn, [inner_points(2),inner_points(1)],[inner_points(1),inner_points(1)]);
 %% Outer Rectangle
-[line_outer1] = mn_dv_newline(mn, [outer_points(1),outer_points(1)],[outer_points(1),outer_points(2)]);
-[line_outer2] = mn_dv_newline(mn, [outer_points(1),outer_points(2)],[outer_points(2),outer_points(2)]);
-[line_outer3] = mn_dv_newline(mn, [outer_points(2),outer_points(2)],[outer_points(2),outer_points(1)]);
-[line_outer4] = mn_dv_newline(mn, [outer_points(2),outer_points(1)],[outer_points(1),outer_points(1)]);
-
+[line_outer1] = mn_dv_newline(mn, [axis(1),axis(2)],[axis(1),outer_length+axis(2)]);
+[line_outer2] = mn_dv_newline(mn, [axis(1),outer_length+axis(2)],[outer_length+axis(1),outer_length+axis(2)]);
+[line_outer3] = mn_dv_newline(mn, [outer_length+axis(1),outer_length+axis(2)],[outer_length+axis(1),axis(2)]);
+[line_outer4] = mn_dv_newline(mn, [outer_length+axis(1),axis(2)],[axis(1),axis(2)]);
+%% Inner Rectangle
 segments = [line_inner1, line_inner2, line_inner3, line_inner4, line_outer1, line_outer2, line_outer3, line_outer4];
