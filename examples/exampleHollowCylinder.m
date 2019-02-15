@@ -1,0 +1,19 @@
+clc
+clear
+[mn, doc] = mn_open();
+set(mn, 'Visible', true);
+mn_d_setDefaultLengthUnit(doc, 'millimeters', false);
+
+for i = 1:4  
+    
+    hollowCylinder(i) = compHollowCylinder('name', ['hollowCylinder' num2str(i)], ...
+        'dim_d_a', dimMillimeter(4), ...
+        'dim_r_o', dimMillimeter(80), ...
+        'dim_depth', dimMillimeter(9), ...
+        'material', matGeneric('name', 'pm'), ...
+        'location', compLocation('anchor_xyz', dimMillimeter([80*i,0,0]), ...
+                        'rotate_xyz', dimDegree([0,0,0]).toRadians));
+
+    hollowCylinderSegs = mn_drawHollowCylinder(mn, hollowCylinder(i));
+    mn_dv_viewAll(mn);
+end
