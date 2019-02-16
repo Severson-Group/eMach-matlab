@@ -1,12 +1,12 @@
-classdef dimMillimeter < dimLinear
-    %dimMillimeter Dimension in millimeters
+classdef DimMillimeter < DimLinear
+    %DIMMILLIMETER Dimension in millimeters
     %   based off of the double class, this class implements required
     %   conversion methods.
      
    
     methods
-        function obj = dimMillimeter(vargin)
-            obj = obj@dimLinear(vargin);
+        function obj = DimMillimeter(vargin)
+            obj = obj@DimLinear(vargin);
         end
         
         function new = toMillimeter(obj)            
@@ -18,7 +18,7 @@ classdef dimMillimeter < dimLinear
         function new = toInch(obj) 
             %TOINCHES Convert this dimension to inches
             
-           new = dimInch(obj/25.4); 
+           new = DimInch(obj/25.4); 
         end
     end
 end

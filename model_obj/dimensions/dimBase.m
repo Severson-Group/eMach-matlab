@@ -1,9 +1,9 @@
-classdef dimBase < double
-    %D_BASE Abstract base class for dimensions
+classdef DimBase < double
+    %DIMBASE Abstract base class for dimensions
     %   Specifies a contract for dimensions
     
     methods
-        function obj = dimBase(vargin)
+        function obj = DimBase(vargin)
             obj = obj@double(vargin);
         end
     end
