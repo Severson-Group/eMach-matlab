@@ -13,7 +13,7 @@ function [segments] = mn_drawBreadloaf(mn, compBreadloafObj)
 %When handling the location settings, only deal with xy coordinates because 
 %MagNet always draws in the xy reference frame.
 
-validateattributes(compBreadloafObj,{'compBreadloaf'},{'nonempty'})
+validateattributes(compBreadloafObj,{'compBreadloaf'},{'nonempty'});
 
 shift_xy = compBreadloafObj.location.anchor_xyz(1:2);
 rotate_xy = compBreadloafObj.location.rotate_xyz(3).toRadians;
@@ -35,8 +35,8 @@ r = compBreadloafObj.dim_r;
 %counterclockwise.
 
 %preallocate column vectors for each coordinate point
-x = zeros(4,1);
-y = zeros(4,1);
+x = zeros(1,4);
+y = zeros(1,4);
 
 % y-coordinates
 y(1) = -w/2 + l*cos(alpha);
@@ -51,8 +51,9 @@ x(2) = x(1);
 x(3) = x(1) - l*sin(alpha);
 x(4) = x(3);
 
-local_coords = transpose([x,y]); % 2x4 matrix [--x--]
-                                 %            [--y--]
+local_coords = [x;y]; % 2x4 matrix [--x--]
+                      %            [--y--]
+                      
 %% Vertices (Global Coordinate System)
 
 %NOTE: the order of operations is rotation about the local coordinate
@@ -61,19 +62,17 @@ local_coords = transpose([x,y]); % 2x4 matrix [--x--]
 
 global_coords = R*local_coords; %rotate cross section about the local
                                      %coordinate system origin.
-                                     
-global_coords = transpose(global_coords); %transposing into 4x2 matrix
 
-global_coords(:,1) = global_coords(:,1) + shift_xy(1); %add x offset
-global_coords(:,2) = global_coords(:,2) + shift_xy(2); %add y offset
+global_coords(1,:) = global_coords(1,:) + shift_xy(1); %add x offset
+global_coords(2,:) = global_coords(2,:) + shift_xy(2); %add y offset
 
 
 %% Create Segments
 
-[arc] = mn_dv_newarc(mn, shift_xy, global_coords(1,:), global_coords(2,:));
-[side1] = mn_dv_newline(mn,        global_coords(2,:), global_coords(3,:));
-[side2] = mn_dv_newline(mn,        global_coords(3,:), global_coords(4,:));
-[base] = mn_dv_newline(mn,         global_coords(4,:), global_coords(1,:));
+[arc] = mn_dv_newarc(mn, shift_xy, global_coords(:,1), global_coords(:,2));
+[side1] = mn_dv_newline(mn,        global_coords(:,2), global_coords(:,3));
+[side2] = mn_dv_newline(mn,        global_coords(:,3), global_coords(:,4));
+[base] = mn_dv_newline(mn,         global_coords(:,4), global_coords(:,1));
 
 segments = [arc, side1, side2, base];
 
