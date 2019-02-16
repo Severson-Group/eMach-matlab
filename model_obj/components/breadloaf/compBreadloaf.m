@@ -15,7 +15,7 @@ classdef compBreadloaf < compBase
     end
     
     methods
-        function obj = compArc(varargin)
+        function obj = compBreadloaf(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
         end

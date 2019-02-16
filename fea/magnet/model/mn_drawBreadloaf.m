@@ -18,41 +18,62 @@ validateattributes(compBreadloafObj,{'compBreadloaf'},{'nonempty'})
 shift_xy = compBreadloafObj.location.anchor_xyz(1:2);
 rotate_xy = compBreadloafObj.location.rotate_xyz(3).toRadians;
 
-center = [0,0] + shift_xy(1:2); 
-
+%rotation transformation for rotating local coordinate system
 R = [cos(rotate_xy), -sin(rotate_xy);...
      sin(rotate_xy),  cos(rotate_xy)];
+
+%Defining short local variables to avoid long unreadable code expressions
+w = compBreadloafObj.dim_w;
+l = compBreadloafObj.dim_l;
+alpha = compBreadloafObj.dim_alpha.toRadians;
+r = compBreadloafObj.dim_r;
  
- w = compBreadloafObj.dim_w;
- l = compBreadloafObj.dim_r;
- alpha = compBreadloafObj.dim_alpha.toRadians;
- r = compBreadloafObj.dim_r;
- 
 
-%% Top arc segment
+%% Vertices (Local Coordinate System)
+%Computing the coordinates of each vertice in the cross-sections local
+%coordinate system. Vertices begin at bottom right vertex and proceed
+%counterclockwise.
 
-y = w/2 - l*cos(alpha);
-beta = asin(temp/r);
-x = r*cos(beta);
+%preallocate column vectors for each coordinate point
+x = zeros(4,1);
+y = zeros(4,1);
 
-startxy_arc = transpose(R*[ x; -y]);
-endxy_arc =  transpose(R*[ x; y]);
+% y-coordinates
+y(1) = -w/2 + l*cos(alpha);
+y(2) = -y(1);
+y(3) = w/2;
+y(4) = -y(3);
 
-[arc] = mn_dv_newarc(mn, center, startxy_arc, endxy_arc);
+% x-coordinates
+beta = asin(y(1)/r);
+x(1) = r*cos(beta);
+x(2) = x(1);
+x(3) = x(1) - l*sin(alpha);
+x(4) = x(3);
 
-%% side segments
+local_coords = transpose([x,y]); % 2x4 matrix [--x--]
+                                 %            [--y--]
+%% Vertices (Global Coordinate System)
 
-y = w/2;
-x = endxy_arc(1) - l*sin(alpha);
-side1_start = transpose(R*[x;-y]);
-side2_start = transpose(R*[x;y]);
+%NOTE: the order of operations is rotation about the local coordinate
+%system origin followed by a translation (rotations and translations do not
+%commute)
 
-[side1] = mn_dv_newline(mn, side1_start, startxy_arc);
-[side2] = mn_dv_newline(mn, side2_start, endxy_arc);
+global_coords = R*local_coords; %rotate cross section about the local
+                                     %coordinate system origin.
+                                     
+global_coords = transpose(global_coords); %transposing into 4x2 matrix
 
-%% Base Line
+global_coords(:,1) = global_coords(:,1) + shift_xy(1); %add x offset
+global_coords(:,2) = global_coords(:,2) + shift_xy(2); %add y offset
 
-[base] = mn_dv_newline(mn, side1_start, side_start);
+
+%% Create Segments
+
+[arc] = mn_dv_newarc(mn, shift_xy, global_coords(1,:), global_coords(2,:));
+[side1] = mn_dv_newline(mn,        global_coords(2,:), global_coords(3,:));
+[side2] = mn_dv_newline(mn,        global_coords(3,:), global_coords(4,:));
+[base] = mn_dv_newline(mn,         global_coords(4,:), global_coords(1,:));
 
 segments = [arc, side1, side2, base];
 
