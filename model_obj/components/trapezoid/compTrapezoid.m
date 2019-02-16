@@ -6,8 +6,9 @@ classdef compTrapezoid < compBase
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_l;      %Side edge length: class type dimLinear
+        dim_h;      %Height length: class type dimLinear
         dim_w;      %Bottom edge length: class type dimLinear
+        dim_depth;  %Depth of trapezoid: class type dimLinear
         dim_theta;  %Angular span of lower corner: class type dimAngular
     end
     
@@ -26,8 +27,9 @@ classdef compTrapezoid < compBase
             validateProps@compBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_l,{'dimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_h,{'dimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_w,{'dimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_depth,{'dimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_theta,{'dimAngular'},{'nonnegative', 'nonempty', '<', pi})
          end
                   

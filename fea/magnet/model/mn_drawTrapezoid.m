@@ -19,14 +19,14 @@ validateattributes(compTrapezoidObj,{'compTrapezoid'},{'nonempty'})
 %% Calculate points of trapezoid
 % Bottom left is 1, rotating clockwise for 2, 3, 4
 
-l = compTrapezoidObj.dim_l;
+h = compTrapezoidObj.dim_h;
 w = compTrapezoidObj.dim_w;
 theta = compTrapezoidObj.dim_theta;
 
 
 point1 = [-(w/2), 0];
-point2 = [-(w/2) + l*cos(theta), l*sin(theta)];
-point3 = [ (w/2) - l*cos(theta), l*sin(theta)];
+point2 = [-(w/2) + (h/tan(theta)), h];
+point3 = [ (w/2) - (h/tan(theta)), h];
 point4 = [ (w/2), 0];
 
 
