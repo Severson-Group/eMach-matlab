@@ -1,18 +1,13 @@
 classdef MagNet < ToolBase & Drawer2dBase
-    %MagNet Encapsulation for the MagNet FEA software
-    %   TODO add more description
-    %   TODO add more description
-    %   TODO add more description
-    %   TODO add more description
+    %MAGNET Encapsulation for the MagNet FEA software
+    %   TODO: add more description
+    %   TODO: add more description
+    %   TODO: add more description
+    %   TODO: add more description
     
     properties (GetAccess = 'private', SetAccess = 'private')
-        mn; % MagNet activexserver object
+        mn;  % MagNet activexserver object
         doc; % Document object
-    end
-    
-    properties (GetAccess = 'public', SetAccess = 'protected')
-%        attr1; % Describe this attribute
-%        attr2; % Describe this attribute
     end
     
     methods
@@ -20,10 +15,6 @@ classdef MagNet < ToolBase & Drawer2dBase
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
         end
-        
-        % ----------------------------------------
-        % ToolBase abstract method implementations
-        % ----------------------------------------
         
         function obj = open(obj, iFilename, iMn, iVisible)
             %OPEN Open MagNet or a specific file.
@@ -60,7 +51,10 @@ classdef MagNet < ToolBase & Drawer2dBase
         
         function close(obj)
            % CLOSE Closes MagNet application
-            
+           %     close()
+           
+           % TODO:
+           % Implement this...
         end
 
         
@@ -89,7 +83,8 @@ classdef MagNet < ToolBase & Drawer2dBase
         
         function [arc] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current MagNet document.
-            %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y]) draws an arc
+            %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
+            %       draws an arc
             %
             %   This is a wrapper for the Document::View::newArc function.
 
@@ -107,15 +102,16 @@ classdef MagNet < ToolBase & Drawer2dBase
         end
         
         function select(obj)
-            %SELET Selects something from canvas (?)
+            %SELECT Selects something from canvas (?)
+            %    select()
+            
             % TODO:
-            % implement this...
+            % Implement this...
+            %
+            % This will need to take in arguments, or maybe
+            % CrossSect objects which then store internally all their
+            % lines and surfaces that need to be selected
         end
-
-        
-        % --------------------------------------------
-        % MagNet specific method implementations
-        % --------------------------------------------
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
             %SETDEFAULTLENGTHUNIT Set the default unit for length.
@@ -152,23 +148,15 @@ classdef MagNet < ToolBase & Drawer2dBase
             
             set(obj.mn, 'Visible', visibility);
         end
-
-
     end
     
-     methods(Access = protected)
+    methods(Access = protected)
          function validateProps(obj)
             %VALIDATE_PROPS Validate the properties of this component
              
-            %1. use the superclass method to validate the properties 
+            % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
             validateProps@Drawer2dBase(obj);
-            
-            %2. valudate the new properties that have been added here
-%            validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
-%            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
-%            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
-%            validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
          end
                   
          function obj = createProps(obj, len, args)
