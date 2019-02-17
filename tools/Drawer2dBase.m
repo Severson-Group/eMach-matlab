@@ -1,14 +1,9 @@
 classdef Drawer2dBase < handle
-    %Drawer2dBase Abstract base class for Drawer2d implementations
-    %   TODO add more description
-    %   TODO add more description
-    %   TODO add more description
-    %   TODO add more description
-    
-    properties (GetAccess = 'public', SetAccess = 'protected')
-%        attr1; % Describe this attribute
-%        attr2; % Describe this attribute
-    end
+    %Drawer2dBase Abstract base class for software which can draw in 2D
+    %   Requires subclass to implement:
+    %   - drawLine()
+    %   - drawArc()
+    %   - select()
     
     methods
         function obj = Drawer2dBase(varargin)
@@ -26,17 +21,6 @@ classdef Drawer2dBase < handle
      methods(Access = protected)
          function validateProps(obj)
             %VALIDATE_PROPS Validate the properties of this component
-             
-            %1. use the superclass method to validate the properties 
-%            validateProps@Tool(obj);   
-%            validateProps@Drawer2D(obj);   
-%            validateProps@MakeSolid(obj);   
-            
-            %2. valudate the new properties that have been added here
-%            validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
-%            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
-%            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
-%            validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
          end
                   
          function obj = createProps(obj, len, args)
