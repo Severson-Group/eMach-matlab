@@ -57,11 +57,6 @@ classdef MagNet < ToolBase & Drawer2dBase
            % Implement this...
         end
 
-        
-        % --------------------------------------------
-        % Drawer2dBase abstract method implementations
-        % --------------------------------------------
-
         function [line] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line in the current MagNet document.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
