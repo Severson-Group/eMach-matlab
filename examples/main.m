@@ -1,8 +1,10 @@
 clc
 clear
 
-toolTikz = TikZ();
-toolTikz.open('output.txt');
+DRAW_MAGNET = 1;
+DRAW_TIKZ   = 0;
+
+%% Define model
 
 arc1 = CrossSectArc( ...
         'name', 'arc1', ...
@@ -13,8 +15,7 @@ arc1 = CrossSectArc( ...
         'location', Location2D( ...
             'anchor_xy', DimMillimeter([0,0]), ...
             'rotate_xy', DimDegree([0,0]).toRadians() ...
-        ), ...
-        'drawer', toolTikz ...
+        ) ...
         );
     
 comp1 = Component( ...
@@ -28,6 +29,25 @@ comp1 = Component( ...
         ) ...
         );
 
-comp1.make();
+%% Draw via MagNet
 
-toolTikz.close();
+if (DRAW_MAGNET)
+    toolMn = MagNet();
+    toolMn.open(0,0,true);
+    toolMn.setDefaultLengthUnit('millimeters', false);
+
+    comp1.make(toolMn);
+
+    toolMn.viewAll();
+end
+
+%% Draw via TikZ
+
+if (DRAW_TIKZ)
+    toolTikz = TikZ();
+    toolTikz.open('output.txt');
+
+    comp1.make(toolTikz);
+
+    toolTikz.close();
+end
