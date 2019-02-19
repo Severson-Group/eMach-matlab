@@ -6,7 +6,7 @@ classdef TikZ < ToolBase & Drawer2dBase
     %   TODO: add more description
     
     properties (GetAccess = 'private', SetAccess = 'private')
-        file; % File to write TikZ commands to
+        file; % File to write TikZ commands
     end
     
     methods
@@ -17,7 +17,11 @@ classdef TikZ < ToolBase & Drawer2dBase
         
         function obj = open(obj, filename)
             % OPEN Opens a TikZ drawing
-        
+            %     open('output.txt')
+            %
+            % NOTE: This will erase existing file contents
+            %       and overwrite with new data!
+            
             obj.file = fopen(filename, 'w');
 
             fprintf(obj.file, '\\documentclass[border=10pt]{standalone}\n');
@@ -70,7 +74,10 @@ classdef TikZ < ToolBase & Drawer2dBase
             
             % TODO: there is a corner case here... angle sign changes
             % and using first vs. second equation changes answer...
-            % Need to look into this
+            % Need to look into this...
+            %
+            % i.e., both equations should give same answer, but sign
+            % changes sometimes under corner cases
             
 %            start = acos((x1 - h) / radius);
             start = asin((y1 - k) / radius);
