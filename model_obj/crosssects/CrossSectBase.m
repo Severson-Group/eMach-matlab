@@ -5,7 +5,6 @@ classdef CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected') 
         name; % Name of the component
         location; % The location of the arc, a location2D object.
-        drawer; % Class to use to draw this components
     end
     
     methods(Access = protected)
@@ -13,12 +12,11 @@ classdef CrossSectBase
             % Validate the global properties
             validateattributes(obj.name,     {'char'},            {'nonempty'})             
             validateattributes(obj.location, {'Location2D'},      {'nonempty'})
-            validateattributes(obj.drawer,   {'Drawer2dBase'}, {'nonempty'})
         end
     end
     
     methods(Abstract = true)
-        draw(obj);
+        draw(obj, drawer);
         select(obj);
     end
     

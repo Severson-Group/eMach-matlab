@@ -20,9 +20,11 @@ classdef Component
             validateattributes(obj.location, {'Location3D'}, {'nonempty'});
         end
         
-        function make(obj)
+        function make(obj, drawer)
+            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            
             for i = 1:length(obj.cross_sections)
-                obj.cross_sections(i).draw();
+                obj.cross_sections(i).draw(drawer);
                 obj.cross_sections(i).select();
             end
             

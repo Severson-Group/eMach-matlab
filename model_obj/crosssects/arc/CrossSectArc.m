@@ -18,7 +18,9 @@ classdef CrossSectArc < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj)
+        function draw(obj, drawer)
+            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            
             shift_xy = obj.location.anchor_xy(1:2);
             %rotate_xy = obj.location.rotate_xyz(3).toRadians;
             rotate_xy = 0;
@@ -35,7 +37,7 @@ classdef CrossSectArc < CrossSectBase
                             sin(obj.dim_alpha.toRadians/2 + rotate_xy)] ...
                             + shift_xy;        
 
-            [arc_out] = obj.drawer.drawArc(center, startxy_out, endxy_out);
+            [arc_out] = drawer.drawArc(center, startxy_out, endxy_out);
 
             % Inner arc segment
             startxy_in = (obj.dim_r_o - obj.dim_d_a) * ...
@@ -48,11 +50,11 @@ classdef CrossSectArc < CrossSectBase
                             sin(obj.dim_alpha.toRadians/2 + rotate_xy)] ...
                             + shift_xy;
 
-            [arc_in] = obj.drawer.drawArc(center, startxy_in, endxy_in);
+            [arc_in] = drawer.drawArc(center, startxy_in, endxy_in);
 
             % Side segments
-            [line_cc] = obj.drawer.drawLine(endxy_in, endxy_out);
-            [line_cw] = obj.drawer.drawLine(startxy_in, startxy_out);
+            [line_cc] = drawer.drawLine(endxy_in, endxy_out);
+            [line_cw] = drawer.drawLine(startxy_in, startxy_out);
 
             %segments = [arc_out, arc_in, line_cc, line_cw];
         end
