@@ -33,7 +33,7 @@ points_i=[axis(1)+t1,axis(2)+t4; axis(1)+t1,axis(2)+b_o-t2;...
           l_o-t3+axis(1), b_o-t2+axis(2);l_o-t3+axis(1),t4+axis(2);];
 points_o = [axis(1),axis(2); axis(1),axis(2)+b_o; axis(1)+l_o, ....
             axis(2)+b_o; axis(1)+l_o,axis(2)];
-rotate=[cos(theta), sin(theta); -sin(theta), cos(theta)];
+rotate=[cos(theta), -sin(theta); sin(theta), cos(theta)];
 
 for j=1:4
 points_i(j,:)=rotate*points_i(j,:)'
