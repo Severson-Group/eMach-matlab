@@ -1,18 +1,18 @@
-classdef dimDegree < dimAngular
+classdef DimDegree < DimAngular
     %DIMDEGREE Dimension in degrees
     %   based off of the double class, this class implements required
     %   conversion methods.
      
    
     methods
-        function obj = dimDegree(vargin)
-            obj = obj@dimAngular(vargin);
+        function obj = DimDegree(vargin)
+            obj = obj@DimAngular(vargin);
         end
         
         function new = toRadians(obj)
             %TORADIANS Convert this dimension to degrees
             
-            new = dimRadian(obj*pi/180);
+            new = DimRadian(obj*pi/180);
         end
         
         function new = toDegrees(obj) 
