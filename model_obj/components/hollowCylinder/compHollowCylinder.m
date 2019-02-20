@@ -7,7 +7,6 @@ classdef compHollowCylinder < compBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_d_a;     %Thickness of the cylinder: class type dimLinear.
         dim_r_o;     %Outer radius of the cylinder: class type dimLinear
-        dim_depth;   %Axial depth of the cylinder: class type dimLinear
     end
     
     methods
@@ -27,9 +26,10 @@ classdef compHollowCylinder < compBase
             validateProps@compBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_d_a,{'dimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_r_o,{'dimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'dimLinear'},{'nonnegative', 'nonempty'})            
+            validateattributes(obj.dim_d_a,{'dimLinear'},...
+                {'nonnegative','nonempty'})            
+            validateattributes(obj.dim_r_o,{'dimLinear'},...
+                {'nonnegative','nonempty'})        
          end
                   
          function obj = createProps(obj, len, args)
@@ -42,4 +42,3 @@ classdef compHollowCylinder < compBase
          end
      end
 end
-

@@ -1,8 +1,9 @@
 function [segments] = mn_drawHollowCylinder(mn, compHollowCylinderObj)
 %MN_DRAWHOLLOWCYLINDER Draw a HollowCylinder object in a MagNet document.
-%   This function draws a hollow cylinder based on the compHollowCylinderObj description. It
-%   assumes that MagNet is configured to use the linear units provided by
-%   compHollowCylinderObj (i.e., mm vs inches).
+%   This function draws a hollow cylinder based on the
+%   compHollowCylinderObj description. It assumes that MagNet is configured
+%   to use the linear units provided by compHollowCylinderObj
+%   (i.e., mm vs inches).
 %
 %   Variables:
 %       mn          - MagNet activexserver object
