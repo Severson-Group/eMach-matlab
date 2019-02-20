@@ -1,7 +1,8 @@
 function [segments] = mn_drawHollowRect(mn, compHollowRectObj)
 %MN_DRAWHOLLOWRECT Draw a hollow rectangle object in a MagNet document.
-%   This function draws a hollow rectangle based on the compHollowRectObj description. It
-%   assumes that MagNet is configured to use the linear units provided by
+%   This function draws a hollow rectangle based on the 
+%   compHollowRectObj description. 
+%   It assumes MagNet is configured to use the linear units provided by
 %   compHollowRectObj (i.e., mm vs inches).
 %
 %   Variables:
@@ -18,22 +19,38 @@ function [segments] = mn_drawHollowRect(mn, compHollowRectObj)
 validateattributes(compHollowRectObj,{'compHollowRect'},{'nonempty'})
 
 shift_xy = compHollowRectObj.location.anchor_xyz(1:2);
-rotate_xy = compHollowRectObj.location.rotate_xyz(3).toRadians;
+theta = compHollowRectObj.location.rotate_xyz(3).toRadians;
 
 axis = [0,0] + shift_xy(1:2); 
-outer_length=compHollowRectObj.dim_l_o;
-thickness=compHollowRectObj.dim_t;
-length_inner=outer_length-thickness;
+l_o=compHollowRectObj.dim_l_o;
+b_o=compHollowRectObj.dim_b_o;
+t1=compHollowRectObj.dim_t1;
+t2=compHollowRectObj.dim_t2;
+t3=compHollowRectObj.dim_t3;
+t4=compHollowRectObj.dim_t4;
 
-[line_inner1] = mn_dv_newline(mn, [axis(1)+thickness,axis(2)+thickness],[axis(1)+thickness,length_inner+axis(2)]);
-[line_inner2] = mn_dv_newline(mn, [axis(1)+thickness,length_inner+axis(2)],[length_inner+axis(1),length_inner+axis(2)]);
-[line_inner3] = mn_dv_newline(mn, [length_inner+axis(1),length_inner+axis(2)],[length_inner+axis(1),thickness+axis(2)]);
-[line_inner4] = mn_dv_newline(mn, [length_inner+axis(1),thickness+axis(2)],[thickness+axis(1),thickness+axis(2)]);
+points_i=[axis(1)+t1,axis(2)+t4; axis(1)+t1,axis(2)+b_o-t2;...
+          l_o-t3+axis(1), b_o-t2+axis(2);l_o-t3+axis(1),t4+axis(2);];
+points_o = [axis(1),axis(2); axis(1),axis(2)+b_o; axis(1)+l_o, ....
+            axis(2)+b_o; axis(1)+l_o,axis(2)];
+rotate=[cos(theta), sin(theta); -sin(theta), cos(theta)];
+
+for j=1:4
+points_i(j,:)=rotate*points_i(j,:)'
+points_o(j,:)=rotate*points_o(j,:)'
+end
+
+%% Inner Rectangle
+[l_i1] = mn_dv_newline(mn, points_i(1,:),points_i(2,:));
+[l_i2] = mn_dv_newline(mn, points_i(2,:),points_i(3,:));
+[l_i3] = mn_dv_newline(mn, points_i(3,:),points_i(4,:));
+[l_i4] = mn_dv_newline(mn, points_i(4,:),points_i(1,:));
 
 %% Outer Rectangle
-[line_outer1] = mn_dv_newline(mn, [axis(1),axis(2)],[axis(1),outer_length+axis(2)]);
-[line_outer2] = mn_dv_newline(mn, [axis(1),outer_length+axis(2)],[outer_length+axis(1),outer_length+axis(2)]);
-[line_outer3] = mn_dv_newline(mn, [outer_length+axis(1),outer_length+axis(2)],[outer_length+axis(1),axis(2)]);
-[line_outer4] = mn_dv_newline(mn, [outer_length+axis(1),axis(2)],[axis(1),axis(2)]);
-%% Inner Rectangle
-segments = [line_inner1, line_inner2, line_inner3, line_inner4, line_outer1, line_outer2, line_outer3, line_outer4];
+[l_o1] = mn_dv_newline(mn, points_o(1,:),points_o(2,:));
+[l_o2] = mn_dv_newline(mn, points_o(2,:),points_o(3,:));
+[l_o3] = mn_dv_newline(mn, points_o(3,:),points_o(4,:));
+[l_o4] = mn_dv_newline(mn, points_o(4,:),points_o(1,:));
+
+segments = [l_i1, l_i2, l_i3, l_i4,...
+            l_o1, l_o2, l_o3, l_o4];
