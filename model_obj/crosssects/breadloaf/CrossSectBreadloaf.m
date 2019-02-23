@@ -1,4 +1,4 @@
-bclassdef compBreadloaf < compBase
+classdef CrossSectBreadloaf < CrossSectBase
     %COMPBREADLOAF Describes an a breadloaf profile (trapezoid with round top).
     %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is center of the arc'd edge, with the 
@@ -11,12 +11,13 @@ bclassdef compBreadloaf < compBase
         dim_l;     %length of sides: class type dimLinear
         dim_r;  %radius of top of breadloaf: class type dimLinear
         dim_alpha;  %angle between base and sides: class type dimAngular
+        dim_depth; %depth of breadloaf: class type dimLinear
         
     end
     
     methods
-        function obj = compBreadloaf(varargin)
-            obj = obj.createProps(nargin,varargin);            
+        function obj = CrossSectBreadloaf(varargin)
+            obj = obj.createProps(nargin, varargin);            
             obj.validateProps();            
         end
                 
