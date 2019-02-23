@@ -6,9 +6,19 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_h;      %Height length: class type dimLinear
-        dim_w;      %Bottom edge length: class type dimLinear
-        dim_theta;  %Angular span of lower corner: class type dimAngular
+        dim_alpha_st; %span angle of tooth: class type DimAngular
+        dim_alpha_so; %angle of tooth edge: class type DimAngular
+        dim_r_si; %inner radius of stator teeth: class type DimLinear
+        dim_d_so; %tooth edge length: class type DimLinear
+        dim_d_sp; %tooth tip length: class type DimLinear
+        dim_d_st; %tooth base length: class type DimLinear
+        dim_d_sy; %back iron thickness: class type DimLinear
+        dim_w_st; %tooth base width: class type DimLinear
+        dim_r_st; %fillet on outter tooth: class type DimLinear
+        dim_r_sf; %fillet between tooth tip and base: class type DimLinear
+        dim_r_sb; %fillet at tooth base: class type DimLinear
+        slots; %number of stator slots
+        
     end
     
     methods
@@ -20,30 +30,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
-            % Calculate points of trapezoid
-            % Bottom left is 1, rotating clockwise for 2, 3, 4
 
-            h = obj.dim_h;
-            w = obj.dim_w;
-            theta = obj.dim_theta;
-            
-            x = [-(w/2), -(w/2) + (h/tan(theta)), ...
-                  (w/2) - (h/tan(theta)), (w/2)];
-            
-            y = [0, h, h, 0];
-            
-            [x_trans, y_trans] = obj.location.transformCoords(x,y);
-
-            point1 = [x_trans(1), y_trans(1)];
-            point2 = [x_trans(2), y_trans(2)];
-            point3 = [x_trans(3), y_trans(3)];
-            point4 = [x_trans(4), y_trans(4)];
-
-            % Draw segments
-            [top_seg]    = drawer.drawLine(point2, point3);
-            [bottom_seg] = drawer.drawLine(point1, point4);
-            [left_seg]   = drawer.drawLine(point1, point2);
-            [right_seg]  = drawer.drawLine(point3, point4);
 
             %segments = [top_seg, bottom_seg, left_seg, right_seg];
         end
@@ -61,10 +48,19 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             validateProps@CrossSectBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty', '<', pi})
+            validateattributes(obj.dim_alpha_st,{'DimAngular'},{'nonnegative', 'nonempty'})
+            validateattributes(obj.dim_alpha_so,{'DimAngular'},{'nonempty'})
+            validateattributes(obj.dim_r_si,{'DimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_d_so,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_d_sp,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_d_st,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_d_sy,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_w_st,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_r_st,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_r_sf,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_r_sb,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.slots,{'double'},{'nonnegative','nonempty'})
+            
          end
                   
          function obj = createProps(obj, len, args)
