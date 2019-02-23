@@ -29,7 +29,7 @@ classdef Location2D
             
             if exist('theta','var')
                 validateattributes(theta, {'DimAngular'}, {'size',[1,1]})
-                theta = theta.toRadians();
+                theta = theta.toRadians() + obj.rotate_xy.toRadians();
                 R = [ cos(theta), -sin(theta); ...
                       sin(theta),  cos(theta) ];
             else
