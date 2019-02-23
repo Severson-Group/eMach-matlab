@@ -21,11 +21,21 @@ classdef Location2D
                       sin(theta),  cos(theta) ];
         end
         
-        function [x,y] = transformCoords(obj, x, y)
+        function [x,y] = transformCoords(obj, x, y, theta)
             
             %This function takes in x and y coordinate vectors and 
             %returns transformed x and y coordinate vectors of the same
             %shape as the input vectors
+            
+            if exist('theta','var')
+                validateattributes(theta, {'DimAngular'}, {'size',[1,1]})
+                theta = theta.toRadians();
+                R = [ cos(theta), -sin(theta); ...
+                      sin(theta),  cos(theta) ];
+            else
+                R = obj.R;
+            end
+               
             
             %grabbing orginal dimensions of x and y
             original_x_dim = size(x); 
@@ -36,7 +46,7 @@ classdef Location2D
             y = reshape(y, 1, []);
            
             coords = [x;y];
-            rotated_coords = obj.R*coords;
+            rotated_coords = R*coords;
             
             x = reshape(rotated_coords(1,1:end), original_x_dim) + ...
                 obj.anchor_xy(1);
