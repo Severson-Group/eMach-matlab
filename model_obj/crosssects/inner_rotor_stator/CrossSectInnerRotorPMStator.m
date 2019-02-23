@@ -58,6 +58,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             x4 = r4*cos(beta4);
             x5 = r4*cos(alpha_total/2);
             x6 = (r4 + d_sy)*cos(alpha_total/2);
+            disp(r4 + d_sy)
             
             y1 = r_si*sin(alpha_st/2);
             y2 = y1 + d_so*sin(beta2);
@@ -66,36 +67,38 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             y5 = r4*sin(alpha_total/2);
             y6 = (r4 + d_sy)*sin(alpha_total/2);
             
-            x = [ x1, x1, x2, x3, x4, x5, x6, x6, x5, x4, x3, x2 ];
-            y = [-y1, y1, y2, y3, y4, y5, y6, -y6, -y5, -y4, -y3, -y2];
+            x_arr = [ x1, x1, x2, x3, x4, x5, x6, x6, x5, x4, x3, x2 ];
+            y_arr = [-y1, y1, y2, y3, y4, y5, y6, -y6, -y5, -y4, -y3, -y2];
             
-            [x,y] = obj.location.transformCoords(x,y);
+            for i = 1:slots
+              
+            [x,y] = obj.location.transformCoords(x_arr,y_arr, DimRadian((i-1)*alpha_total));
             
-            p1 = [x(1), y(1)];
-            p2 = [x(2), y(2)];
-            p3 = [x(3), y(3)];
-            p4 = [x(4), y(4)];
-            p5 = [x(5), y(5)];
-            p6 = [x(6), y(6)];
-            p7 = [x(7), y(7)];
-            p8 = [x(8), y(8)];
-            p9 = [x(9), y(9)];
-            p10 = [x(10), y(10)];
-            p11 = [x(11), y(11)];
-            p12 = [x(12), y(12)];
+                p1 = [x(1), y(1)];
+                p2 = [x(2), y(2)];
+                p3 = [x(3), y(3)];
+                p4 = [x(4), y(4)];
+                p5 = [x(5), y(5)];
+                p6 = [x(6), y(6)];
+                p7 = [x(7), y(7)];
+                p8 = [x(8), y(8)];
+                p9 = [x(9), y(9)];
+                p10 = [x(10), y(10)];
+                p11 = [x(11), y(11)];
+                p12 = [x(12), y(12)];
+
+                arc1(i) = drawer.drawArc(obj.location.anchor_xy, p1, p2);
+                seg1(i) = drawer.drawLine(p2, p3);
+                seg2(i) = drawer.drawLine(p3, p4);
+                seg3(i) = drawer.drawLine(p4, p5);
+                arc2(i) = drawer.drawArc(obj.location.anchor_xy, p5, p6);
+                arc3(i) = drawer.drawArc(obj.location.anchor_xy, p8, p7);
+                arc4(i) = drawer.drawArc(obj.location.anchor_xy, p9, p10);
+                seg4(i) = drawer.drawLine(p10, p11);
+                seg5(i) = drawer.drawLine(p11, p12);
+                seg6(i) = drawer.drawLine(p12, p1);
             
-            [arc1] = drawer.drawArc(obj.location.anchor_xy, p1, p2);
-            [seg1] = drawer.drawLine(p2, p3);
-            [seg2] = drawer.drawLine(p3, p4);
-            [seg3] = drawer.drawLine(p4, p5);
-            [arc2] = drawer.drawArc(obj.location.anchor_xy, p5, p6);
-%             [seg4] = drawer.drawLine(p6, p7);
-            [arc3] = drawer.drawArc(obj.location.anchor_xy, p8, p7);
-%             [seg5] = drawer.drawLine(p8, p9);
-            [arc4] = drawer.drawArc(obj.location.anchor_xy, p9, p10);
-            [seg6] = drawer.drawLine(p10, p11);
-            [seg7] = drawer.drawLine(p11, p12);
-            [seg8] = drawer.drawLine(p12, p1);
+            end
 
 
             %segments = [top_seg, bottom_seg, left_seg, right_seg];
