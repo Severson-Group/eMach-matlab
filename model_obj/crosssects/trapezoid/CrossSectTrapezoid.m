@@ -26,7 +26,7 @@ classdef CrossSectTrapezoid < CrossSectBase
 
             h = obj.dim_h;
             w = obj.dim_w;
-            theta = obj.dim_theta;
+            theta = obj.dim_theta.toRadians();
             
             x = [-(w/2), -(w/2) + (h/tan(theta)), ...
                   (w/2) - (h/tan(theta)), (w/2)];
@@ -65,7 +65,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty', '<', pi})
+            validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty'})
          end
                   
          function obj = createProps(obj, len, args)

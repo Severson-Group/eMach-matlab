@@ -20,8 +20,43 @@ classdef CrossSectBreadloaf < CrossSectBase
             obj = obj.createProps(nargin, varargin);            
             obj.validateProps();            
         end
-                
+        
+        function draw(obj, drawer)
+            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            
+            w = obj.dim_w;
+            l = obj.dim_l;
+            r = obj.dim_r;
+            alpha = obj.dim_alpha.toRadians();
+            
+            y_out = w/2 - l*cos(alpha);
+            y_in = w/2;
+            beta = asin(y_out/r);
+            x_out = r*cos(beta);
+            x_in = x_out - l*sin(alpha);
+            
+            x = [ x_out, x_out, x_in, x_in ];
+            y = [-y_out, y_out, y_in, -y_in];
+            
+            [x_trans, y_trans] = obj.location.transformCoords(x,y);
 
+            p1 = [x_trans(1), y_trans(1)];
+            p2 = [x_trans(2), y_trans(2)];
+            p3 = [x_trans(3), y_trans(3)];
+            p4 = [x_trans(4), y_trans(4)];
+
+            % Draw segments
+            [arc]    = drawer.drawArc(obj.location.anchor_xy, p1, p2);
+            [top_seg] = drawer.drawLine(p2,p3);
+            [base]   = drawer.drawLine(p3, p4);
+            [bottom_seg]  = drawer.drawLine(p4, p1);
+
+            %segments = [arc, top_seg, base, bottom_seg];
+        end
+        
+        function select(obj)
+            
+        end
     end
     
      methods(Access = protected)
@@ -29,13 +64,14 @@ classdef CrossSectBreadloaf < CrossSectBase
             %VALIDATE_PROPS Validate the properties of this component
              
             %1. use the superclass method to validate the properties 
-            validateProps@compBase(obj);   
+            validateProps@CrossSectBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_w,{'dimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_l,{'dimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_r,{'dimLinear'},{'nonnegative', 'nonempty'})
-            validateattributes(obj.dim_alpha,{'dimAngular'},{'nonnegative', 'nonempty', '<', pi})
+            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_l,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_r,{'DimLinear'},{'nonnegative', 'nonempty'})
+            validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty'})
+            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
          end
                   
          function obj = createProps(obj, len, args)

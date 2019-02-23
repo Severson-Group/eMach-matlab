@@ -65,7 +65,7 @@ classdef CrossSectArc < CrossSectBase
             validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
-            validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
+            validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty'})
          end
                   
          function obj = createProps(obj, len, args)
