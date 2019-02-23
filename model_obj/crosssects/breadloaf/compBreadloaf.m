@@ -1,4 +1,4 @@
-classdef compBreadloaf < compBase
+bclassdef compBreadloaf < compBase
     %COMPBREADLOAF Describes an a breadloaf profile (trapezoid with round top).
     %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is center of the arc'd edge, with the 
