@@ -1,21 +1,23 @@
-classdef compBase
-    %COMPBASE Abstract base class for components
+classdef CrossSectBase < matlab.mixin.Heterogeneous
+    %CROSSSECTBASE Abstract base class for cross sections
     %   Sets up and validates universial properties
     
     properties (GetAccess = 'public', SetAccess = 'protected') 
-        name;     %Name of the component
-        material;   %Arc material, a material object                     
-        location = compLocation();   %The location of the arc, a clocation object.        
+        name; % Name of the component
+        location; % The location of the arc, a location2D object.
     end
     
     methods(Access = protected)
-        function validateProps(obj)            
-            
-            %validate the global properties
-            validateattributes(obj.name,{'char'},{'nonempty'})             
-            validateattributes(obj.location, {'compLocation'}, {'nonempty'})
-            validateattributes(obj.material, {'matGeneric'}, {'nonempty'})
+        function validateProps(obj)
+            % Validate the global properties
+            validateattributes(obj.name,     {'char'},            {'nonempty'})             
+            validateattributes(obj.location, {'Location2D'},      {'nonempty'})
         end
+    end
+    
+    methods(Abstract = true)
+        draw(obj, drawer);
+        select(obj);
     end
     
     methods(Abstract = true, Access = protected)

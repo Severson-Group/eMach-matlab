@@ -1,10 +1,10 @@
-classdef dimAngular < dimBase
-    %DANGULAR Abstract base class for angular dimensions
+classdef DimAngular < DimBase
+    %DIMANGULAR Abstract base class for angular dimensions
     %   Specifies a contract for dimension classes.
      
     methods 
-        function obj = dimAngular(vargin)
-            obj = obj@dimBase(vargin);
+        function obj = DimAngular(vargin)
+            obj = obj@DimBase(vargin);
         end
     end
    

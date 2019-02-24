@@ -1,12 +1,12 @@
-classdef matGeneric
-    %MATERIAL Material of a component. Place holder for now
+classdef MaterialGeneric
+    %MATERIALGENERIC Material of a component. Place holder for now
     
     properties (GetAccess = 'public', SetAccess = 'protected') 
-        name
+        name; % Name of material
     end
     
     methods
-        function obj = matGeneric(varargin)
+        function obj = MaterialGeneric(varargin)
             %MATERIAL Create a material object using key value pairs
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
@@ -16,7 +16,7 @@ classdef matGeneric
     methods(Access = protected)
         function validateProps(obj)            
             %VALIDATE_PROPS Validate the object properties
-            validateattributes(obj.name,{'char'},{'nonempty'})                         
+            validateattributes(obj.name, {'char'}, {'nonempty'})                         
         end    
     
         function obj = createProps(obj, len, args)
