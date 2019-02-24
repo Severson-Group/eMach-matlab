@@ -47,6 +47,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             
             alpha_total = DimDegree(360/slots).toRadians();
             
+            %points with no fillets
             x1 = r_si*cos(alpha_st/2);
             beta2 = alpha_st/2 - alpha_so;
             x2 = x1 + d_so*cos( beta2 );
@@ -58,8 +59,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             x4 = r4*cos(beta4);
             x5 = r4*cos(alpha_total/2);
             x6 = (r4 + d_sy)*cos(alpha_total/2);
-            disp(r4 + d_sy)
-            
+                        
             y1 = r_si*sin(alpha_st/2);
             y2 = y1 + d_so*sin(beta2);
             y3 = w_st/2;
@@ -67,12 +67,34 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             y5 = r4*sin(alpha_total/2);
             y6 = (r4 + d_sy)*sin(alpha_total/2);
             
+            %calculating with addition of fillets
+            gamma = atan(abs((y3-y2)/(x3-x2)));
+            xf2_c = x3 + r_sf*(sin(gamma) - ((1-cos(gamma))/tan(gamma)));
+            yf2_c = y3 + r_sf;
+            xf2 = x3 - r_sf*(1-cos(gamma))/tan(gamma);
+            yf2 = y3 + r_sf*(1-cos(gamma));
+            
+            v1 = [x1-x2; y1-y2];
+            v2 = [x3-x2; y3-y2];
+            r1 = r_st*[-v1(2); v1(1)]/norm(v1);
+            r2 = r_st*[-v2(2); v2(1)]/norm(v2);
+            A = [v1, -v2];
+            t = A\-(r2+r1);
+            disp(t)
+            
+            
+            
+          
+            x_f2_arr = [xf2, xf2_c, xf2_c, xf2, xf2_c, xf2_c];
+            y_f2_arr = [yf2, yf2_c, y3, -yf2, -yf2_c, -y3];
+            
             x_arr = [ x1, x1, x2, x3, x4, x5, x6, x6, x5, x4, x3, x2 ];
             y_arr = [-y1, y1, y2, y3, y4, y5, y6, -y6, -y5, -y4, -y3, -y2];
             
             for i = 1:slots
               
             [x,y] = obj.location.transformCoords(x_arr,y_arr, DimRadian((i-1)*alpha_total));
+            [x_f2, y_f2] = obj.location.transformCoords(x_f2_arr, y_f2_arr, DimRadian((i-1)*alpha_total));
             
                 p1 = [x(1), y(1)];
                 p2 = [x(2), y(2)];
@@ -86,16 +108,25 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
                 p10 = [x(10), y(10)];
                 p11 = [x(11), y(11)];
                 p12 = [x(12), y(12)];
+                
+                f2_top_start = [x_f2(1), y_f2(1)];
+                f2_top_center = [x_f2(2), y_f2(2)];
+                f2_top_end = [x_f2(3), y_f2(3)];
+                f2_bottom_start = [x_f2(6), y_f2(6)];
+                f2_bottom_center = [x_f2(5), y_f2(5)];
+                f2_bottom_end = [x_f2(4), y_f2(4)];
 
                 arc1(i) = drawer.drawArc(obj.location.anchor_xy, p1, p2);
                 seg1(i) = drawer.drawLine(p2, p3);
-                seg2(i) = drawer.drawLine(p3, p4);
-                seg3(i) = drawer.drawLine(p4, p5);
+                seg2(i) = drawer.drawLine(p3, f2_top_start);
+                fill2_top(i) = drawer.drawArc(f2_top_center, f2_top_start, f2_top_end);
+                seg3(i) = drawer.drawLine(f2_top_end, p5);
                 arc2(i) = drawer.drawArc(obj.location.anchor_xy, p5, p6);
                 arc3(i) = drawer.drawArc(obj.location.anchor_xy, p8, p7);
                 arc4(i) = drawer.drawArc(obj.location.anchor_xy, p9, p10);
-                seg4(i) = drawer.drawLine(p10, p11);
-                seg5(i) = drawer.drawLine(p11, p12);
+                seg4(i) = drawer.drawLine(p10, f2_bottom_start);
+                fill2_bottom(i) = drawer.drawArc(f2_bottom_center, f2_bottom_start, f2_bottom_end);
+                seg5(i) = drawer.drawLine(f2_bottom_end, p12);
                 seg6(i) = drawer.drawLine(p12, p1);
             
             end
