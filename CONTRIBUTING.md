@@ -6,7 +6,19 @@ public discussion groups, you agree to release your code under the terms
 of the BSD license that you can find in the LICENSE.md file included in 
 the source distribution.
 
-# How to use GitHub issues for the modeling repository
+# How to use GitHub Issues for the modeling repository
+
+GitHub Issues is used to track development actions for this repository.
+If there is a problem or concern, create an issue using the GitHub web
+interface. Please ensure a duplicate issue doesn't already exist.
+
+1. Create a descriptive title that summarizes the issue
+2. Write enough details in the description that anyone else familiar
+   with the project can take action and be productive on this topic
+3. Populate metadata fields
+  a. Use "Assignees" to assign relevant people to work on the issue
+  b. Use "Labels" to assign appropriate tags
+  c. Use "Milestone" to assign issue to group
 
 # How to provide a patch for a new feature
 
