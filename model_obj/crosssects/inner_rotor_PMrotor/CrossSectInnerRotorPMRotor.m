@@ -1,8 +1,8 @@
 classdef CrossSectInnerRotorPMRotor < CrossSectBase
-    %CrossSectInnerRotorPMStator Describes the inner rotor PM rotor.
+    %CrossSectInnerRotorPMRotor Describes the inner rotor PM rotor.
     %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is the center of the rotor,
-    %   with the x-axis directed down the center of one of the rotor teeth.
+    %   with the x-axis directed along the center of one of the rotor poles
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
