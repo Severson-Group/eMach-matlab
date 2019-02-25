@@ -17,7 +17,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
         dim_r_st; %fillet on outter tooth: class type DimLinear
         dim_r_sf; %fillet between tooth tip and base: class type DimLinear
         dim_r_sb; %fillet at tooth base: class type DimLinear
-        stator_slots; %number of stator slots
+        dim_Q;    %number of stator slots (integer)
         
     end
     
@@ -43,9 +43,9 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             r_st = obj.dim_r_st;
             r_sf = obj.dim_r_sf;
             r_sb = obj.dim_r_sb;
-            slots = obj.stator_slots;
+            Q = obj.dim_Q;
             
-            alpha_total = DimDegree(360/slots).toRadians();
+            alpha_total = DimDegree(360/Q).toRadians();
             
             x1 = r_si*cos(alpha_st/2);
             beta2 = alpha_st/2 - alpha_so;
@@ -70,7 +70,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             x_arr = [ x1, x1, x2, x3, x4, x5, x6, x6, x5, x4, x3, x2 ];
             y_arr = [-y1, y1, y2, y3, y4, y5, y6, -y6, -y5, -y4, -y3, -y2];
             
-            for i = 1:slots
+            for i = 1:Q
               
             [x,y] = obj.location.transformCoords(x_arr,y_arr, DimRadian((i-1)*alpha_total));
             
@@ -128,7 +128,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             validateattributes(obj.dim_r_st,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_r_sf,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_r_sb,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.stator_slots,{'double'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_Q,{'double'},{'nonnegative','nonempty','integer'})
             
          end
                   
