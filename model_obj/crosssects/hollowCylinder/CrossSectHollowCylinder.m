@@ -24,18 +24,17 @@ classdef CrossSectHollowCylinder < CrossSectBase
             center = [0,0];
             
             % Outer circle
-            outer_radius = compHollowCylinderObj.dim_r_o;
             startxy_out = outer_radius*[0, -1]; % + shift_xy;
             endxy_out = outer_radius*[0, 1]; % + shift_xy;
-            [arc_out1] = drawer.drawArc(mn, center, startxy_out, endxy_out);
-            [arc_out2] = drawer.drawArc(mn, center, endxy_out, startxy_out);
+            [arc_out1] = drawer.drawArc(center, startxy_out, endxy_out);
+            [arc_out2] = drawer.drawArc(center, endxy_out, startxy_out);
             
             % inner circle
             inner_radius = outer_radius - thickness;
             startxy_in = inner_radius*[0, -1]; % + shift_xy;
             endxy_in = inner_radius*[0, 1]; % + shift_xy;
-            [arc_in1] = drawer.drawArc(mn, center, startxy_in, endxy_in);
-            [arc_in2] = drawer.drawArc(mn, center, endxy_in, startxy_in);
+            [arc_in1] = drawer.drawArc(center, startxy_in, endxy_in);
+            [arc_in2] = drawer.drawArc(center, endxy_in, startxy_in);
             segments = [arc_out1, arc_out2, arc_in1, arc_in2];       
         end
         
@@ -52,8 +51,8 @@ classdef CrossSectHollowCylinder < CrossSectBase
             validateProps@CrossSectBase(obj); 
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_d_a,{'dimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_r_o,{'dimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
          end
                   
