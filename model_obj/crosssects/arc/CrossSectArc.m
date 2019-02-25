@@ -21,40 +21,29 @@ classdef CrossSectArc < CrossSectBase
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
-            shift_xy = obj.location.anchor_xy(1:2);
-            %rotate_xy = obj.location.rotate_xyz(3).toRadians;
-            rotate_xy = 0;
+            t = obj.dim_d_a;
+            r = obj.dim_r_o;
+            alpha = obj.dim_alpha.toRadians();
             
-            center = [0,0] + shift_xy(1:2); 
-
-            % Outer arc segment
-            startxy_out = obj.dim_r_o * ...
-                        [   cos(-obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(-obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;
-            endxy_out = obj.dim_r_o * ...
-                        [   cos(obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;        
-
-            [arc_out] = drawer.drawArc(center, startxy_out, endxy_out);
-
-            % Inner arc segment
-            startxy_in = (obj.dim_r_o - obj.dim_d_a) * ...
-                        [   cos(-obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(-obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;
-
-            endxy_in = (obj.dim_r_o - obj.dim_d_a) * ...
-                        [   cos(obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;
-
-            [arc_in] = drawer.drawArc(center, startxy_in, endxy_in);
-
-            % Side segments
-            [line_cc] = drawer.drawLine(endxy_in, endxy_out);
-            [line_cw] = drawer.drawLine(startxy_in, startxy_out);
+            x_out = r*cos(alpha/2);
+            x_in = (r-t)*cos(alpha/2);
+            x = [x_out, x_out, x_in, x_in];
+            
+            y_out = r*sin(alpha/2);
+            y_in = (r-t)*sin(alpha/2);
+            y = [-y_out, y_out, y_in, -y_in];
+            
+            [x_trans, y_trans] = obj.location.transformCoords(x,y);
+            
+            p1 = [x_trans(1), y_trans(1)];
+            p2 = [x_trans(2), y_trans(2)];
+            p3 = [x_trans(3), y_trans(3)];
+            p4 = [x_trans(4), y_trans(4)];
+            
+            [arc_out] = drawer.drawArc(obj.location.anchor_xy, p1, p2);
+            [line_cc] = drawer.drawLine(p2,p3);
+            [arc_in] = drawer.drawArc(obj.location.anchor_xy, p4, p3);
+            [line_cw] = drawer.drawLine(p4, p1);
 
             %segments = [arc_out, arc_in, line_cc, line_cw];
         end
