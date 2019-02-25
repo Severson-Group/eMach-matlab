@@ -122,6 +122,8 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
                 [f1_b_start, f1_b_stop, f1_b_center, f1_b_t] = obj.filletLineLine(p11, p12, p1, obj.dim_r_st);
                 [f2_t_start, f2_t_stop, f2_t_center, f2_t_t] = obj.filletLineLine(p3, p4, p5, obj.dim_r_sf);
                 [f2_b_start, f2_b_stop, f2_b_center, f2_b_t] = obj.filletLineLine(p10, p11, p12, obj.dim_r_sf);
+                [f3_t_start, f3_t_stop, f3_t_center, f3_t_t] = obj.filletLineArc( p4, p5, p6, obj.location.anchor_xy, obj.dim_r_sb, "start" );
+                [f3_b_start, f3_b_stop, f3_b_center, f3_b_t] = obj.filletLineArc( p11, p9, p10, obj.location.anchor_xy, obj.dim_r_sb, "stop" );
                 
 
                 arc1(i) = drawer.drawArc(obj.location.anchor_xy, p1, p2);
@@ -129,14 +131,16 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
                 f1_top(i) = drawer.drawArc(f1_t_center, f1_t_start, f1_t_stop);
                 seg2(i) = drawer.drawLine(f1_t_start, f2_t_start);
                 f2_top(i) = drawer.drawArc(f2_t_center, f2_t_start, f2_t_stop);
-                seg3(i) = drawer.drawLine(f2_t_stop, p5);
-                arc2(i) = drawer.drawArc(obj.location.anchor_xy, p5, p6);
+                seg3(i) = drawer.drawLine(f2_t_stop, f3_t_start);
+                f3_top(i) = drawer.drawArc(f3_t_center, f3_t_start, f3_t_stop);
+                arc2(i) = drawer.drawArc(obj.location.anchor_xy, f3_t_stop, p6);
                 arc3(i) = drawer.drawArc(obj.location.anchor_xy, p8, p7);
-                arc4(i) = drawer.drawArc(obj.location.anchor_xy, p9, p10);
-                seg4(i) = drawer.drawLine(p10, f2_b_start);
+                arc4(i) = drawer.drawArc(obj.location.anchor_xy, p9, f3_b_start);
+                f3_bottom(i) = drawer.drawArc(f3_b_center, f3_b_start, f3_b_stop);
+                seg4(i) = drawer.drawLine(f3_b_stop, f2_b_start);
                 f2_b(i) = drawer.drawArc(f2_b_center, f2_b_start, f2_b_stop);
                 seg5(i) = drawer.drawLine(f2_b_stop, f1_b_stop);
-                f1_top(i) = drawer.drawArc(f1_b_center, f1_b_start, f1_b_stop);
+                f1_bottom(i) = drawer.drawArc(f1_b_center, f1_b_start, f1_b_stop);
                 seg6(i) = drawer.drawLine(f1_b_start, p1);
             
             end
@@ -145,23 +149,115 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             %segments = [top_seg, bottom_seg, left_seg, right_seg];
         end
         
-        function [start, stop, center, t] = filletLineLine(obj, p1, p2, p3, r)
+        function [start, stop, center, t] = filletLineArc(obj, p_line, arc_start, arc_stop, arc_center, r, common)
+            
+            validateattributes(p_line, {'numeric'}, {'numel',2});
+            validateattributes(arc_start, {'numeric'}, {'numel',2});
+            validateattributes(arc_stop, {'numeric'}, {'numel',2});
+            validateattributes(arc_center, {'numeric'}, {'numel',2});
+            validateattributes(common, {'string'}, {'nonempty'});
+            validateattributes(r, {'DimLinear'}, {'nonempty'});
+
+            original_dim = size(p_line); %grab original array shape of inputs
+                                     %assuming all inputs have same shape
+            
+            p_line = reshape(p_line, 2,1); 
+            arc_start = reshape(arc_start, 2,1);
+            arc_stop = reshape(arc_stop, 2,1);
+            arc_center = reshape(arc_center, 2,1);
+            
+            if common == 'start'
+                p_common = arc_start;
+                p_arc = arc_stop;
+                sign = 1;
+            elseif common == 'stop'
+                p_common = arc_stop;
+                p_arc = arc_start;
+                sign = -1;
+            else
+                error('Allowable values for common are "start" or "stop".')
+            end
+             
+            arc_radius = norm(arc_start - arc_center);
+            
+            v_com = p_common - arc_center;
+            v_arc = p_arc - arc_center;
+                        
+            %find and verify theta between start and stop vector
+            theta = acos(v_com'*v_arc/arc_radius^2);
+            T = @(angle) [cos(angle), -sin(angle); sin(angle), cos(angle)];
+            if ~(norm((arc_stop-arc_center) - T(theta)*(arc_start-arc_center)) < 1e-8)
+                %does rotating starting point by theta bring it to end
+                %point? if not then theta must be flipped
+                theta = 2*pi - theta;
+            end
+            v1 = p_line - p_common;
+            
+            m = (r*v_com/norm(v_com) + v_com);
+            r1 = r*[-v1(2); v1(1)]/norm(v1); %vector perpendicular to v1
+            delta = deg2rad(0.5);
+            v_perturb = T(sign*delta)*v_com - v_com;
+            if r1'*v_perturb<0
+                r1 = -1*r1;
+            end            
+            
+            n = -(v_com + r1);
+            g = sign*theta;
+            
+            fun = @(t2) (m(2)*v1(1) - m(1)*v1(2))*cos(g*t2) + (m(1)*v1(1) + m(2)*v1(2))*sin(g*t2) + n(2)*v1(1) - n(1)*v1(2);
+            
+            t2 = fzero(fun, 0.5);
+            disp('YAAAHHHHH')
+            disp(t2)
+            beta = g*t2;
+            if v1(2) < 0.001
+                t1 = -(m(1)*cos(beta) - m(2)*sin(beta) + n(1))/v1(1);
+            else
+                t1 = -(m(1)*sin(beta) + m(2)*cos(beta) + n(2))/v1(2);
+            end
+            disp('NNNOOOWWWWW')
+            disp(t1)
+            t = [t1,t2];
+            v2 = T(beta)*v_com - v_com;
+
+            %checking to see which way the arc must be drawn
+            alpha1 = mod(rad2deg( atan2(v1(2),v1(1)) ) + 720, 360);
+            alpha2 = mod(rad2deg( atan2(v2(2),v2(1)) ) + 720, 360);
+            delta = alpha1 - alpha2;
+            if delta > 0 && delta <180 || delta <-180
+                start = p_common + t(1)*v1;
+                stop  = p_common + v2;
+            else
+                start = p_common + v2;
+                stop  = p_common + t(1)*v1;
+            end
+                
+            center = p_common + t(1)*v1 + r1; 
+            
+            %return points in same shape as the original inputs
+            start = reshape(start, original_dim);
+            stop = reshape(stop, original_dim);
+            center = reshape(center, original_dim);
+            
+            
+        end
+        
+        function [start, stop, center, t] = filletLineLine(obj, p1, p_common, p2, r)
             
             validateattributes(p1, {'numeric'}, {'numel',2});
+            validateattributes(p_common, {'numeric'}, {'numel',2});
             validateattributes(p2, {'numeric'}, {'numel',2});
-            validateattributes(p3, {'numeric'}, {'numel',2});
             validateattributes(r, {'DimLinear'}, {'nonempty'})
        
-            original_p1_dim = size(p1); 
-            original_p2_dim = size(p2);
-            original_p3_dim = size(p3);
+            original_dim = size(p1); %grab original array shape of inputs
+                                     %assuming all inputs have same shape
             
             p1 = reshape(p1, 2,1); 
+            p_common = reshape(p_common, 2,1);
             p2 = reshape(p2, 2,1);
-            p3 = reshape(p3, 2,1);
             
-            v1 = p1-p2;
-            v2 = p3-p2;
+            v1 = p1-p_common;
+            v2 = p2-p_common;
             r1 = r*[-v1(2); v1(1)]/norm(v1);
             r2 = r*[-v2(2); v2(1)]/norm(v2);
             
@@ -180,14 +276,20 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             alpha2 = mod(rad2deg( atan2(v2(2),v2(1)) ) + 720, 360);
             delta = alpha1 - alpha2;
             if delta > 0 && delta <180 || delta <-180
-                start = p2 + t(1)*v1;
-                stop  = p2 + t(2)*v2;
+                start = p_common + t(1)*v1;
+                stop  = p_common + t(2)*v2;
             else
-                start = p2 + t(2)*v2;
-                stop  = p2 + t(1)*v1;
+                start = p_common + t(2)*v2;
+                stop  = p_common + t(1)*v1;
             end
                 
-            center = p2 + t(1)*v1 + r1; 
+            center = p_common + t(1)*v1 + r1; 
+            
+            %return points in same shape as the original inputs
+            start = reshape(start, original_dim);
+            stop = reshape(stop, original_dim);
+            center = reshape(center, original_dim);
+            
         end
         
         function select(obj)
