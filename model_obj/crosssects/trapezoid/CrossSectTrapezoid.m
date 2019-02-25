@@ -27,11 +27,18 @@ classdef CrossSectTrapezoid < CrossSectBase
             h = obj.dim_h;
             w = obj.dim_w;
             theta = obj.dim_theta;
+            
+            x = [-(w/2), -(w/2) + (h/tan(theta)), ...
+                  (w/2) - (h/tan(theta)), (w/2)];
+            
+            y = [0, h, h, 0];
+            
+            [x_trans, y_trans] = obj.location.transformCoords(x,y);
 
-            point1 = [-(w/2), 0];
-            point2 = [-(w/2) + (h/tan(theta)), h];
-            point3 = [ (w/2) - (h/tan(theta)), h];
-            point4 = [ (w/2), 0];
+            point1 = [x_trans(1), y_trans(1)];
+            point2 = [x_trans(2), y_trans(2)];
+            point3 = [x_trans(3), y_trans(3)];
+            point4 = [x_trans(4), y_trans(4)];
 
             % Draw segments
             [top_seg]    = drawer.drawLine(point2, point3);
