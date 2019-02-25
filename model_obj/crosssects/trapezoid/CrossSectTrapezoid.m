@@ -18,7 +18,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             % Calculate points of trapezoid
@@ -39,12 +39,16 @@ classdef CrossSectTrapezoid < CrossSectBase
             [left_seg]   = drawer.drawLine(point1, point2);
             [right_seg]  = drawer.drawLine(point3, point4);
 
-            %segments = [top_seg, bottom_seg, left_seg, right_seg];
+            %calculate a coordinate inside the surface
+            innerCoord = ((point1 + point2) / 2); %PLACE HOLDER CALCULATION. 
+            %TO DO: REPLACE WITH REAL CALCULATION USING NEW LOCATION2D
+            %note: this will be much, much improved by using Nick's new
+            %Location2D class.....
+            
+            segments = [top_seg, bottom_seg, left_seg, right_seg];            
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
     end
     
      methods(Access = protected)

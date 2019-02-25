@@ -18,7 +18,7 @@ classdef CrossSectArc < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             shift_xy = obj.location.anchor_xy(1:2);
@@ -56,7 +56,15 @@ classdef CrossSectArc < CrossSectBase
             [line_cc] = drawer.drawLine(endxy_in, endxy_out);
             [line_cw] = drawer.drawLine(startxy_in, startxy_out);
 
-            %segments = [arc_out, arc_in, line_cc, line_cw];
+            %calculate a coordinate inside the surface
+            rad = obj.dim_r_o - obj.dim_d_a/2;
+            innerCoord(1) = rad*cos(rotate_xy) + shift_xy(1);
+            innerCoord(2) = rad*sin(rotate_xy) + shift_xy(2);
+            %note: this will be much, much improved by using Nick's new
+            %Location2D class.....
+            
+            segments = [arc_out, arc_in, line_cc, line_cw];
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
         function select(obj)
