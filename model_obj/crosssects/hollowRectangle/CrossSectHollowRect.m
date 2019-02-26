@@ -10,8 +10,7 @@ classdef CrossSectHollowRect < CrossSectBase
         dim_t3;  %Thickness of rectangle's right side: class type dimLinear
         dim_t4;  %Thickness of rectangle's lower side: class type dimLinear
         dim_l_o; %Length of outer rectangle: class type dimLinear
-        dim_b_o; %Breadth of outer rectangle: class type dimLinear
-        dim_depth; %Depth of the rectangle: class type dimLinear
+        dim_b_o; %Breadth of outer rectangle: class type dimLinear        
     end
     
   methods
@@ -22,8 +21,7 @@ classdef CrossSectHollowRect < CrossSectBase
                 
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
-            theta = obj.location.rotate_xy(1).toRadians;
-
+            
             axis = [0,0];
             l_o=obj.dim_l_o;
             b_o=obj.dim_b_o;
@@ -39,15 +37,9 @@ classdef CrossSectHollowRect < CrossSectBase
             axis(2)+b_o; axis(1)+l_o,axis(2)];
         
 %%Transform Coordinates
-            x_i=points_i(:,1); y_i=points_i(:,2);
-            x_o=points_o(:,1); y_o=points_o(:,2);
-            [x_i_trans, y_i_trans] = obj.location.transformCoords(x_i,y_i);
-            [x_o_trans, y_o_trans] = obj.location.transformCoords(x_o,y_o);
-            points_i(:,1)= x_i_trans(:,1);
-            points_i(:,2)=y_i_trans(:,1);
-            points_o(:,1)= x_o_trans(:,1);
-            points_o(:,2)=y_o_trans(:,1);
-
+            [points_i] = obj.location.transformCoords(points_i);
+            [points_o] = obj.location.transformCoords(points_o);
+            
 %% Draw Inner Rectangle
             [l_i1] = drawer.drawLine(points_i(1,:),points_i(2,:));
             [l_i2] = drawer.drawLine(points_i(2,:),points_i(3,:));
