@@ -22,8 +22,7 @@ classdef CrossSectHollowRect < CrossSectBase
                 
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
-            shift_xy = obj.location.anchor_xy(1:2);
-            theta = obj.location.rotate_xy(2).toRadians;
+            theta = obj.location.rotate_xy(1).toRadians;
 
             axis = [0,0];
             l_o=obj.dim_l_o;
@@ -35,25 +34,19 @@ classdef CrossSectHollowRect < CrossSectBase
 
 %%Create inner and outer points
             points_i=[axis(1)+t1,axis(2)+t4; axis(1)+t1,axis(2)+b_o-t2;...
-             l_o-t3+axis(1), b_o-t2+axis(2);l_o-t3+axis(1),t4+axis(2);];
+            l_o-t3+axis(1), b_o-t2+axis(2);l_o-t3+axis(1),t4+axis(2);];
             points_o = [axis(1),axis(2); axis(1),axis(2)+b_o; axis(1)+l_o, ....
             axis(2)+b_o; axis(1)+l_o,axis(2)];
         
-%%Rotation Matrix
-            rotate=[cos(theta), -sin(theta);...
-                    sin(theta), cos(theta)];
-
-%%Rotate
-            for j=1:4
-                points_i(j,:)=rotate*points_i(j,:)'
-                points_o(j,:)=rotate*points_o(j,:)'
-            end
-
-%Shift Points
-            points_i(:,1)= points_i(:,1)+ shift_xy(1);
-            points_i(:,2)=points_i(:,2)+ shift_xy(2);
-            points_o(:,1)= points_o(:,1)+ shift_xy(1);
-            points_o(:,2)=points_o(:,2)+ shift_xy(2);
+%%Transform Coordinates
+            x_i=points_i(:,1); y_i=points_i(:,2);
+            x_o=points_o(:,1); y_o=points_o(:,2);
+            [x_i_trans, y_i_trans] = obj.location.transformCoords(x_i,y_i);
+            [x_o_trans, y_o_trans] = obj.location.transformCoords(x_o,y_o);
+            points_i(:,1)= x_i_trans(:,1);
+            points_i(:,2)=y_i_trans(:,1);
+            points_o(:,1)= x_o_trans(:,1);
+            points_o(:,2)=y_o_trans(:,1);
 
 %% Draw Inner Rectangle
             [l_i1] = drawer.drawLine(points_i(1,:),points_i(2,:));
