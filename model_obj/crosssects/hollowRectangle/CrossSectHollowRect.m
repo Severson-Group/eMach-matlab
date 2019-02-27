@@ -5,12 +5,12 @@ classdef CrossSectHollowRect < CrossSectBase
     %   rectangle.
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_t1;  %Thickness of rectangle's left side: class type dimLinear
+        dim_t1;  %Thickness of rectangle's right side: class type dimLinear
         dim_t2;  %Thickness of rectangle's upper side: class type dimLinear
-        dim_t3;  %Thickness of rectangle's right side: class type dimLinear
+        dim_t3;  %Thickness of rectangle's left side: class type dimLinear
         dim_t4;  %Thickness of rectangle's lower side: class type dimLinear
-        dim_l_o; %Length of outer rectangle: class type dimLinear
-        dim_b_o; %Breadth of outer rectangle: class type dimLinear        
+        dim_w; %Length of outer rectangle: class type dimLinear
+        dim_h; %Breadth of outer rectangle: class type dimLinear        
     end
     
   methods
@@ -23,18 +23,18 @@ classdef CrossSectHollowRect < CrossSectBase
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             axis = [0,0];
-            l_o=obj.dim_l_o;
-            b_o=obj.dim_b_o;
+            w=obj.dim_w;
+            h=obj.dim_h;
             t1=obj.dim_t1;
             t2=obj.dim_t2;
             t3=obj.dim_t3;
             t4=obj.dim_t4;
 
 %%Create inner and outer points
-            points_i=[axis(1)+t1,axis(2)+t4; axis(1)+t1,axis(2)+b_o-t2;...
-            l_o-t3+axis(1), b_o-t2+axis(2);l_o-t3+axis(1),t4+axis(2);];
-            points_o = [axis(1),axis(2); axis(1),axis(2)+b_o; axis(1)+l_o, ....
-            axis(2)+b_o; axis(1)+l_o,axis(2)];
+            points_i=[axis(1)+t3,axis(2)+t4; axis(1)+t3,axis(2)+h-t2;...
+            w-t1+axis(1), h-t2+axis(2);w-t1+axis(1),t4+axis(2);];
+            points_o = [axis(1),axis(2); axis(1),axis(2)+h; axis(1)+w, ....
+            axis(2)+h; axis(1)+w,axis(2)];
         
 %%Transform Coordinates
             [points_i] = obj.location.transformCoords(points_i);
@@ -70,7 +70,8 @@ classdef CrossSectHollowRect < CrossSectBase
         validateattributes(obj.dim_t2,{'DimLinear'},{'nonnegative','nonempty'});
         validateattributes(obj.dim_t3,{'DimLinear'},{'nonnegative','nonempty'});
         validateattributes(obj.dim_t4,{'DimLinear'},{'nonnegative','nonempty'});
-        validateattributes(obj.dim_l_o,{'DimLinear'},{'nonnegative','nonempty'});
+        validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'});
+        validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'});
       end
                   
          function obj = createProps(obj, len, args)
