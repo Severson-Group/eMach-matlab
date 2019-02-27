@@ -6,7 +6,11 @@ classdef Location2D
         anchor_xy = [DimMillimeter(0),DimMillimeter(0)];   %Distance from 
         %global origin xy coordinate to component's origin xy coordinate
         
+<<<<<<< HEAD
         rotate_xy = DimRadian(0);  %Angles about global xy axes to 
+=======
+        theta = DimRadian(0);  %Angles about global xy axes to 
+>>>>>>> develop
                                      %rotate component's xy axes in radians
         R; %Rotation transformation matrix
     end
@@ -15,6 +19,7 @@ classdef Location2D
         function obj = Location2D(varargin)
             obj = createProperties(obj,nargin,varargin);            
             validateattributes(obj.anchor_xy,{'DimLinear'}, {'size', [1,2]})
+<<<<<<< HEAD
             validateattributes(obj.rotate_xy,{'DimAngular'},{'size', [1,1]})
             theta = obj.rotate_xy.toRadians();
             obj.R = [ cos(theta), -sin(theta); ...
@@ -53,7 +58,34 @@ classdef Location2D
             y = reshape(rotated_coords(2,1:end), original_y_dim) + ...
                 obj.anchor_xy(2);
             
+=======
+            validateattributes(obj.theta,{'DimAngular'},{'size', [1,1]})
+            theta = obj.theta.toRadians();
+            obj.R = [ cos(theta), -sin(theta); ...
+                      sin(theta),  cos(theta) ];
+>>>>>>> develop
         end
+        
+        function rotated_coords = transformCoords(obj, coords, add_theta)
+            
+            %This function takes in an nx2 array of coordinates of the form
+            %[x,y] and returns rotated and translated coordinates. The
+            %translation and rotation are described by obj.anchor_xy and
+            %obj.theta. The optional "add_theta" argument adds an
+            %additional angle of "add_theta" to the obj.theta attribute.
+            
+            if exist('add_theta','var')
+                validateattributes(add_theta, {'DimAngular'}, {'size',[1,1]})
+                add_theta = add_theta.toRadians() + obj.theta.toRadians();
+                T = [ cos(add_theta), -sin(add_theta); ...
+                      sin(add_theta),  cos(add_theta) ];
+            else
+                T = obj.R;
+            end
+               
+            rotated_coords = transpose(T*coords');
+        end
+        
     end
     
      methods(Access = protected)
