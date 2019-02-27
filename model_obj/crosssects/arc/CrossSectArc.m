@@ -33,33 +33,21 @@ classdef CrossSectArc < CrossSectBase
             y_in = (r-t)*sin(alpha/2);
             y = [-y_out, y_out, y_in, -y_in];
             
-            [x_trans, y_trans] = obj.location.transformCoords(x,y);
+            [p] = obj.location.transformCoords([x' y']);
             
-            p1 = [x_trans(1), y_trans(1)];
-            p2 = [x_trans(2), y_trans(2)];
-            p3 = [x_trans(3), y_trans(3)];
-            p4 = [x_trans(4), y_trans(4)];
-            
-            [arc_out] = drawer.drawArc(obj.location.anchor_xy, p1, p2);
-            [line_cc] = drawer.drawLine(p2,p3);
-            [arc_in] = drawer.drawArc(obj.location.anchor_xy, p4, p3);
-            [line_cw] = drawer.drawLine(p4, p1);
+            [arc_out] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
+            [line_cc] = drawer.drawLine(p(2,:),p(3,:));
+            [arc_in] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
+            [line_cw] = drawer.drawLine(p(4,:), p(1,:));
 
             %calculate a coordinate inside the surface
             rad = obj.dim_r_o - obj.dim_d_a/2;
-            innerCoord(1) = rad*cos(rotate_xy) + shift_xy(1);
-            innerCoord(2) = rad*sin(rotate_xy) + shift_xy(2);
-            %note: this will be much, much improved by using Nick's new
-            %Location2D class.....
+            innerCoord = obj.location.transformCoords([rad, 0]);            
             
             segments = [arc_out, arc_in, line_cc, line_cw];
             csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
-
     end
     
      methods(Access = protected)

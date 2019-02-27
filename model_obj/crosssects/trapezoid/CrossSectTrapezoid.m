@@ -33,24 +33,16 @@ classdef CrossSectTrapezoid < CrossSectBase
             
             y = [0, h, h, 0];
             
-            [x_trans, y_trans] = obj.location.transformCoords(x,y);
-
-            point1 = [x_trans(1), y_trans(1)];
-            point2 = [x_trans(2), y_trans(2)];
-            point3 = [x_trans(3), y_trans(3)];
-            point4 = [x_trans(4), y_trans(4)];
+            [p] = obj.location.transformCoords([x' y']);
 
             % Draw segments
-            [top_seg]    = drawer.drawLine(point2, point3);
-            [bottom_seg] = drawer.drawLine(point1, point4);
-            [left_seg]   = drawer.drawLine(point1, point2);
-            [right_seg]  = drawer.drawLine(point3, point4);
+            [top_seg]    = drawer.drawLine(p(2,:), p(3,:));
+            [bottom_seg] = drawer.drawLine(p(1,:), p(4,:));
+            [left_seg]   = drawer.drawLine(p(1,:), p(2,:));
+            [right_seg]  = drawer.drawLine(p(3,:), p(4,:));
 
             %calculate a coordinate inside the surface
-            innerCoord = ((point1 + point2) / 2); %PLACE HOLDER CALCULATION. 
-            %TO DO: REPLACE WITH REAL CALCULATION USING NEW LOCATION2D
-            %note: this will be much, much improved by using Nick's new
-            %Location2D class.....
+            innerCoord = obj.location.transformCoords([0, h/2]);
             
             segments = [top_seg, bottom_seg, left_seg, right_seg];            
             csToken = CrossSectToken(innerCoord, segments);
