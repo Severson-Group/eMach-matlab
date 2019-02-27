@@ -8,8 +8,7 @@ classdef CrossSectArc < CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_d_a;    %Thickness of the arc: class type dimLinear. If 
         dim_r_o;    %Outer radius of the arc: class type dimLinear
-        dim_alpha;  %Angular span of the arc: class type dimAngular
-        dim_depth;  %Axial depth of the arc: class type dimLinear
+        dim_alpha;  %Angular span of the arc: class type dimAngular        
     end
     
     methods
@@ -59,8 +58,7 @@ classdef CrossSectArc < CrossSectBase
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
+            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
          end
                   

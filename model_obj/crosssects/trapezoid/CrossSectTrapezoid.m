@@ -8,7 +8,6 @@ classdef CrossSectTrapezoid < CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_h;      %Height length: class type dimLinear
         dim_w;      %Bottom edge length: class type dimLinear
-        dim_depth;  %Depth of trapezoid: class type dimLinear
         dim_theta;  %Angular span of lower corner: class type dimAngular
     end
     
@@ -59,8 +58,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty', '<', pi})
          end
                   
