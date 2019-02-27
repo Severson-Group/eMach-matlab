@@ -6,8 +6,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
     
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_d_a;     %Thickness of the cylinder: class type dimLinear.
-        dim_r_o;     %Outer radius of the cylinder: class type dimLinear
-        dim_depth;   %Axial Depth of cylinder: class type dimLinear        
+        dim_r_o;     %Outer radius of the cylinder: class type dimLinear    
     end
     
     methods
@@ -19,23 +18,27 @@ classdef CrossSectHollowCylinder < CrossSectBase
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
-            outer_radius = obj.dim_r_o;
-            thickness = obj.dim_d_a;            
-            center = [0,0];
+            r = obj.dim_r_o;
+            t = obj.dim_d_a;                  
             
-            % Outer circle
-            startxy_out = outer_radius*[0, -1]; % + shift_xy;
-            endxy_out = outer_radius*[0, 1]; % + shift_xy;
-            [arc_out1] = drawer.drawArc(center, startxy_out, endxy_out);
-            [arc_out2] = drawer.drawArc(center, endxy_out, startxy_out);
+            x_out = 0;
+            x_in = 0;
+            x = [x_out, x_out, x_in, x_in];
             
-            % inner circle
-            inner_radius = outer_radius - thickness;
-            startxy_in = inner_radius*[0, -1]; % + shift_xy;
-            endxy_in = inner_radius*[0, 1]; % + shift_xy;
-            [arc_in1] = drawer.drawArc(center, startxy_in, endxy_in);
-            [arc_in2] = drawer.drawArc(center, endxy_in, startxy_in);
-            segments = [arc_out1, arc_out2, arc_in1, arc_in2];       
+            y_out = r;
+            y_in = r-t;
+            y = [-y_out, y_out, -y_in, y_in];
+            
+            xy_cords = [x' y'];
+            
+            [p] = obj.location.transformCoords(xy_cords);
+            
+            [arc_out1] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
+            [arc_out2] = drawer.drawArc(obj.location.anchor_xy, p(2,:), p(1,:));
+            [arc_in1] = drawer.drawArc(obj.location.anchor_xy, p(3,:), p(4,:));
+            [arc_in2] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
+            
+%             segments = [arc_out1, arc_out2, arc_in1, arc_in2];       
         end
         
         function select(obj)
@@ -53,7 +56,6 @@ classdef CrossSectHollowCylinder < CrossSectBase
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
          end
                   
          function obj = createProps(obj, len, args)
