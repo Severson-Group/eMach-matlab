@@ -8,8 +8,7 @@ classdef CrossSectArc < CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_d_a;    %Thickness of the arc: class type dimLinear. If 
         dim_r_o;    %Outer radius of the arc: class type dimLinear
-        dim_alpha;  %Angular span of the arc: class type dimAngular
-        dim_depth;  %Axial depth of the arc: class type dimLinear
+        dim_alpha;  %Angular span of the arc: class type dimAngular        
     end
     
     methods
@@ -21,40 +20,27 @@ classdef CrossSectArc < CrossSectBase
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
-            shift_xy = obj.location.anchor_xy(1:2);
-            %rotate_xy = obj.location.rotate_xyz(3).toRadians;
-            rotate_xy = 0;
+            t = obj.dim_d_a;
+            r = obj.dim_r_o;
+            alpha = obj.dim_alpha.toRadians();
             
-            center = [0,0] + shift_xy(1:2); 
-
-            % Outer arc segment
-            startxy_out = obj.dim_r_o * ...
-                        [   cos(-obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(-obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;
-            endxy_out = obj.dim_r_o * ...
-                        [   cos(obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;        
-
-            [arc_out] = drawer.drawArc(center, startxy_out, endxy_out);
-
-            % Inner arc segment
-            startxy_in = (obj.dim_r_o - obj.dim_d_a) * ...
-                        [   cos(-obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(-obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;
-
-            endxy_in = (obj.dim_r_o - obj.dim_d_a) * ...
-                        [   cos(obj.dim_alpha.toRadians/2 + rotate_xy), ...
-                            sin(obj.dim_alpha.toRadians/2 + rotate_xy)] ...
-                            + shift_xy;
-
-            [arc_in] = drawer.drawArc(center, startxy_in, endxy_in);
-
-            % Side segments
-            [line_cc] = drawer.drawLine(endxy_in, endxy_out);
-            [line_cw] = drawer.drawLine(startxy_in, startxy_out);
+            x_out = r*cos(alpha/2);
+            x_in = (r-t)*cos(alpha/2);
+            x = [x_out, x_out, x_in, x_in];
+            
+            y_out = r*sin(alpha/2);
+            y_in = (r-t)*sin(alpha/2);
+            y = [-y_out, y_out, y_in, -y_in];
+            
+            xy_cords = [x' y'];
+            
+            [p] = obj.location.transformCoords(xy_cords);
+            
+            
+            [arc_out] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
+            [line_cc] = drawer.drawLine(p(2,:),p(3,:));
+            [arc_in] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
+            [line_cw] = drawer.drawLine(p(4,:), p(1,:));
 
             %segments = [arc_out, arc_in, line_cc, line_cw];
         end
@@ -74,8 +60,7 @@ classdef CrossSectArc < CrossSectBase
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
+            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty', '<', 2*pi})
          end
                   

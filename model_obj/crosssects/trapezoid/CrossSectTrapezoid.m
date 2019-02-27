@@ -8,7 +8,6 @@ classdef CrossSectTrapezoid < CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_h;      %Height length: class type dimLinear
         dim_w;      %Bottom edge length: class type dimLinear
-        dim_depth;  %Depth of trapezoid: class type dimLinear
         dim_theta;  %Angular span of lower corner: class type dimAngular
     end
     
@@ -27,17 +26,19 @@ classdef CrossSectTrapezoid < CrossSectBase
             h = obj.dim_h;
             w = obj.dim_w;
             theta = obj.dim_theta;
-
-            point1 = [-(w/2), 0];
-            point2 = [-(w/2) + (h/tan(theta)), h];
-            point3 = [ (w/2) - (h/tan(theta)), h];
-            point4 = [ (w/2), 0];
+            
+            x = [-(w/2), -(w/2) + (h/tan(theta)), ...
+                  (w/2) - (h/tan(theta)), (w/2)];
+            
+            y = [0, h, h, 0];
+            
+            [p] = obj.location.transformCoords( [x' y']);
 
             % Draw segments
-            [top_seg]    = drawer.drawLine(point2, point3);
-            [bottom_seg] = drawer.drawLine(point1, point4);
-            [left_seg]   = drawer.drawLine(point1, point2);
-            [right_seg]  = drawer.drawLine(point3, point4);
+            [top_seg]    = drawer.drawLine(p(2,:), p(3,:));
+            [bottom_seg] = drawer.drawLine(p(1,:), p(4,:));
+            [left_seg]   = drawer.drawLine(p(1,:), p(2,:));
+            [right_seg]  = drawer.drawLine(p(3,:), p(4,:));
 
             %segments = [top_seg, bottom_seg, left_seg, right_seg];
         end
@@ -56,8 +57,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
+            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty', '<', pi})
          end
                   
