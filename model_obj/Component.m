@@ -4,31 +4,28 @@ classdef Component
        
     properties(GetAccess = 'public', SetAccess = 'protected')
         name;           % Name of component
-        cross_sections; % List of cross sections in this component
+        crossSections;  % List of cross sections in this component
         material;       % Material component is made of
-        make_solid;     % How the cross sections will be made into a solid
-        location;       % 3D location of this component
+        makeSolid;      % How the cross sections will be made into a solid        
     end
     
     methods
         function obj = Component(varargin)
             obj = createProperties(obj,nargin,varargin);
             validateattributes(obj.name, {'char'}, {'nonempty'});
-            validateattributes(obj.cross_sections, {'CrossSectBase'}, {'nonempty'});
+            validateattributes(obj.crossSections, {'CrossSectBase'}, {'nonempty'});
             validateattributes(obj.material, {'MaterialGeneric'}, {'nonempty'});
-            validateattributes(obj.make_solid, {'MakeSolidBase'}, {'nonempty'});
-            validateattributes(obj.location, {'Location3D'}, {'nonempty'});
+            validateattributes(obj.makeSolid, {'MakeSolidBase'}, {'nonempty'});            
         end
         
-        function make(obj, drawer)
+        function make(obj, drawer, maker)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
-            for i = 1:length(obj.cross_sections)
-                obj.cross_sections(i).draw(drawer);
-                obj.cross_sections(i).select();
+            for i = 1:length(obj.crossSections)
+                cs(i) = obj.crossSections(i).draw(drawer);                
             end
             
-            obj.make_solid.run();
+            obj.makeSolid.run(obj.name, obj.material.name, cs, maker)
         end
     end
     
