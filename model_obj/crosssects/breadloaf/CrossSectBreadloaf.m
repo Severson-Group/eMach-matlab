@@ -19,7 +19,7 @@ classdef CrossSectBreadloaf < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             %create local variables for more readable code
@@ -51,8 +51,11 @@ classdef CrossSectBreadloaf < CrossSectBase
             [top_seg] = drawer.drawLine(p2,p3);
             [base]   = drawer.drawLine(p3, p4);
             [bottom_seg]  = drawer.drawLine(p4, p1);
+            
+            innerCoord = obj.location.transformCoords( [(xi + xo)/2, 0] );
 
-            %segments = [arc, top_seg, base, bottom_seg];
+            segments = [arc, top_seg, base, bottom_seg];
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
         function select(obj)
