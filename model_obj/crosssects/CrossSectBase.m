@@ -16,8 +16,7 @@ classdef CrossSectBase < matlab.mixin.Heterogeneous
     end
     
     methods(Abstract = true)
-        draw(obj, drawer);
-        select(obj);
+        [csToken] = draw(obj, drawer);        
     end
     
     methods(Abstract = true, Access = protected)
