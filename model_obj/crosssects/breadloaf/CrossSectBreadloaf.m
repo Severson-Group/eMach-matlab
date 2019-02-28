@@ -7,12 +7,10 @@ classdef CrossSectBreadloaf < CrossSectBase
     %   (i.e. the radius is not too small)
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_w;     %width of the base: class type dimLinear. If 
+        dim_w;     %width of the base: class type dimLinear.
         dim_l;     %length of sides: class type dimLinear
         dim_r;  %radius of top of breadloaf: class type dimLinear
-        dim_alpha;  %angle between base and sides: class type dimAngular
-        dim_depth; %depth of breadloaf: class type dimLinear
-        
+        dim_alpha;  %angle between base and sides: class type dimAngular        
     end
     
     methods
@@ -24,26 +22,29 @@ classdef CrossSectBreadloaf < CrossSectBase
         function draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
+            %create local variables for more readable code
             w = obj.dim_w;
             l = obj.dim_l;
             r = obj.dim_r;
             alpha = obj.dim_alpha.toRadians();
             
-            y_out = w/2 - l*cos(alpha);
-            y_in = w/2;
-            beta = asin(y_out/r);
-            x_out = r*cos(beta);
-            x_in = x_out - l*sin(alpha);
+            %calculate coordinates for outter and inner points
+            yo = w/2 - l*cos(alpha);
+            yi = w/2;
+            beta = asin(yo/r);
+            xo = r*cos(beta);
+            xi = xo - l*sin(alpha);
             
-            x = [ x_out, x_out, x_in, x_in ];
-            y = [-y_out, y_out, y_in, -y_in];
+            p1 = [ xo, -yo ];
+            p2 = [ xo,  yo ];
+            p3 = [ xi,  yi ];
+            p4 = [ xi, -yi ];
             
-            [x_trans, y_trans] = obj.location.transformCoords(x,y);
-
-            p1 = [x_trans(1), y_trans(1)];
-            p2 = [x_trans(2), y_trans(2)];
-            p3 = [x_trans(3), y_trans(3)];
-            p4 = [x_trans(4), y_trans(4)];
+            %transform coords
+            p1 = obj.location.transformCoords(p1);
+            p2 = obj.location.transformCoords(p2);
+            p3 = obj.location.transformCoords(p3);
+            p4 = obj.location.transformCoords(p4);
 
             % Draw segments
             [arc]    = drawer.drawArc(obj.location.anchor_xy, p1, p2);
@@ -71,7 +72,6 @@ classdef CrossSectBreadloaf < CrossSectBase
             validateattributes(obj.dim_l,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_r,{'DimLinear'},{'nonnegative', 'nonempty'})
             validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative', 'nonempty'})
          end
                   
          function obj = createProps(obj, len, args)
