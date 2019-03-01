@@ -17,7 +17,7 @@ classdef CrossSectArc < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             t = obj.dim_d_a;
@@ -32,23 +32,21 @@ classdef CrossSectArc < CrossSectBase
             y_in = (r-t)*sin(alpha/2);
             y = [-y_out, y_out, y_in, -y_in];
             
-            xy_cords = [x' y'];
-            
-            [p] = obj.location.transformCoords(xy_cords);
-            
+            [p] = obj.location.transformCoords([x' y']);
             
             [arc_out] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
             [line_cc] = drawer.drawLine(p(2,:),p(3,:));
             [arc_in] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
             [line_cw] = drawer.drawLine(p(4,:), p(1,:));
 
-            %segments = [arc_out, arc_in, line_cc, line_cw];
+            %calculate a coordinate inside the surface
+            rad = obj.dim_r_o - obj.dim_d_a/2;
+            innerCoord = obj.location.transformCoords([rad, 0]);            
+            
+            segments = [arc_out, arc_in, line_cc, line_cw];
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
-
     end
     
      methods(Access = protected)
