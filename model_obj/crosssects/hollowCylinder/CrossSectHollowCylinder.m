@@ -15,7 +15,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
             obj.validateProps();            
         end
                 
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             r = obj.dim_r_o;
@@ -29,21 +29,21 @@ classdef CrossSectHollowCylinder < CrossSectBase
             y_in = r-t;
             y = [-y_out, y_out, -y_in, y_in];
             
-            xy_cords = [x' y'];
-            
-            [p] = obj.location.transformCoords(xy_cords);
+            [p] = obj.location.transformCoords([x' y']);
             
             [arc_out1] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
             [arc_out2] = drawer.drawArc(obj.location.anchor_xy, p(2,:), p(1,:));
             [arc_in1] = drawer.drawArc(obj.location.anchor_xy, p(3,:), p(4,:));
             [arc_in2] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
             
-%             segments = [arc_out1, arc_out2, arc_in1, arc_in2];       
+            %calculate a coordinate inside the surface
+            rad = obj.dim_r_o - obj.dim_d_a/2;
+            innerCoord = obj.location.transformCoords([rad, 0]);             
+            
+            segments = [arc_out1, arc_out2, arc_in1, arc_in2];  
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
     end
     
      methods(Access = protected)
