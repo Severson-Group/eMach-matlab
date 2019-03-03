@@ -17,7 +17,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             % Calculate points of trapezoid
@@ -33,6 +33,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             y = [0, h, h, 0];
             
 <<<<<<< HEAD
+<<<<<<< HEAD
             [x_trans, y_trans] = obj.location.transformCoords(x,y);
 
             point1 = [x_trans(1), y_trans(1)];
@@ -42,6 +43,9 @@ classdef CrossSectTrapezoid < CrossSectBase
 =======
             [p] = obj.location.transformCoords( [x' y']);
 >>>>>>> develop
+=======
+            [p] = obj.location.transformCoords([x' y']);
+>>>>>>> develop
 
             % Draw segments
             [top_seg]    = drawer.drawLine(p(2,:), p(3,:));
@@ -49,12 +53,13 @@ classdef CrossSectTrapezoid < CrossSectBase
             [left_seg]   = drawer.drawLine(p(1,:), p(2,:));
             [right_seg]  = drawer.drawLine(p(3,:), p(4,:));
 
-            %segments = [top_seg, bottom_seg, left_seg, right_seg];
+            %calculate a coordinate inside the surface
+            innerCoord = obj.location.transformCoords([0, h/2]);
+            
+            segments = [top_seg, bottom_seg, left_seg, right_seg];            
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
     end
     
      methods(Access = protected)
