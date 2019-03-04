@@ -40,8 +40,8 @@ classdef Location2D
                
             rotateCoords = transpose(T*coords');
             transCoords = zeros(size(rotateCoords));
-            transCoords(:,1) = rotateCoords(:,1) + obj.anchor_xyz(1);
-            transCoords(:,2) = rotateCoords(:,2) + obj.anchor_xyz(2);
+            transCoords(:,1) = rotateCoords(:,1) + obj.anchor_xy(1);
+            transCoords(:,2) = rotateCoords(:,2) + obj.anchor_xy(2);
         end
         
         function locObj = relative(obj, relLinear, relAngular)
