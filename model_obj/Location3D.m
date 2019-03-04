@@ -26,6 +26,10 @@ classdef Location3D
             u = obj.u/norm(obj.u);
             theta = obj.theta.toRadians();
             
+            %obj.UU and obj.Ux are intermediate direction vector dependent
+            %matrices. See wikipedia page for more details:
+            %"https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions"
+            
             obj.UU = [ u(1)^2,     u(1)*u(2),   u(1)*u(3); ...
                        u(1)*u(2),  u(2)^2,      u(2)*u(3); ...
                        u(1)*u(3),  u(2)*u(3),   u(3)^2 ];
@@ -34,17 +38,18 @@ classdef Location3D
                        u(3),  0,     -u(1); ...
                       -u(2),  u(1),   0    ];
               
+            %creating rotation matrix
             obj.R = cos(theta)*eye(3) + sin(theta)*obj.Ux + ...
                     (1-cos(theta))*obj.UU;
                
         end
         
-        
-        function rotated_coords = transformCoords(obj, coords, add_theta)
+        function transCoords = transformCoords(obj, coords, add_theta)
             
-            %This function takes in an nx2 array of coordinates of the form
-            %[x,y] and returns rotated and translated coordinates. The
-            %translation and rotation are described by obj.anchor_xy and
+            %This function takes in an nx3 or nx2 array of coordinates of 
+            %the form [x,y,z] or [x,y] and returns rotated and translated
+            %coordinates. The rotations are performed about the axis obj.u.
+            %Translation and rotation are described by obj.anchor_xy and
             %obj.theta. The optional "add_theta" argument adds an
             %additional angle of "add_theta" to the obj.theta attribute.
             
@@ -62,7 +67,12 @@ classdef Location3D
                 coords = [coords, zeros(size(coords,1),1)];
             end
                
-            rotated_coords = transpose(T*coords');
+            rotateCoords = transpose(T*coords');
+            transCoords = zeros(size(rotateCoords));
+            transCoords(:,1) = rotateCoords(:,1) + obj.anchor_xyz(1);
+            transCoords(:,2) = rotateCoords(:,2) + obj.anchor_xyz(2);
+            transCoords(:,3) = rotateCoords(:,3) + obj.anchor_xyz(3);
+            
         end
         
         
