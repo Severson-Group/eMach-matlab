@@ -27,7 +27,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             %creating local variables of all of the attributes for more
@@ -72,7 +72,10 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
             
             for i = 1:Q
               
-            [x,y] = obj.location.transformCoords(x_arr,y_arr, DimRadian((i-1)*alpha_total));
+                p = obj.location.transformCoords([x_arr',y_arr'], DimRadian((i-1)*alpha_total));
+                
+                x = p(:,1);
+                y = p(:,2);
             
                 p1 = [x(1), y(1)];
                 p2 = [x(2), y(2)];
@@ -99,14 +102,13 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
                 seg6(i) = drawer.drawLine(p12, p1);
             
             end
-
-
-            %segments = [top_seg, bottom_seg, left_seg, right_seg];
+            
+            rad = (x3 + x4)/2;
+            innerCoord = obj.location.transformCoords([rad, 0]); 
+            segments = [arc1, seg1, seg2, seg3, arc2, arc3, arc4, seg4, seg5, seg6];
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
     end
     
      methods(Access = protected)
