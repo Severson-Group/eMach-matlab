@@ -8,7 +8,7 @@ classdef Location3D
         %xyz coordinate
         theta = DimRadian(0);   %Angles about global xyz axes to rotate
                                 %component's xyz axes in radians  
-        u = [1,0,0]; %vector about which to rotate component about
+        u = [0,0,1]; %vector about which to rotate component about
         R; %Rotation transformation matrix
         Ux; %internal use direction matrix 1
         UU; %internal use direction matrix 2
@@ -26,11 +26,11 @@ classdef Location3D
             u = obj.u/norm(obj.u);
             theta = obj.theta.toRadians();
             
-            obj.Ux = [ u(1)^2,     u(1)*u(2),   u(1)*u(3); ...
+            obj.UU = [ u(1)^2,     u(1)*u(2),   u(1)*u(3); ...
                        u(1)*u(2),  u(2)^2,      u(2)*u(3); ...
                        u(1)*u(3),  u(2)*u(3),   u(3)^2 ];
                
-            obj.UU = [ 0,    -u(3),   u(2); ...
+            obj.Ux = [ 0,    -u(3),   u(2); ...
                        u(3),  0,     -u(1); ...
                       -u(2),  u(1),   0    ];
               
@@ -57,9 +57,14 @@ classdef Location3D
             else
                 T = obj.R;
             end
+            
+            if size(coords,2) == 2
+                coords = [coords, zeros(size(coords,1),1)];
+            end
                
             rotated_coords = transpose(T*coords');
         end
+        
         
     end
     
