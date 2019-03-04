@@ -19,7 +19,7 @@ classdef CrossSectHollowRect < CrossSectBase
             obj.validateProps();            
         end
                 
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             axis = [0,0];
@@ -52,8 +52,11 @@ classdef CrossSectHollowRect < CrossSectBase
             [l_o3] = drawer.drawLine(points_o(3,:),points_o(4,:));
             [l_o4] = drawer.drawLine(points_o(4,:),points_o(1,:));
             
-        end
-        function select(obj)
+%calculate a coordinate inside the surface
+            rad = obj.dim_w/2;
+            innerCoord = obj.location.transformCoords([rad, 0]);             
+            segments = [l_i1,l_i2,l_i3,l_i4,l_o1,l_o2,l_o3,l_o4];  
+            csToken = CrossSectToken(innerCoord, segments);
             
         end
     end
