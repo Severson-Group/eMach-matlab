@@ -1,13 +1,15 @@
-classdef MagNet < ToolBase & Drawer2dBase
+classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
     %MAGNET Encapsulation for the MagNet FEA software
     %   TODO: add more description
     %   TODO: add more description
     %   TODO: add more description
     %   TODO: add more description
     
-    properties (GetAccess = 'private', SetAccess = 'private')
+    properties (GetAccess = 'public', SetAccess = 'private')
         mn;  % MagNet activexserver object
         doc; % Document object
+        view; %View object
+        consts; %Program constants
     end
     
     methods
@@ -47,6 +49,9 @@ classdef MagNet < ToolBase & Drawer2dBase
             else
                 obj.doc = invoke(obj.mn, 'newDocument');
             end
+            
+            obj.view = invoke(obj.doc, 'getview');
+            obj.consts = invoke(obj.mn, 'getConstants');
         end
         
         function close(obj)
@@ -106,6 +111,26 @@ classdef MagNet < ToolBase & Drawer2dBase
             % This will need to take in arguments, or maybe
             % CrossSect objects which then store internally all their
             % lines and surfaces that need to be selected
+        end
+        
+        function new = extrude(obj, name, material, depth)
+            validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'});
+            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');            
+            new = mn_dv_makeComponentInALine(obj.mn, depth, name, ...
+                material, flags); 
+        end
+        
+        function new = prepareSection(obj, csToken)
+            
+            validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
+            seltype = get(obj.consts,'InfoSetSelection');
+            objcode = get(obj.consts,'infoSliceSurface');
+            
+            %TO DO: how to deal with the units of the coordinate?? 
+            mn_dv_selectat(obj.mn, csToken.innerCoord, seltype, objcode);
+            new = 1;
         end
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
