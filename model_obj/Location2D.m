@@ -21,7 +21,7 @@ classdef Location2D
                       sin(theta),  cos(theta) ];
         end
         
-        function rotatedCoords = transformCoords(obj, coords, addTheta)
+        function transCoords = transformCoords(obj, coords, addTheta)
             
             %This function takes in an nx2 array of coordinates of the form
             %[x,y] and returns rotated and translated coordinates. The
@@ -38,7 +38,10 @@ classdef Location2D
                 T = obj.R;
             end
                
-            rotatedCoords = transpose(T*coords');
+            rotateCoords = transpose(T*coords');
+            transCoords = zeros(size(rotateCoords));
+            transCoords(:,1) = rotateCoords(:,1) + obj.anchor_xyz(1);
+            transCoords(:,2) = rotateCoords(:,2) + obj.anchor_xyz(2);
         end
         
         function locObj = relative(obj, relLinear, relAngular)
