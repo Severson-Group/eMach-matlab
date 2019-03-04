@@ -16,8 +16,7 @@ classdef CrossSectLinearMotorStator < CrossSectBase
         dim_d_sy; %back iron thickness: class type DimLinear
         dim_r_st; %fillet on outer tooth: class type DimLinear
         dim_r_sf; %fillet between tooth tip and base: class type DimLinear
-        dim_r_sb; %fillet at tooth base: class type DimLinear
-        dim_Q;    %number of stator slots       
+        dim_r_sb; %fillet at tooth base: class type DimLinear  
     end
     
     methods
@@ -26,8 +25,9 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             obj.validateProps();            
         end
                 
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            
             w_s = obj.dim_w_s;
             w_st = obj.dim_w_st;
             w_so = obj.dim_w_so;
@@ -38,8 +38,7 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             d_sy = obj.dim_d_sy;
             r_st = obj.dim_r_st;       
             r_sf = obj.dim_r_sf;
-            r_sb = obj.dim_r_sb;
-            Q = obj.dim_Q;  
+            r_sb = obj.dim_r_sb; 
             
             x1 = r_si;
             x2 = r_si + d_so;
@@ -57,10 +56,12 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             y8 = y7+w_so;
             y9 = y8+y3-y2;
             y10 = y9+w_st/2;
+            
             x = [ x1, x5, x5,  x1,  x1, x2, x3, x4, x4, x3, x2, x1...
                   x1, x2, x3, x4, x4, x3, x2, x1];
             y = [ y1, y1, y10, y10, y8, y8, y9, y9, y6, y6, y7, y7...
                   y4, y4, y5, y5, y2, y2, y3, y3];
+              
             p1 = [x(1), y(1)];
             p2 = [x(2), y(2)];
             p3 = [x(3), y(3)];
@@ -102,12 +103,19 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             [seg18] = drawer.drawLine(p18, p19);
             [seg19] = drawer.drawLine(p19, p20);
             [seg20] = drawer.drawLine(p20, p1);
+            
+            %calculate a coordinate inside the surface
+            innerX = x3;
+            innerY = (y5 + y6)/2;
+            innerCoord = obj.location.transformCoords([innerX, innerY]);            
+            
+            segments = [seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8,...
+                seg9, seg10, seg11, seg12, seg13, seg14, seg15, seg16,...
+                seg17, seg18, seg19, seg20];
+            csToken = CrossSectToken(innerCoord, segments);
       
         end
         
-        function select(obj)
-            
-        end
     end
     
      methods(Access = protected)
@@ -129,7 +137,6 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             validateattributes(obj.dim_r_st,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_r_sf,{'DimLinear'},{'nonnegative','nonempty'})
             validateattributes(obj.dim_r_sb,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_Q,{'uint8'},{'nonnegative','nonempty'})
          end
                   
          function obj = createProps(obj, len, args)
