@@ -1,8 +1,8 @@
 classdef CrossSectLinearMotorStator < CrossSectBase
-    %CROSSSECTHOLLOWCYLINDER Describes a hollow cylinder.
+    %CROSSSECTLINEARMOTORSTATOR Describes linear motor stator.
     %   Properties are set upon class creation and cannot be modified.
-    %   The anchor point for this is the center of the circle,
-    %   with the x-axis directed down the center of one of the stator teeth.
+    %   The anchor point for this is the lower right point of the motor,
+    %   with the x-axis directed to the top.
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
@@ -28,6 +28,7 @@ classdef CrossSectLinearMotorStator < CrossSectBase
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
+            % linear motor stator parameters
             w_s = obj.dim_w_s;
             w_st = obj.dim_w_st;
             w_so = obj.dim_w_so;
@@ -40,12 +41,14 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             r_sf = obj.dim_r_sf;
             r_sb = obj.dim_r_sb; 
             
+            % x-axis coordinates of stator points
             x1 = r_si;
             x2 = r_si + d_so;
             x3 = r_si + d_sp;
             x4 = r_so - d_sy;
             x5 = r_so;
             
+            % y-axis coordinates of stator points
             y1 = 0;
             y2 = w_st/2;
             y3 = (w_s-2*w_so)/4;
@@ -57,54 +60,40 @@ classdef CrossSectLinearMotorStator < CrossSectBase
             y9 = y8+y3-y2;
             y10 = y9+w_st/2;
             
+            % build x and y coordinates of stator points as arrays based on
+            % the order how these points are connected between each other
             x = [ x1, x5, x5,  x1,  x1, x2, x3, x4, x4, x3, x2, x1...
                   x1, x2, x3, x4, x4, x3, x2, x1];
             y = [ y1, y1, y10, y10, y8, y8, y9, y9, y6, y6, y7, y7...
                   y4, y4, y5, y5, y2, y2, y3, y3];
-              
-            p1 = [x(1), y(1)];
-            p2 = [x(2), y(2)];
-            p3 = [x(3), y(3)];
-            p4 = [x(4), y(4)];
-            p5 = [x(5), y(5)];
-            p6 = [x(6), y(6)];
-            p7 = [x(7), y(7)];
-            p8 = [x(8), y(8)];
-            p9 = [x(9), y(9)];
-            p10 = [x(10), y(10)];
-            p11 = [x(11), y(11)];
-            p12 = [x(12), y(12)];
-            p13 = [x(13), y(13)];
-            p14 = [x(14), y(14)];
-            p15 = [x(15), y(15)];
-            p16 = [x(16), y(16)];
-            p17 = [x(17), y(17)];
-            p18 = [x(18), y(18)];
-            p19 = [x(19), y(19)];
-            p20 = [x(20), y(20)];
-        
-            [seg1] = drawer.drawLine(p1, p2);
-            [seg2] = drawer.drawLine(p2, p3);
-            [seg3] = drawer.drawLine(p3, p4);
-            [seg4] = drawer.drawLine(p4, p5);
-            [seg5] = drawer.drawLine(p5, p6);
-            [seg6] = drawer.drawLine(p6, p7);
-            [seg7] = drawer.drawLine(p7, p8);
-            [seg8] = drawer.drawLine(p8, p9);
-            [seg9] = drawer.drawLine(p9, p10);
-            [seg10] = drawer.drawLine(p10, p11);
-            [seg11] = drawer.drawLine(p11, p12);
-            [seg12] = drawer.drawLine(p12, p13);
-            [seg13] = drawer.drawLine(p13, p14);
-            [seg14] = drawer.drawLine(p14, p15);
-            [seg15] = drawer.drawLine(p15, p16);
-            [seg16] = drawer.drawLine(p16, p17);
-            [seg17] = drawer.drawLine(p17, p18);
-            [seg18] = drawer.drawLine(p18, p19);
-            [seg19] = drawer.drawLine(p19, p20);
-            [seg20] = drawer.drawLine(p20, p1);
             
-            %calculate a coordinate inside the surface
+            % p contains transformed xy coordinates of all points   
+            [p] = obj.location.transformCoords([x' y']);  
+      
+            % add lines between particular points
+            [seg1] = drawer.drawLine(p(1,:), p(2,:));
+            [seg2] = drawer.drawLine(p(2,:), p(3,:));
+            [seg3] = drawer.drawLine(p(3,:), p(4,:));
+            [seg4] = drawer.drawLine(p(4,:), p(5,:));
+            [seg5] = drawer.drawLine(p(5,:), p(6,:));
+            [seg6] = drawer.drawLine(p(6,:), p(7,:));
+            [seg7] = drawer.drawLine(p(7,:), p(8,:));
+            [seg8] = drawer.drawLine(p(8,:), p(9,:));
+            [seg9] = drawer.drawLine(p(9,:), p(10,:));
+            [seg10] = drawer.drawLine(p(10,:), p(11,:));
+            [seg11] = drawer.drawLine(p(11,:), p(12,:));
+            [seg12] = drawer.drawLine(p(12,:), p(13,:));
+            [seg13] = drawer.drawLine(p(13,:), p(14,:));
+            [seg14] = drawer.drawLine(p(14,:), p(15,:));
+            [seg15] = drawer.drawLine(p(15,:), p(16,:));
+            [seg16] = drawer.drawLine(p(16,:), p(17,:));
+            [seg17] = drawer.drawLine(p(17,:), p(18,:));
+            [seg18] = drawer.drawLine(p(18,:), p(19,:));
+            [seg19] = drawer.drawLine(p(19,:), p(20,:));
+            [seg20] = drawer.drawLine(p(20,:), p(1,:));
+            
+            % calculate xy coordinates of the point inside the stator which
+            % is the center of the central stator teeth 
             innerX = x3;
             innerY = (y5 + y6)/2;
             innerCoord = obj.location.transformCoords([innerX, innerY]);            
