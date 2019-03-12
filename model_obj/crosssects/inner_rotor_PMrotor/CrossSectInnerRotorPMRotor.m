@@ -82,26 +82,40 @@ classdef CrossSectInnerRotorPMRotor < CrossSectBase
                 end
                     y(i) = a(i)*sin(angle(i));
                     x(i) = a(i)*cos(angle(i));
+                    zx(i) = (r_ri+d_ri)*cos((angle(i)));
+                    zy(i) = (r_ri + d_ri)*sin((angle(i)));
             end
     
 %%Reshape the coordinates for drawing    
             x_array = cat(2,fliplr(x(1:end-1)),x);
             y_array = cat(2,fliplr(-y(1:end-1)),y);
+            zx_array = cat(2,fliplr(zx(1:end-1)),zx);
+            zy_array = cat(2,fliplr(-zy(1:end-1)),zy);
         
             for l=1:length(x_array)
                 points(l,1)=x_array(l);
                 points(l,2)=y_array(l);
+                inner_points(l,1)=zx_array(l);
+                inner_points(l,2)=zy_array(l);
             end
             
 %%Draw p poles with s segments per pole            
             for i = 1:p
-                [points] = obj.location.transformCoords(points, DimRadian(2*pi/p));    
+                [points] = obj.location.transformCoords(points, DimRadian(2*pi/p));
+                [inner_points]=obj.location.transformCoords(inner_points, DimRadian(2*pi/p));
                 for j=1:2*s+1
                     if mod(j,2)==0
                      arc_c(j) = drawer.drawArc(obj.location.anchor_xy, points(j,:),...
                                 points(j+1,:));
-                    end
+                      lines(j)= drawer.drawLine(points(j,:), inner_points(j,:)); 
+                     end
+                    if (mod(j,2)==1 && j<(2*s+1))
+                        arc(j) = drawer.drawArc(obj.location.anchor_xy,inner_points(j,:),...
+                                inner_points(j+1,:));
+                        lines(j)= drawer.drawLine(points(j,:), inner_points(j,:));    
+                       
                 end           
+                end
             end
 %%Draw inner surface          
          point_i = [r_ri,0]+obj.location.anchor_xy;
@@ -112,7 +126,7 @@ classdef CrossSectInnerRotorPMRotor < CrossSectBase
          arc_i2 = drawer.drawArc(obj.location.anchor_xy, point_i2,point_i);
          arc_i3 = drawer.drawArc(obj.location.anchor_xy, point_i3,point_i4);
          arc_i4 = drawer.drawArc(obj.location.anchor_xy, point_i4,point_i3);
-         rad = r_ri;
+         rad = r_ri+d_ri;
          innerCoord = obj.location.transformCoords([rad, 0]);
          segments = [arc_c,arc_i1,arc_i2,arc_i3,arc_i4];
          csToken = CrossSectToken(innerCoord, segments);
