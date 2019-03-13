@@ -52,9 +52,24 @@ classdef CrossSectHollowRect < CrossSectBase
             [l_o3] = drawer.drawLine(points_o(3,:),points_o(4,:));
             [l_o4] = drawer.drawLine(points_o(4,:),points_o(1,:));
             
-%calculate a coordinate inside the surface
-            rad = obj.dim_w/2;
-            innerCoord = obj.location.transformCoords([rad, 0]);             
+%compute coordinate inside the surface to extrude
+           if t4>0
+            x_coord = w/2;
+            y_coord = t4/2;
+           elseif t3>0
+             x_coord = t3/2;
+             y_coord = h/2;
+           elseif t2>0
+             x_coord = w/2;
+             y_coord = h-(t2/2);
+           elseif t1>0
+              x_coord = w - (t1/2);
+              y_coord = h/2;
+           elseif (t1==0)&&(t2==0)&&(t3==0)&&(t4==0)
+               x_coord = w/2;
+               y_coord = h/2;
+             end
+            innerCoord = obj.location.transformCoords([x_coord, y_coord]);             
             segments = [l_i1,l_i2,l_i3,l_i4,l_o1,l_o2,l_o3,l_o4];  
             csToken = CrossSectToken(innerCoord, segments);
             
