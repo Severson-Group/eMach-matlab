@@ -112,23 +112,18 @@ classdef CrossSectInnerRotorPMRotor < CrossSectBase
                     if (mod(j,2)==1 && j<(2*s+1))
                         arc(j) = drawer.drawArc(obj.location.anchor_xy,inner_points(j,:),...
                                 inner_points(j+1,:));
-                        lines(j)= drawer.drawLine(points(j,:), inner_points(j,:));    
-                       
-                end           
+                        lines(j)= drawer.drawLine(points(j,:), inner_points(j,:));     
+                    end           
                 end
             end
 %%Draw inner surface          
          point_i = [r_ri,0]+obj.location.anchor_xy;
          point_i2 = [-r_ri,0]+obj.location.anchor_xy;
-         point_i3 = [r_ri-obj.dim_t_i,0]+obj.location.anchor_xy;
-         point_i4 = [-(r_ri-obj.dim_t_i),0]+obj.location.anchor_xy;
          arc_i1 = drawer.drawArc(obj.location.anchor_xy, point_i,point_i2);
          arc_i2 = drawer.drawArc(obj.location.anchor_xy, point_i2,point_i);
-         arc_i3 = drawer.drawArc(obj.location.anchor_xy, point_i3,point_i4);
-         arc_i4 = drawer.drawArc(obj.location.anchor_xy, point_i4,point_i3);
          rad = r_ri+d_ri;
          innerCoord = obj.location.transformCoords([rad, 0]);
-         segments = [arc_c,arc_i1,arc_i2,arc_i3,arc_i4];
+         segments = [arc_c,arc_i1,arc_i2];
          csToken = CrossSectToken(innerCoord, segments);
                      
         end
@@ -152,11 +147,7 @@ classdef CrossSectInnerRotorPMRotor < CrossSectBase
              validateattributes(obj.dim_d_rp,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.num_seg,{'double'},{'nonnegative','nonempty'});
-             validateattributes(obj.num_pole,{'double'},{'nonnegative','nonempty'});
-            
-            
-            
-         
+             validateattributes(obj.num_pole,{'double'},{'nonnegative','nonempty'});        
             
             
          end
