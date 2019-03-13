@@ -28,38 +28,35 @@ classdef CrossSectBreadloaf < CrossSectBase
             r = obj.dim_r;
             alpha = obj.dim_alpha.toRadians();
             
-            %calculate coordinates for outter and inner points
-            yo = w/2 - l*cos(alpha);
-            yi = w/2;
-            beta = asin(yo/r);
-            xo = r*cos(beta);
-            xi = xo - l*sin(alpha);
+            %calculate coordinates each point starting in bottom right
+            %corner and moving counterclockwise around the breadloaf
             
-            p1 = [ xo, -yo ];
-            p2 = [ xo,  yo ];
-            p3 = [ xi,  yi ];
-            p4 = [ xi, -yi ];
+            p1 = [ w/2, 0 ];
+            p2 = [ w/2 - l*cos(alpha),  l*sin(alpha) ];
+            p3 = [-w/2 + l*cos(alpha),  l*sin(alpha) ];
+            p4 = [-w/2, 0 ];
+            
+            beta = asin(p2(1)/r);
+            base = r*cos(beta);
+            arcCenter = [0, -(base - p2(2))];
             
             %transform coords
             p1 = obj.location.transformCoords(p1);
             p2 = obj.location.transformCoords(p2);
             p3 = obj.location.transformCoords(p3);
             p4 = obj.location.transformCoords(p4);
+            arcCenter = obj.location.transformCoords(arcCenter);
 
             % Draw segments
-            [arc]    = drawer.drawArc(obj.location.anchor_xy, p1, p2);
-            [top_seg] = drawer.drawLine(p2,p3);
-            [base]   = drawer.drawLine(p3, p4);
-            [bottom_seg]  = drawer.drawLine(p4, p1);
+            [rightSeg] = drawer.drawLine(p1,p2);
+            [arc] = drawer.drawArc(arcCenter, p2, p3);
+            [leftSeg]   = drawer.drawLine(p3, p4);
+            [baseSeg]  = drawer.drawLine(p4, p1);
             
-            innerCoord = obj.location.transformCoords( [(xi + xo)/2, 0] );
+            innerCoord = obj.location.transformCoords( [0, l*sin(alpha)/2] );
 
-            segments = [arc, top_seg, base, bottom_seg];
+            segments = [rightSeg, arc, leftSeg, baseSeg];
             csToken = CrossSectToken(innerCoord, segments);
-        end
-        
-        function select(obj)
-            
         end
     end
     
