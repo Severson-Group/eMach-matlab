@@ -4,8 +4,8 @@ classdef CrossSectSolidRect  < CrossSectBase
     %   The anchor point for this is the lower left corner of the rectangle.
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_w; %Length of the rectangle: class type dimLinear
-        dim_h; %Breadth of the rectangle: class type dimLinear        
+        dim_w; %Width of the rectangle: class type dimLinear
+        dim_h; %Height of the rectangle: class type dimLinear        
     end
     
   methods
@@ -21,8 +21,10 @@ classdef CrossSectSolidRect  < CrossSectBase
             h=obj.dim_h;
             
 %%Create points
-            points = [axis(1),axis(2); axis(1),axis(2)+h; axis(1)+w, ....
-            axis(2)+h; axis(1)+w,axis(2)];
+            points = [  axis(1),    axis(2); 
+                        axis(1),    axis(2)+h; 
+                        axis(1)+w,  axis(2)+h; 
+                        axis(1)+w,  axis(2)];
         
 %%Transform Coordinates
             [points] = obj.location.transformCoords(points);
