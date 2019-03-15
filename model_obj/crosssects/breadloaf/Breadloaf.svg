@@ -133,10 +133,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="161.03826"
-     inkscape:cy="154.73062"
+     inkscape:cx="12.416123"
+     inkscape:cy="107.26054"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g5266"
      showgrid="false"
      inkscape:snap-bbox="true"
      inkscape:snap-smooth-nodes="true"
@@ -144,9 +144,9 @@
      inkscape:snap-bbox-edge-midpoints="true"
      inkscape:bbox-paths="true"
      inkscape:bbox-nodes="true"
-     inkscape:window-width="2560"
-     inkscape:window-height="1377"
-     inkscape:window-x="2552"
+     inkscape:window-width="1536"
+     inkscape:window-height="801"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:snap-center="true"
@@ -246,15 +246,15 @@
          style="fill:#999999;stroke:#999999;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker2109);marker-end:url(#marker2045)" />
       <text
          id="text3037"
-         y="115.28768"
-         x="140.6937"
+         y="115.42132"
+         x="141.89641"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';letter-spacing:0px;word-spacing:0px;fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.26458332"
          xml:space="preserve"><tspan
            style="fill:#999999;stroke-width:0.26458332"
-           y="115.28768"
-           x="140.6937"
+           y="115.42132"
+           x="141.89641"
            id="tspan3035"
-           sodipodi:role="line">L</tspan></text>
+           sodipodi:role="line">l</tspan></text>
       <g
          transform="rotate(90,118.69537,124.32009)"
          inkscape:transform-center-y="-7.4909903"
