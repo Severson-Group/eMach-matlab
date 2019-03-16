@@ -1,9 +1,6 @@
 classdef MakerRevolveBase < MakerBase
-    %Drawer2dBase Abstract base class for software which can draw in 2D
-    %   Requires subclass to implement:
-    %   - drawLine()
-    %   - drawArc()
-    %   - select()
+    %MakerRevolveBase Abstract base class for software which can revolve
+    %parts    
     
     methods
         function obj = MakerRevolveBase(varargin)

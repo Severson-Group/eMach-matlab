@@ -1,9 +1,5 @@
 classdef MakerExtrudeBase < MakerBase
-    %Drawer2dBase Abstract base class for software which can draw in 2D
-    %   Requires subclass to implement:
-    %   - drawLine()
-    %   - drawArc()
-    %   - select()
+    %MakerExtrudeBase Abstract base class for software which can extrude    
     
     methods
         function obj = MakerExtrudeBase(varargin)
