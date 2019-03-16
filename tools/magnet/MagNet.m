@@ -127,7 +127,8 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(name, {'char'}, {'nonempty'});            
             validateattributes(center, {'numeric'}, {'size',[1,2]})
             validateattributes(axis, {'numeric'}, {'size',[1,2]})
-            validateattributes(angle, {'dimAngular'}, {'nonempty'});
+            validateattributes(angle, {'DimAngular'}, {'nonempty'});
+            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
             
             %TODO: Convert center and axis to the appropriate default unit.
             

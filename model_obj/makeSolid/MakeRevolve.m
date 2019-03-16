@@ -28,7 +28,8 @@ classdef MakeRevolve < MakeSolidBase
             end
             
             %2. Make via revolution
-            maker.revolve(name, material, obj.center, obj.axis, obj.angle);
+            maker.revolve(name, material, ...
+                    obj.dim_center, obj.dim_axis, obj.dim_angle);
             
             %3. TO DO: Move to final location
             %maker.Move(name, obj.location);
