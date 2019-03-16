@@ -1,14 +1,17 @@
-classdef MakeSimpleExtrude < MakeSolidBase
+classdef MakeRevolve < MakeSolidBase
     %MAKESIMPLEEXTRUDE Extrude a cross-section along a straight path
     %   Make a cross-section solid through simple extrusion
     
     properties(GetAccess = 'public', SetAccess = 'protected')
-        dim_depth;  %Length to extrude: class type dimLinear.                 
+        dim_center; %x,y coordinate of center point of rotation
+        dim_axis;   %x,y coordinate on the axis of ration (negative reverses
+                    %direction) (0, -1) to rotate clockwise about the y axis
+        dim_angle;  %Angular distance of revolution (dimAngular)        
     end    
     
     methods
-        function obj = MakeSimpleExtrude(varargin)
-            %MAKESIMPLEEXTRUDE Construct an instance of this class
+        function obj = MakeRevolve(varargin)
+            %MAKEEXTRUDE Construct an instance of this class
             
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
@@ -17,13 +20,15 @@ classdef MakeSimpleExtrude < MakeSolidBase
         function run(obj, name, material, csToken, maker)
             %RUN Make the cross-section solid
             
+            validateattributes(maker,{'MakerRevolveBase'},{'nonempty'})   
+            
             %1. Prepare to extrude
             for i = 1:length(csToken)
                 maker.prepareSection(csToken);
             end
             
-            %2. Make via extrusion
-            maker.extrude(name, material, obj.dim_depth);
+            %2. Make via revolution
+            maker.revolve(name, material, obj.center, obj.axis, obj.angle);
             
             %3. TO DO: Move to final location
             %maker.Move(name, obj.location);
@@ -40,7 +45,10 @@ classdef MakeSimpleExtrude < MakeSolidBase
             validateProps@MakeSolidBase(obj);   
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})                        
+            validateattributes(obj.dim_center,{'DimLinear'},{'size',[1,2]})
+            validateattributes(obj.dim_axis,{'DimLinear'},{'size',[1,2]})            
+            validateattributes(obj.dim_angle,{'DimAngular'},{'nonempty'})                    
+                    
          end
                   
          function obj = createProps(obj, len, args)

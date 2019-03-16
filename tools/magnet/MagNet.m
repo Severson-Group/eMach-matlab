@@ -1,4 +1,4 @@
-classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
+classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
     %MAGNET Encapsulation for the MagNet FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -113,11 +113,35 @@ classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
             % lines and surfaces that need to be selected
         end
         
+        function new = revolve(obj, name, material, center, axis, angle)
+            %REVOLVE Revolve a cross-section along an arc    
+            %new = revolve(obj, name, material, center, axis, angle)
+            %   name   - name of the newly extruded component
+            %   center - x,y coordinate of center point of rotation
+            %   axis   - x,y coordinate on the axis of ration (negative reverses
+            %             direction) (0, -1) to rotate clockwise about the y axis
+            %   angle  - Angle of rotation (dimAngular) 
+            
+            
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'});            
+            validateattributes(center, {'numeric'}, {'size',[1,2]})
+            validateattributes(axis, {'numeric'}, {'size',[1,2]})
+            validateattributes(angle, {'dimAngular'}, {'nonempty'});
+            
+            %TODO: Convert center and axis to the appropriate default unit.
+            
+            new = mn_dv_makeComponentInAnArc(obj.mn, center, axis, ...
+                    angle.toDegrees(), name, material, flags);
+        end
+        
         function new = extrude(obj, name, material, depth)
             validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});
-            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');            
+            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
+            
+            %TO DO: Convert center and axis to the appropriate default unit.
             new = mn_dv_makeComponentInALine(obj.mn, depth, name, ...
                 material, flags); 
         end
