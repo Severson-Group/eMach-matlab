@@ -10,6 +10,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         doc; % Document object
         view; %View object
         consts; %Program constants
+        defaultLength = 'dimMillimeter';
     end
     
     methods
@@ -52,6 +53,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             
             obj.view = invoke(obj.doc, 'getview');
             obj.consts = invoke(obj.mn, 'getConstants');
+            obj.setDefaultLengthUnit('millimeters', false);
         end
         
         function close(obj)
@@ -176,6 +178,16 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             %
             %   This is a wrapper for Document::setDefaultLengthUnit
 
+            %update length unit type, this is needed for unit conversions
+            %in extruding/drawing/moving/etc. (not yet implemented).
+            if strcmp(userUnit, 'millimeters')
+                obj.defaultLength = 'DimMillimeter';
+            elseif strcmp(userUnit, 'inches')
+                obj.defaultLength = 'DimInches';
+            else
+                error('unsupported length unit')
+            end
+            
             invoke(obj.doc, 'setDefaultLengthUnit', userUnit, makeAppDefault);
         end
         
