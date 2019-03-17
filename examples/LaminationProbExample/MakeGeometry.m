@@ -4,7 +4,10 @@ clc
 clear
 n = 5; %number of laminations
 
-%TO DO: add airbox
+%TO DO: 
+%   - add airbox
+%   - assign mesh settings
+%   - create coils
 
 
 %% set up MagNet
