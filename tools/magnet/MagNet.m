@@ -1,4 +1,4 @@
-classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
+classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
     %MAGNET Encapsulation for the MagNet FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -10,6 +10,7 @@ classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
         doc; % Document object
         view; %View object
         consts; %Program constants
+        defaultLength = 'dimMillimeter';
     end
     
     methods
@@ -52,6 +53,7 @@ classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
             
             obj.view = invoke(obj.doc, 'getview');
             obj.consts = invoke(obj.mn, 'getConstants');
+            obj.setDefaultLengthUnit('millimeters', false);
         end
         
         function close(obj)
@@ -113,11 +115,36 @@ classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
             % lines and surfaces that need to be selected
         end
         
+        function new = revolve(obj, name, material, center, axis, angle)
+            %REVOLVE Revolve a cross-section along an arc    
+            %new = revolve(obj, name, material, center, axis, angle)
+            %   name   - name of the newly extruded component
+            %   center - x,y coordinate of center point of rotation
+            %   axis   - x,y coordinate on the axis of ration (negative reverses
+            %             direction) (0, -1) to rotate clockwise about the y axis
+            %   angle  - Angle of rotation (dimAngular) 
+            
+            
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'});            
+            validateattributes(center, {'numeric'}, {'size',[1,2]})
+            validateattributes(axis, {'numeric'}, {'size',[1,2]})
+            validateattributes(angle, {'DimAngular'}, {'nonempty'});
+            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
+            
+            %TODO: Convert center and axis to the appropriate default unit.
+            
+            new = mn_dv_makeComponentInAnArc(obj.mn, center, axis, ...
+                    angle.toDegrees(), name, material, flags);
+        end
+        
         function new = extrude(obj, name, material, depth)
             validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});
-            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');            
+            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
+            
+            %TO DO: Convert center and axis to the appropriate default unit.
             new = mn_dv_makeComponentInALine(obj.mn, depth, name, ...
                 material, flags); 
         end
@@ -151,6 +178,16 @@ classdef MagNet < ToolBase & Drawer2dBase & Maker3dBase
             %
             %   This is a wrapper for Document::setDefaultLengthUnit
 
+            %update length unit type, this is needed for unit conversions
+            %in extruding/drawing/moving/etc. (not yet implemented).
+            if strcmp(userUnit, 'millimeters')
+                obj.defaultLength = 'DimMillimeter';
+            elseif strcmp(userUnit, 'inches')
+                obj.defaultLength = 'DimInches';
+            else
+                error('unsupported length unit')
+            end
+            
             invoke(obj.doc, 'setDefaultLengthUnit', userUnit, makeAppDefault);
         end
         
