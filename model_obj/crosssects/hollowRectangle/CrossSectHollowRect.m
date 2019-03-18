@@ -21,15 +21,14 @@ classdef CrossSectHollowRect < CrossSectBase
                 
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
-            
             axis = [0,0];
             w=obj.dim_w;
             h=obj.dim_h;
             t1=obj.dim_t1;
             t2=obj.dim_t2;
             t3=obj.dim_t3;
-            t4=obj.dim_t4;
-
+            t4=obj.dim_t4;            
+         
 %%Create inner and outer points
             points_i=[axis(1)+t3,axis(2)+t4; axis(1)+t3,axis(2)+h-t2;...
             w-t1+axis(1), h-t2+axis(2);w-t1+axis(1),t4+axis(2);];
@@ -53,28 +52,14 @@ classdef CrossSectHollowRect < CrossSectBase
             [l_o4] = drawer.drawLine(points_o(4,:),points_o(1,:));
             
 %compute coordinate inside the surface to extrude
-           if t4>0
             x_coord = w/2;
             y_coord = t4/2;
-           elseif t3>0
-             x_coord = t3/2;
-             y_coord = h/2;
-           elseif t2>0
-             x_coord = w/2;
-             y_coord = h-(t2/2);
-           elseif t1>0
-              x_coord = w - (t1/2);
-              y_coord = h/2;
-           elseif (t1==0)&&(t2==0)&&(t3==0)&&(t4==0)
-               x_coord = w/2;
-               y_coord = h/2;
-             end
             innerCoord = obj.location.transformCoords([x_coord, y_coord]);             
             segments = [l_i1,l_i2,l_i3,l_i4,l_o1,l_o2,l_o3,l_o4];  
             csToken = CrossSectToken(innerCoord, segments);
-            
         end
     end
+    
     
   methods(Access = protected)
      function validateProps(obj)
@@ -84,13 +69,16 @@ classdef CrossSectHollowRect < CrossSectBase
         validateProps@CrossSectBase(obj);   
             
         %2. valudate the new properties that have been added here
-        validateattributes(obj.dim_t1,{'DimLinear'},{'nonnegative','nonempty'});
-        validateattributes(obj.dim_t2,{'DimLinear'},{'nonnegative','nonempty'});
-        validateattributes(obj.dim_t3,{'DimLinear'},{'nonnegative','nonempty'});
-        validateattributes(obj.dim_t4,{'DimLinear'},{'nonnegative','nonempty'});
-        validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'});
-        validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'});
-      end
+        validateattributes(obj.dim_t1,{'DimLinear'},{'positive','nonempty'});
+        validateattributes(obj.dim_t2,{'DimLinear'},{'positive','nonempty'});
+        validateattributes(obj.dim_t3,{'DimLinear'},{'positive','nonempty'});
+        validateattributes(obj.dim_t4,{'DimLinear'},{'positive','nonempty'});
+        validateattributes(obj.dim_w,{'DimLinear'},{'positive','nonempty'});
+        validateattributes(obj.dim_h,{'DimLinear'},{'positive','nonempty'});
+        validateattributes(obj.dim_w-(obj.dim_t1+obj.dim_t3),{'double'},{'positive','nonempty'});
+        validateattributes(obj.dim_h-(obj.dim_t2+obj.dim_t4),{'double'},{'positive','nonempty'});
+        
+       end
                   
          function obj = createProps(obj, len, args)
              %CREATE_PROPS Add support for value pair constructor
