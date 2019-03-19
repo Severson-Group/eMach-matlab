@@ -1,49 +1,46 @@
-classdef CrossSectArc < CrossSectBase
-    %CROSSSECTARC Describes an arc of a hollow cylinder.
+classdef CrossSectHollowCylinder < CrossSectBase
+    %CROSSSECTHOLLOWCYLINDER Describes a hollow cylinder.
     %   Properties are set upon class creation and cannot be modified.
-    %   The anchor point for this is the center of the circle that this arc
-    %   lies upon, with the x axis pointing toward the arc center.
+    %   The anchor point for this is the center of the circle
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_d_a;    %Thickness of the arc: class type dimLinear. If 
-        dim_r_o;    %Outer radius of the arc: class type dimLinear
-        dim_alpha;  %Angular span of the arc: class type dimAngular        
+        dim_d_a;     %Thickness of the cylinder: class type dimLinear.
+        dim_r_o;     %Outer radius of the cylinder: class type dimLinear    
     end
     
     methods
-        function obj = CrossSectArc(varargin)
+        function obj = CrossSectHollowCylinder(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
         end
-        
+                
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
-            t = obj.dim_d_a;
             r = obj.dim_r_o;
-            alpha = obj.dim_alpha.toRadians();
+            t = obj.dim_d_a;                  
             
-            x_out = r*cos(alpha/2);
-            x_in = (r-t)*cos(alpha/2);
+            x_out = 0;
+            x_in = 0;
             x = [x_out, x_out, x_in, x_in];
             
-            y_out = r*sin(alpha/2);
-            y_in = (r-t)*sin(alpha/2);
-            y = [-y_out, y_out, y_in, -y_in];
+            y_out = r;
+            y_in = r-t;
+            y = [-y_out, y_out, -y_in, y_in];
             
             [p] = obj.location.transformCoords([x' y']);
             
-            [arc_out] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
-            [line_cc] = drawer.drawLine(p(2,:),p(3,:));
-            [arc_in] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
-            [line_cw] = drawer.drawLine(p(4,:), p(1,:));
-
+            [arc_out1] = drawer.drawArc(obj.location.anchor_xy, p(1,:), p(2,:));
+            [arc_out2] = drawer.drawArc(obj.location.anchor_xy, p(2,:), p(1,:));
+            [arc_in1] = drawer.drawArc(obj.location.anchor_xy, p(3,:), p(4,:));
+            [arc_in2] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
+            
             %calculate a coordinate inside the surface
             rad = obj.dim_r_o - obj.dim_d_a/2;
-            innerCoord = obj.location.transformCoords([rad, 0]);            
+            innerCoord = obj.location.transformCoords([rad, 0]);             
             
-            segments = [arc_out, arc_in, line_cc, line_cw];
+            segments = [arc_out1, arc_out2, arc_in1, arc_in2];  
             csToken = CrossSectToken(innerCoord, segments);
         end
         
@@ -54,12 +51,11 @@ classdef CrossSectArc < CrossSectBase
             %VALIDATE_PROPS Validate the properties of this component
              
             %1. use the superclass method to validate the properties 
-            validateProps@CrossSectBase(obj);   
+            validateProps@CrossSectBase(obj); 
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_alpha,{'DimAngular'},{'nonnegative', 'nonempty'})
+            validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
          end
                   
          function obj = createProps(obj, len, args)
@@ -72,4 +68,3 @@ classdef CrossSectArc < CrossSectBase
          end
      end
 end
-

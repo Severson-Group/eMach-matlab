@@ -1,4 +1,4 @@
-classdef MakeSimpleExtrude < MakeSolidBase
+classdef MakeExtrude < MakeSolidBase
     %MAKESIMPLEEXTRUDE Extrude a cross-section along a straight path
     %   Make a cross-section solid through simple extrusion
     
@@ -7,8 +7,8 @@ classdef MakeSimpleExtrude < MakeSolidBase
     end    
     
     methods
-        function obj = MakeSimpleExtrude(varargin)
-            %MAKESIMPLEEXTRUDE Construct an instance of this class
+        function obj = MakeExtrude(varargin)
+            %MAKEEXTRUDE Construct an instance of this class
             
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
@@ -16,6 +16,8 @@ classdef MakeSimpleExtrude < MakeSolidBase
                 
         function run(obj, name, material, csToken, maker)
             %RUN Make the cross-section solid
+            
+            validateattributes(maker,{'MakerExtrudeBase'},{'nonempty'})   
             
             %1. Prepare to extrude
             for i = 1:length(csToken)
