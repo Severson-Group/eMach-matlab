@@ -20,25 +20,34 @@ classdef CrossSectNotchedRectangle < CrossSectBase
                 
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});   
+            
+            % notched retangle parameters
             w = obj.dim_w;
             w_n = obj.dim_w_n;
             d = obj.dim_d;
             d_n = obj.dim_d_n;
             
+            % x-axis coordinates of notched rectangle points
             x1 = 0;
             x2 = w_n;
             x3 = w - w_n;
             x4 = w;
             
+            % y-axis coordinates of notched rectangle points
             y1 = 0;
             y2 = d;
             y3 = d + d_n;
             
+            % build x and y coordinates of notched rectangle points as 
+            % arrays based on the order how these points are connected
+            % between each other
             x = [ x1, x4, x4, x3, x3, x2, x2, x1];
             y = [ y1, y1, y3, y3, y2, y2, y3, y3];      
             
+            % p contains transformed xy coordinates of all points
             [p] = obj.location.transformCoords([x' y']);
             
+            % add lines between particular points
             [seg1] = drawer.drawLine(p(1,:), p(2,:));
             [seg2] = drawer.drawLine(p(2,:), p(3,:));
             [seg3] = drawer.drawLine(p(3,:), p(4,:));
@@ -48,13 +57,15 @@ classdef CrossSectNotchedRectangle < CrossSectBase
             [seg7] = drawer.drawLine(p(7,:), p(8,:));
             [seg8] = drawer.drawLine(p(8,:), p(1,:));
             
-            %calculate a coordinate inside the surface
+            % calculate xy coordinates of the point inside the notched
+            % rectangle
             innerX = obj.dim_w/2;
             innerY = obj.dim_d/2;
             innerCoord = obj.location.transformCoords([innerX, innerY]); 
             
             segments = [seg1, seg2, seg3, seg4, seg5, seg6, seg7, seg8];
             csToken = CrossSectToken(innerCoord, segments);
+            
         end
         
     end

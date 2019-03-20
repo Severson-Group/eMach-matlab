@@ -1199,9 +1199,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142137"
-     inkscape:cx="134.46707"
-     inkscape:cy="968.23821"
+     inkscape:zoom="2.8284274"
+     inkscape:cx="443.39371"
+     inkscape:cy="816.11812"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1372,38 +1372,6 @@
        inkscape:connector-curvature="0"
        d="m 43.65624,43.264583 -10e-6,17.22724 v 17.464846"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.20906115;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#Arrow2Lstart-9-1-0)"
-       inkscape:export-xdpi="1000"
-       inkscape:export-ydpi="1000"
-       inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png" />
-    <path
-       sodipodi:nodetypes="ccc"
-       id="path14906"
-       inkscape:connector-curvature="0"
-       d="m 112.44792,100.15 1e-5,1.44524 -1e-5,1.46518"
-       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker1671)"
-       inkscape:export-xdpi="1000"
-       inkscape:export-ydpi="1000"
-       inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png" />
-    <text
-       id="text14912"
-       y="97.418411"
-       x="110.99165"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444447px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       xml:space="preserve"
-       inkscape:export-xdpi="1000"
-       inkscape:export-ydpi="1000"
-       inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png"><tspan
-         style="font-style:italic;font-weight:normal;font-size:5.64444447px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         y="97.418411"
-         x="110.99165"
-         id="tspan14910"
-         sodipodi:role="line">g</tspan></text>
-    <path
-       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker12708)"
-       d="m 112.40595,93.00625 -1e-5,-1.445244 1e-5,-1.465178"
-       inkscape:connector-curvature="0"
-       id="path17490"
-       sodipodi:nodetypes="ccc"
        inkscape:export-xdpi="1000"
        inkscape:export-ydpi="1000"
        inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png" />
@@ -1815,29 +1783,6 @@
          style="font-style:italic;font-weight:normal;font-size:5.64444447px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">r<tspan
    style="font-size:3.66888881px;baseline-shift:sub;stroke-width:0.065"
    id="tspan6706">st</tspan></tspan></text>
-    <g
-       inkscape:export-ydpi="1000"
-       inkscape:export-xdpi="1000"
-       id="g1687"
-       style="stroke:#000000;stroke-width:0.2;stroke-miterlimit:4;stroke-dasharray:2.39999999, 0.2;stroke-dashoffset:0;stroke-opacity:1"
-       transform="translate(2.0655934,-7.2037393)"
-       inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png">
-      <path
-         style="opacity:1;vector-effect:none;fill:#040303;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.39999999, 0.2;stroke-dashoffset:0;stroke-opacity:1"
-         d="m 169.91357,107.0355 h 13.31039"
-         id="path1681"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path1683"
-         d="M 50.851067,107.0355 H 169.91357"
-         style="opacity:1;vector-effect:none;fill:#040303;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.39999999, 0.2;stroke-dashoffset:0;stroke-opacity:1" />
-      <path
-         style="opacity:1;vector-effect:none;fill:#040303;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.39999999, 0.2;stroke-dashoffset:0;stroke-opacity:1"
-         d="m 37.540677,107.0355 h 13.31039"
-         id="path1685"
-         inkscape:connector-curvature="0" />
-    </g>
     <path
        inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png"
        inkscape:export-ydpi="1000"
