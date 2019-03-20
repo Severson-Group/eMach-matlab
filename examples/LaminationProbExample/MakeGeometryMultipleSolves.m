@@ -157,62 +157,55 @@ end
 
 %% Solve it
 
-% % sol = invoke(toolMn.doc, 'solveStatic2d');
+% sol = invoke(toolMn.doc, 'solveStatic2d');
 
-% Set transient options
-command = 'Call getDocument().beginUndoGroup("Set Transient Options", true)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().setFixedIntervalTimeSteps(0, 50, 5)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().deleteTimeStepMaximumDelta()';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().setParameter("", "TransientAveragePowerLossStartTime", "0%ms", infoNumberParameter)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().setParameter("", "TransientAveragePowerLossStopTime", "50%ms", infoNumberParameter)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().endUndoGroup()';
-invoke(toolMn.mn, 'processCommand', command);
+% Set transient options: [start time, time-step, end time]
+timeSettings = [0, 1, 50];
+mn_d_setparameter(toolMn.doc, '', 'TimeSteps', ...
+    sprintf('[%g %%ms, %g %%ms, %g %%ms]', timeSettings), ...
+    get(toolMn.consts,'infoArrayParameter'));
 
-% Set a sinusoidal current
-command = 'Call getDocument().getView().selectObject("Coil#1", infoSetSelection)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().beginUndoGroup("Set Coil#1 Properties", true)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'REDIM ArrayOfValues(2)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'ArrayOfValues(0)= 0';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'ArrayOfValues(1)= 8.5';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'ArrayOfValues(2)= 20';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().setSourceWaveform("Coil#1","SIN", ArrayOfValues)';
-invoke(toolMn.mn, 'processCommand', command);
-command = 'Call getDocument().endUndoGroup()';
-invoke(toolMn.mn, 'processCommand', command);
+% Change to a sinusoidal current
+mn_d_setparameter(toolMn.doc, coilName, 'WaveFormType', 'SIN', ...
+    get(toolMn.consts,'InfoStringParameter'));
+mn_d_setparameter(toolMn.doc, coilName, 'WaveFormValues', '[0, 8.5, 20]', ...
+    get(toolMn.consts,'InfoArrayParameter'));
 
-sol = invoke(toolMn.doc, 'solveTimeHarmonic2d');
-% sol = invoke(toolMn.doc, 'solveTransient2d');
+% sol = invoke(toolMn.doc, 'solveTimeHarmonic2d');
+sol = invoke(toolMn.doc, 'solveTransient2d');
 
 %% Post-processing
 
-% get iron ohmic losses
+% add this command to be able to pass an array from Matlab to a MagNet 
+% command's input argument
+feature('COM_SafeArraySingleDim', 1)
+
+% get average iron ohmic loss: calculate average loss for each lamination
+% and then sum losses of all laminations
 solution = invoke(toolMn.doc, 'getSolution');
+time = timeSettings(1):timeSettings(2):timeSettings(3);
 for i = 1:length(compLam)
-    OhmicLosses(i) = invoke(solution, 'getOhmicLossInConductor', int32(1), compLam(i).name);
+    for k=1:length(time)
+        OhmicLosses(k,i) = invoke(solution, ...
+            'getOhmicLossInConductor', {int32(1); time(k)}, compLam(i).name);
+    end
 end
-TotalOhmicLossesTH(j) = sum(OhmicLosses);
+TotalOhmicLossesTransient(j) = sum(mean(OhmicLosses));
 
-% get |B| value at tooth center
-invoke(toolMn.mn, 'processCommand', 'Set Sol = getDocument.getSolution');
-invoke(toolMn.mn, 'processCommand', 'Set Mesh = Sol.getMesh(1)');
-invoke(toolMn.mn, 'processCommand', 'Set Field = Sol.getSystemField(Mesh, "|B| smoothed")');
-invoke(toolMn.mn, 'processCommand', 'ReDim FieldVals(0)');
-
-command = ['Call Field.getFieldAtPoint(' num2str(9) ', ' num2str(15) ', 0 ,FieldVals)'];
-invoke(toolMn.mn, 'processCommand', command);
-invoke(toolMn.mn, 'processCommand', 'call setVariant(0,FieldVals(0),"MATLAB")');
-BValuesTH(j) = invoke(toolMn.mn, 'getVariant', 0, 'MATLAB');
+% get Bx and By values at tooth center at peak current
+invoke(toolMn.mn, 'processcommand', ...
+    'Set Mesh = getDocument.getSolution.getMesh(Array(1, 25))');
+invoke(toolMn.mn, 'processcommand', ...
+    'Set Field = getDocument.getSolution.getSystemField(Mesh, "B")');
+invoke(toolMn.mn, 'processcommand', ...
+    'ReDim FieldVector(0)');
+invoke(toolMn.mn, 'processcommand', ...
+    ['Call Field.getFieldAtPoint(' num2str(9) ', ' num2str(15) ', 0, FieldVector)']);
+invoke(toolMn.mn, 'processcommand', ...
+    'Call setVariant(0, FieldVector, "MATLAB")');
+ReturnVector = invoke(toolMn.mn, 'getVariant', 0, 'MATLAB');
+Bx(j) = ReturnVector{1};
+By(j) = ReturnVector{2};
 
 % save file and exit
 FileName = [pwd '\lam_thickness_',num2str(lamT),'.mn'];
