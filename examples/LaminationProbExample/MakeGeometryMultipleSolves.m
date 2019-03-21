@@ -11,6 +11,16 @@ MES_Laminations = 0.15; %Maximum Element Size in the laminations (mm)
 CoilTurns = 1000; %Number of turns on the coil
 CoilCurrent = 8.5; %Amperes, current to get 1 T at the lamination center
 
+endTime = 65; %ms
+timeStep = 1; %ms
+elecFreq = 20; %Hz
+elecPeriod = 1/elecFreq*1e3; %ms
+currentAmplitude = 8.5; %Amp
+
+BXPoints = linspace(8,10,10); %X Coordinates to calculate fields at (mm)
+BYPoint = 15;   %Y Coordinate to calculate fields at (mm)
+BZPoint = 0;    %Z Coorindate to calculate fields at (mm)
+
 %TO DO: 
 %   - use a lamination steel that is conductive
 %   - extract field results
@@ -160,7 +170,7 @@ end
 % sol = invoke(toolMn.doc, 'solveStatic2d');
 
 % Set transient options: [start time, time-step, end time]
-timeSettings = [0, 1, 50];
+timeSettings = [0, timeStep, endTime];
 mn_d_setparameter(toolMn.doc, '', 'TimeSteps', ...
     sprintf('[%g %%ms, %g %%ms, %g %%ms]', timeSettings), ...
     get(toolMn.consts,'infoArrayParameter'));
@@ -168,51 +178,66 @@ mn_d_setparameter(toolMn.doc, '', 'TimeSteps', ...
 % Change to a sinusoidal current
 mn_d_setparameter(toolMn.doc, coilName, 'WaveFormType', 'SIN', ...
     get(toolMn.consts,'InfoStringParameter'));
-mn_d_setparameter(toolMn.doc, coilName, 'WaveFormValues', '[0, 8.5, 20]', ...
+mn_d_setparameter(toolMn.doc, coilName, 'WaveFormValues', ...
+    sprintf('[0, %g, %g]', currentAmplitude, elecFreq), ...
     get(toolMn.consts,'InfoArrayParameter'));
 
 % sol = invoke(toolMn.doc, 'solveTimeHarmonic2d');
-sol = invoke(toolMn.doc, 'solveTransient2d');
+solData = invoke(toolMn.doc, 'solveTransient2d');
 
 %% Post-processing
 
 % add this command to be able to pass an array from Matlab to a MagNet 
-% command's input argument
-feature('COM_SafeArraySingleDim', 1)
 
 % get average iron ohmic loss: calculate average loss for each lamination
 % and then sum losses of all laminations
-solution = invoke(toolMn.doc, 'getSolution');
-time = timeSettings(1):timeSettings(2):timeSettings(3);
+time = mn_getTimeInstants(toolMn.mn, 1, true);
 for i = 1:length(compLam)
-    for k=1:length(time)
-        OhmicLosses(k,i) = invoke(solution, ...
-            'getOhmicLossInConductor', {int32(1); time(k)}, compLam(i).name);
-    end
+        eOhmicLossesT = mn_readConductorOhmicLoss(toolMn.mn, ...
+            toolMn.doc, compLam(i).name, 1);
+        OhmicLosses(:,i) = eOhmicLossesT(:,2);
 end
-TotalOhmicLossesTr(j) = sum(mean(OhmicLosses));
+TotalOhmicLossesTr = sum(mean(OhmicLosses(end-round(elecPeriod/timeStep):end)));
+%
 
-% get Bx and By values at tooth center at peak current
-BXPoints = linspace(4.01,13.99,100);
-invoke(toolMn.mn, 'processcommand', ...
-    'Set Mesh = getDocument.getSolution.getMesh(Array(1, 12))');
-invoke(toolMn.mn, 'processcommand', ...
-    'Set Field = getDocument.getSolution.getSystemField(Mesh, "B")');
-invoke(toolMn.mn, 'processcommand', ...
-    'ReDim FieldVector(0)');
-for p=1:length(BXPoints)
-invoke(toolMn.mn, 'processcommand', ...
-    ['Call Field.getFieldAtPoint(' num2str(BXPoints(p)) ', ' num2str(15) ', 0, FieldVector)']);
-invoke(toolMn.mn, 'processcommand', ...
-    'Call setVariant(0, FieldVector, "MATLAB")');
-ReturnVector = invoke(toolMn.mn, 'getVariant', 0, 'MATLAB');
-BxTr(j,p) = ReturnVector{1};
-ByTr(j,p) = ReturnVector{2};
+% get By in region at tooth center as a function of time
+thePoints = [BXPoints' BYPoint*ones(size(BXPoints')) BZPoint*ones(size(BXPoints'))];
+for k = 1:length(time)
+    fieldData{k} = mn_readFieldAtPoints(toolMn.mn, thePoints, ...
+                                                'B', 1, time(k));
+    ByAll(k,:) = fieldData{k}(:,2)'; %gather just the y direction data as a function of time
+    ByAvg(k,:) = mean(fieldData{k}(:,2)); %average of y direction field near center
 end
+
+%Get coil current
+current = mn_readCoilCurrent(toolMn.mn, toolMn.doc, coilName, 1);
+
+%determine By peak:
+Bypeak = max(abs(ByAvg));
+figure
+subplot(2,1,1)
+plot(time, ByAvg)
+ylabel('Field at center (T)')
+subplot(2,1,2)
+plot (time, current(:,2))
+ylabel('Coil Current (A)')
+xlabel('time (ms)')
+
+figure
+plot(time, OhmicLosses)
+ylabel('Ohmic losses')
+xlabel('time (ms)')
 
 % save file and exit
 FileName = [pwd '\lam_thickness_',num2str(lamT),'.mn'];
 Doc=invoke(toolMn.mn, 'saveDocument', FileName);
 invoke(toolMn.mn, 'exit');
 
+%data to save
+solData(j).TotalOhmicLossesTr = TotalOhmicLossesTr;
+solData(j).Bypeak = Bypeak;
+solData(j).ByAvg = ByAvg;
+solData(j).time = time;
 end
+
+save(solData);
