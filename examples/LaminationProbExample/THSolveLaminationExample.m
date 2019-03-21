@@ -3,8 +3,6 @@ clear
 
 n = 1:20; %number of laminations
 
-endTime = 65; %ms
-timeStep = 1; %ms
 elecFreq = 20; %Hz
 elecPeriod = 1/elecFreq*1e3; %ms
 currentAmplitude = 8.5; %Amp
@@ -26,39 +24,28 @@ for j = 1:length(n)
         sprintf('[0, %g, %g]', currentAmplitude, elecFreq), ...
         get(toolMn.consts,'InfoArrayParameter'));
 
-    %% Set transient solver options and solve
-    
-    timeSettings = [0, timeStep, endTime];
-    mn_d_setparameter(toolMn.doc, '', 'TimeSteps', ...
-        sprintf('[%g %%ms, %g %%ms, %g %%ms]', timeSettings), ...
-        get(toolMn.consts,'infoArrayParameter'));
-    
-    solData = invoke(toolMn.doc, 'solveTransient2d');
+    %% Solve time-harmonic
+      
+    solData = invoke(toolMn.doc, 'solveTimeHarmonic2d');
 
     %% Post-processing
     
     % get average iron ohmic loss: calculate average loss for each 
     % lamination and then sum losses of all laminations
-    time = mn_getTimeInstants(toolMn.mn, 1, true);
     for i = 1:length(compLam)
         eOhmicLossesT = mn_readConductorOhmicLoss(toolMn.mn, ...
             toolMn.doc, compLam(i).name, 1);
         OhmicLosses(:,i) = eOhmicLossesT(:,2);
     end
-    TotalOhmicLosses = sum(mean(OhmicLosses(end-round(elecPeriod/timeStep):end,:)));
+    TotalOhmicLosses = sum(OhmicLosses);
     
     % get By in region at tooth center as a function of time
     thePoints = [BXPoints' BYPoint*ones(size(BXPoints')) BZPoint*ones(size(BXPoints'))];
-    for k = 1:length(time)
-        fieldData{k} = mn_readFieldAtPoints(toolMn.mn, thePoints, ...
-                                                'B', 1, time(k));
-        ByAll(k,:) = fieldData{k}(:,2)'; %gather just the y direction data as a function of time
-        ByAvg(k,:) = mean(fieldData{k}(:,2)); %average of y direction field near center
-    end
-    %Get coil current
-    Current = mn_readCoilCurrent(toolMn.mn, toolMn.doc, coilName, 1);
-    %determine By peak
-    Bypeak = max(abs(ByAvg));
+
+    fieldData = mn_readFieldAtPoints(toolMn.mn, thePoints, ...
+                                                'B', 1);
+    ByAll(j,:) = fieldData(:,2)'; %gather just the y direction data
+    ByAvg = mean(fieldData(:,2)); %average of y direction field near center
     
     %% Save file and exit
     
@@ -69,11 +56,8 @@ for j = 1:length(n)
     %% Data to save
     
     solutionData(j).TotalOhmicLosses = TotalOhmicLosses;
-    solutionData(j).Bypeak = Bypeak;
     solutionData(j).ByAvg = ByAvg;
-    solutionData(j).time = time;
-    solutionData(j).Current = Current(:,2);
     
 end
 
-save('solDataTransient.mat','solutionData');
+save('solDataTH.mat','solutionData');
