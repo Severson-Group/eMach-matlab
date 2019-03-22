@@ -4,7 +4,7 @@ clear
 n = 1:20; %number of laminations
 
 endTime = 65; %ms
-timeStep = 1; %ms
+timeStep = 0.5; %ms
 elecFreq = 20; %Hz
 elecPeriod = 1/elecFreq*1e3; %ms
 currentAmplitude = 8.5; %Amp
@@ -62,7 +62,7 @@ for j = 1:length(n)
     
     %% Save file and exit
     
-    FileName = [pwd '\lam_number_',num2str(n(j)),'.mn'];
+    FileName = [pwd '\lam_number_',num2str(n(j)),'_tr.mn'];
     Doc=invoke(toolMn.mn, 'saveDocument', FileName);
     invoke(toolMn.mn, 'exit');
     
