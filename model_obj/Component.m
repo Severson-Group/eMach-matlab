@@ -27,10 +27,8 @@ classdef Component < matlab.mixin.Copyable
             if nargin
                 if counter == 0
                     % Initialize the object array
-                    %disp('Initialize the object array as pool')
                     objectPool = [obj, ];
                 else
-                    %disp('Add to pool...')
                     objectPool(end+1) = obj;
                 end
             end
@@ -41,11 +39,11 @@ classdef Component < matlab.mixin.Copyable
     methods
         function obj = Component(varargin)
             obj = createProperties(obj,nargin,varargin);
-            obj.setGetNumObjects(obj);
             validateattributes(obj.name, {'char'}, {'nonempty'});
             validateattributes(obj.crossSections, {'CrossSectBase'}, {'nonempty'});
             validateattributes(obj.material, {'MaterialGeneric'}, {'nonempty'});
             validateattributes(obj.makeSolid, {'MakeSolidBase'}, {'nonempty'});            
+            obj.setGetNumObjects(obj);
         end
         
         function make(obj, drawer, maker)
@@ -61,7 +59,12 @@ classdef Component < matlab.mixin.Copyable
         function newObject = clone(obj, varargin)
             % Utilize the copy method of a Copyable object
             newObject = copy(obj);
-            newObject.createProperties(length(varargin), varargin);
+            % Call the class constructor for newObject
+            newObject.createProperties(length(varargin),varargin);
+            validateattributes(newObject.name, {'char'}, {'nonempty'});
+            validateattributes(newObject.crossSections, {'CrossSectBase'}, {'nonempty'});
+            validateattributes(newObject.material, {'MaterialGeneric'}, {'nonempty'});
+            validateattributes(newObject.makeSolid, {'MakeSolidBase'}, {'nonempty'});            
             newObject.setGetNumObjects(newObject);
 
             % Compare new name with old name and throw error if neccessary.
@@ -74,16 +77,11 @@ classdef Component < matlab.mixin.Copyable
             len = length(listOfNames);
             for i = 1:len
                 for j = i+1:len
-                    %debug
-                    %disp(list_name(i))
-                    %disp(list_name(j))
-                    %disp('-------')
                     if strcmp(listOfNames(i), listOfNames(j))
-                        error('Error: Nice try! There is already an object of this class named %s.', char(listOfNames(i)))
+                        error('Error: There is already an object of this class named %s.', char(listOfNames(i)))
                     end
                 end
             end
-            
         end
     end
     

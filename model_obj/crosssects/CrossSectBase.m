@@ -8,10 +8,17 @@ classdef CrossSectBase < matlab.mixin.Heterogeneous & matlab.mixin.Copyable
     end
     
     methods(Access = protected)
-        function validateProps(obj)
+        function validateProps(obj)            
             % Validate the global properties
             validateattributes(obj.name,     {'char'},            {'nonempty'})             
             validateattributes(obj.location, {'Location2D'},      {'nonempty'})
+        end
+        
+        function obj = createProperties(obj, len, args)
+            validateattributes(len, {'numeric'}, {'even'});
+            for i = 1:2:len 
+                obj.(args{i}) = args{i+1};
+            end
         end
     end
     
@@ -24,7 +31,9 @@ classdef CrossSectBase < matlab.mixin.Heterogeneous & matlab.mixin.Copyable
             %All child classes must implement this function to support
             %contruction based on value pairs
     end
-     
+
+
+        
 %% Example implementation:
 %     methods
 %         function obj = comp(varargin)
