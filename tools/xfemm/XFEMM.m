@@ -8,6 +8,8 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
     properties (GetAccess = 'private', SetAccess = 'private')
         FemmProblem;  % XFEMM FemmProblem struct
         doc; % Document object
+        arcInfo;
+        arcIndex = 0;
     end
     
     methods
@@ -30,8 +32,9 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
                 'LengthUnits', units);
         end
         
-        function FemmProblem = returnFemmProblem(obj)
+        function [FemmProblem, arcInfo] = returnFemmProblem(obj)
             FemmProblem = obj.FemmProblem;
+            arcInfo = obj.arcInfo;
         end
         
         function [line] = drawLine(obj, startxy, endxy)
@@ -49,7 +52,7 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         function [arc] = drawArc(obj, centerxy, startxy, endxy)
-            %DRAWARC Draw an arc in the current MagNet document.
+            %DRAWARC Draw an arc in the current XFEMM document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
@@ -66,10 +69,13 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             [obj.FemmProblem, arcseginds] = addarcsegments_mfemm(...
                 obj.FemmProblem, nodeids(1), nodeids(2), angle);
             
-            arc = arcseginds;   
+            arc = arcseginds;  
+            obj.arcIndex = obj.arcIndex + 1;
+            obj.arcInfo(obj.arcIndex,1:2) = [centerxy(1), centerxy(2)];
+            obj.arcInfo(obj.arcIndex,3) = R;
         end
         
-        function [i,FemmProblem] = removeOverlaps(obj)
+        function FemmProblem = removeOverlaps(obj)
             FemmProblem = obj.FemmProblem;
             %% Overlapping nodes, ideally overlapping segments and arc segments
 
@@ -247,7 +253,85 @@ end
         i = i + 1;  
     end
 end
+
+%% Partially overlapping arc segments (at least one node not overlapping)
+
+% Identify partially overlapping arc segments
+% Delete old arc segments
+% Make reconnections by adding new arc segments
+i = 2;
+q = numel(FemmProblem.Segments);
+while (i <= q)
+    h = 0;
+    for j = 1:(i-1)
+        p1 = FemmProblem.ArcSegments(i).n0 + 1;
+        p2 = FemmProblem.ArcSegments(i).n1 + 1;
+        p3 = FemmProblem.ArcSegments(j).n0 + 1;
+        p4 = FemmProblem.ArcSegments(j).n1 + 1; 
+        x1 = FemmProblem.Nodes(p1).Coords(1);
+        y1 = FemmProblem.Nodes(p1).Coords(2);
+        x2 = FemmProblem.Nodes(p2).Coords(1);
+        y2 = FemmProblem.Nodes(p2).Coords(2);
+        x3 = FemmProblem.Nodes(p3).Coords(1);
+        y3 = FemmProblem.Nodes(p3).Coords(2);
+        x4 = FemmProblem.Nodes(p4).Coords(1);
+        y4 = FemmProblem.Nodes(p4).Coords(2);
+        % different based on the quadrant
+        angle1 = atan;
+        
+        R1 = obj.arcInfo(i,3);
+        R2 = obj.arcInfo(j,3);
+        centerxy1 = obj.arcInfo(i,1:2);
+        centerxy2 = obj.arcInfo(j,1:2);
+        p = [angle1 p1 - 1; angle2 p2 - 1; angle3 p3 - 1; angle4 p4 - 1];
+        
+        % Check if two segments partially overlap
+        if (~((angle3 <= angle2 && angle4 <= angle2 && ...
+               angle3 <= angle1 && angle4 <= angle1) || ...
+              (angle3 >= angle2 && angle4 >= angle2 && ...
+               angle3 >= angle1 && angle4 >= angle1))) && ...
+              (((abs(R1 - R2) < 0.001 && ...
+               abs(centerxy1(1) - centerxy2(1)) < 0.001) &&...
+               abs(centerxy1(2) - centerxy2(2)) < 0.001))
+            % Sort coordinates for new arc segments
+                p = sortrows(p,1);
+
+            % Delete old segments and make reconnections              
+            FemmProblem.Segments(end+1) = FemmProblem.Segments(i);
+            FemmProblem.Segments(end+1) = FemmProblem.Segments(j);
+            FemmProblem.Segments(end+1) = FemmProblem.Segments(j);
+            FemmProblem.Segments(i) = [];
+            FemmProblem.Segments(j) = [];
+            FemmProblem.Segments(end-2).n0 = p(1,3);
+            FemmProblem.Segments(end-2).n1 = p(2,3);
+            FemmProblem.Segments(end-1).n0 = p(2,3);
+            FemmProblem.Segments(end-1).n1 = p(3,3);  
+            FemmProblem.Segments(end).n0 = p(3,3);
+            FemmProblem.Segments(end).n1 = p(4,3);   
+            q = numel(FemmProblem.Segments);
             
+            % Delete "zero" segments connecting the node to itself
+r = 1;
+while (r <= q)
+    n0 = FemmProblem.Segments(r).n0;
+    n1 = FemmProblem.Segments(r).n1;
+    if (n0 == n1)                        
+        FemmProblem.Segments(r) = [];  
+        q = q - 1;
+    else
+        r = r + 1;
+    end    
+end
+            i=i-1;
+            break
+        else
+            h = h + 1;
+        end    
+    end
+    if h == i - 1
+        i = i + 1;  
+    end
+end
         end
         
         %%

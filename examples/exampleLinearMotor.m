@@ -205,7 +205,7 @@ if (DRAW_XFEMM)
     magnet3Comp.make(toolXFEMM, toolXFEMM);
 %     FemmProblem = toolXFEMM.returnFemmProblem();
     
-    [i,FemmProblem] = toolXFEMM.removeOverlaps();
+    FemmProblem = toolXFEMM.removeOverlaps();
 
     plotfemmproblem(FemmProblem);
 end
