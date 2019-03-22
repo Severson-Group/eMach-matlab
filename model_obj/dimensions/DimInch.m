@@ -6,6 +6,11 @@ classdef DimInch < DimLinear
    
     methods
         function obj = DimInch(vargin)
+            % Allow constructor to take in a DimLinear
+            if (isa(vargin, 'DimLinear'))
+                vargin = vargin.toInch();
+            end
+
             obj = obj@DimLinear(vargin);
         end
         
