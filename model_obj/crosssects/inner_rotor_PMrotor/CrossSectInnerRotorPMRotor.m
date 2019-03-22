@@ -139,8 +139,8 @@ classdef CrossSectInnerRotorPMRotor < CrossSectBase
             
             %2. validate the new properties that have been added here
              validateattributes(obj.dim_alpha_rm,{'DimAngular'},{'nonnegative', 'nonempty'});
-             validateattributes(obj.dim_alpha_rp,{'DimAngular'},{'nonempty'});
-             validateattributes(obj.dim_alpha_rs,{'DimAngular'},{'nonempty'}); 
+             validateattributes(obj.dim_alpha_rp,{'DimAngular'},{'nonnegative','nonempty'});
+             validateattributes(obj.dim_alpha_rs,{'DimAngular'},{'nonnegative','nonempty'}); 
              validateattributes(obj.dim_r_ri,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_t_i,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_ri,{'DimLinear'},{'nonnegative','nonempty'});
