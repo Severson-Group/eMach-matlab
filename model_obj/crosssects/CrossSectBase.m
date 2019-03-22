@@ -1,4 +1,4 @@
-classdef CrossSectBase < matlab.mixin.Heterogeneous
+classdef CrossSectBase < matlab.mixin.Heterogeneous & matlab.mixin.Copyable
     %CROSSSECTBASE Abstract base class for cross sections
     %   Sets up and validates universial properties
     
