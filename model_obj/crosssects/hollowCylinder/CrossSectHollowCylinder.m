@@ -15,7 +15,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
             obj.validateProps();
 
             % Take a record of created objects
-            obj.setGetNumObjects(obj);        
+            %obj.setGetNumObjects(obj);        
         end
                 
         function [csToken] = draw(obj, drawer)
