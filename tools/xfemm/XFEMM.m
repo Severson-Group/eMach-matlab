@@ -260,7 +260,7 @@ end
 % Delete old arc segments
 % Make reconnections by adding new arc segments
 i = 2;
-q = numel(FemmProblem.Segments);
+q = numel(FemmProblem.ArcSegments);
 while (i <= q)
     h = 0;
     for j = 1:(i-1)
@@ -270,14 +270,26 @@ while (i <= q)
         p4 = FemmProblem.ArcSegments(j).n1 + 1; 
         x1 = FemmProblem.Nodes(p1).Coords(1);
         y1 = FemmProblem.Nodes(p1).Coords(2);
-        x2 = FemmProblem.Nodes(p2).Coords(1);
-        y2 = FemmProblem.Nodes(p2).Coords(2);
+%         x2 = FemmProblem.Nodes(p2).Coords(1);
+%         y2 = FemmProblem.Nodes(p2).Coords(2);
         x3 = FemmProblem.Nodes(p3).Coords(1);
         y3 = FemmProblem.Nodes(p3).Coords(2);
-        x4 = FemmProblem.Nodes(p4).Coords(1);
-        y4 = FemmProblem.Nodes(p4).Coords(2);
-        % different based on the quadrant
-        angle1 = atan;
+%         x4 = FemmProblem.Nodes(p4).Coords(1);
+%         y4 = FemmProblem.Nodes(p4).Coords(2);
+        
+        angle1 = angle(x1 + 1i*y1)*180/pi;
+        angle3 = angle(x3 + 1i*y3)*180/pi;
+        
+        if (angle1 >= 90 && angle1 <= 180) && ...
+           (angle3 >= - 180 && angle3 < - 90)
+           angle3 = angle3 + 360;
+        elseif (angle3 >= 90 && angle3 <= 180) && ...
+               (angle1 >= - 180 && angle1 < - 90)
+           angle1 = angle1 + 360;
+        end
+        
+        angle2 = angle1 + FemmProblem.ArcSegments(i).ArcLength;
+        angle4 = angle3 + FemmProblem.ArcSegments(j).ArcLength;
         
         R1 = obj.arcInfo(i,3);
         R2 = obj.arcInfo(j,3);
@@ -285,7 +297,7 @@ while (i <= q)
         centerxy2 = obj.arcInfo(j,1:2);
         p = [angle1 p1 - 1; angle2 p2 - 1; angle3 p3 - 1; angle4 p4 - 1];
         
-        % Check if two segments partially overlap
+        % Check if two arc segments partially overlap
         if (~((angle3 <= angle2 && angle4 <= angle2 && ...
                angle3 <= angle1 && angle4 <= angle1) || ...
               (angle3 >= angle2 && angle4 >= angle2 && ...
@@ -293,30 +305,37 @@ while (i <= q)
               (((abs(R1 - R2) < 0.001 && ...
                abs(centerxy1(1) - centerxy2(1)) < 0.001) &&...
                abs(centerxy1(2) - centerxy2(2)) < 0.001))
-            % Sort coordinates for new arc segments
+            % Sort angles for new arc segments
                 p = sortrows(p,1);
 
-            % Delete old segments and make reconnections              
-            FemmProblem.Segments(end+1) = FemmProblem.Segments(i);
-            FemmProblem.Segments(end+1) = FemmProblem.Segments(j);
-            FemmProblem.Segments(end+1) = FemmProblem.Segments(j);
-            FemmProblem.Segments(i) = [];
-            FemmProblem.Segments(j) = [];
-            FemmProblem.Segments(end-2).n0 = p(1,3);
-            FemmProblem.Segments(end-2).n1 = p(2,3);
-            FemmProblem.Segments(end-1).n0 = p(2,3);
-            FemmProblem.Segments(end-1).n1 = p(3,3);  
-            FemmProblem.Segments(end).n0 = p(3,3);
-            FemmProblem.Segments(end).n1 = p(4,3);   
-            q = numel(FemmProblem.Segments);
+            % Delete old arc segments and make reconnections              
+            FemmProblem.ArcSegments(end+1) = FemmProblem.ArcSegments(i);
+            FemmProblem.ArcSegments(end+1) = FemmProblem.ArcSegments(j);
+            FemmProblem.ArcSegments(end+1) = FemmProblem.ArcSegments(j);
+            FemmProblem.ArcSegments(i) = [];
+            FemmProblem.ArcSegments(j) = [];
             
-            % Delete "zero" segments connecting the node to itself
+            FemmProblem.ArcSegments(end-2).n0 = p(1,2);
+            FemmProblem.ArcSegments(end-2).n1 = p(2,2);
+            FemmProblem.ArcSegments(end-2).ArcLength = p(2,1) - p(1,1);
+            
+            FemmProblem.ArcSegments(end-1).n0 = p(2,2);
+            FemmProblem.ArcSegments(end-1).n1 = p(3,2);  
+            FemmProblem.ArcSegments(end-1).ArcLength = p(3,1) - p(2,1);
+            
+            FemmProblem.ArcSegments(end).n0 = p(3,2);
+            FemmProblem.ArcSegments(end).n1 = p(4,2);
+            FemmProblem.ArcSegments(end).ArcLength = p(4,1) - p(3,1);
+                        
+            q = numel(FemmProblem.ArcSegments);
+            
+            % Delete "zero" arc segments connecting the node to itself
 r = 1;
 while (r <= q)
-    n0 = FemmProblem.Segments(r).n0;
-    n1 = FemmProblem.Segments(r).n1;
+    n0 = FemmProblem.ArcSegments(r).n0;
+    n1 = FemmProblem.ArcSegments(r).n1;
     if (n0 == n1)                        
-        FemmProblem.Segments(r) = [];  
+        FemmProblem.ArcSegments(r) = [];  
         q = q - 1;
     else
         r = r + 1;
