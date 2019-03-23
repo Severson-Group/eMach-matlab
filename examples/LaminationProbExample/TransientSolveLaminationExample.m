@@ -3,7 +3,6 @@ clear
 
 n = 1:20; %number of laminations
 
-endTime = 65; %ms
 timeStep = 0.5; %ms
 elecFreq = 20; %Hz
 elecPeriod = 1/elecFreq*1e3; %ms
@@ -27,6 +26,11 @@ for j = 1:length(n)
         get(toolMn.consts,'InfoArrayParameter'));
 
     %% Set transient solver options and solve
+    if n(j) == 1
+        endTime = 200; %ms
+    else
+        endTime = 75; % ms
+    end
     
     timeSettings = [0, timeStep, endTime];
     mn_d_setparameter(toolMn.doc, '', 'TimeSteps', ...
@@ -43,9 +47,9 @@ for j = 1:length(n)
     for i = 1:length(compLam)
         eOhmicLossesT = mn_readConductorOhmicLoss(toolMn.mn, ...
             toolMn.doc, compLam(i).name, 1);
-        OhmicLosses(:,i) = eOhmicLossesT(:,2);
+        OhmicLosses(i) = mean(eOhmicLossesT(end-round(elecPeriod/timeStep):end,2));
     end
-    TotalOhmicLosses = sum(mean(OhmicLosses(end-round(elecPeriod/timeStep):end,:)));
+    TotalOhmicLosses = sum(OhmicLosses);
     
     % get By in region at tooth center as a function of time
     thePoints = [BXPoints' BYPoint*ones(size(BXPoints')) BZPoint*ones(size(BXPoints'))];
@@ -58,7 +62,8 @@ for j = 1:length(n)
     %Get coil current
     Current = mn_readCoilCurrent(toolMn.mn, toolMn.doc, coilName, 1);
     %determine By peak
-    Bypeak = max(abs(ByAvg));
+%     Bypeak = max(abs(ByAvg));
+    Bypeak = max(abs(ByAvg(end-round(elecPeriod/timeStep):end)));
     
     %% Save file and exit
     
@@ -76,4 +81,4 @@ for j = 1:length(n)
     
 end
 
-save('solDataTransient.mat','solutionData');
+save('solDataTransientM19.mat','solutionData');
