@@ -56,16 +56,22 @@ classdef Component < matlab.mixin.Copyable
             obj.makeSolid.run(obj.name, obj.material.name, cs, maker)
         end
         
+
         function newObject = clone(obj, varargin)
             % Utilize the copy method of a Copyable object
             newObject = copy(obj);
+
             % Call the class constructor for newObject
             newObject.createProperties(length(varargin),varargin);
+
+            % Add this cloned object to pool
+            newObject.setGetNumObjects(newObject);
+
+            % Valid properties
             validateattributes(newObject.name, {'char'}, {'nonempty'});
             validateattributes(newObject.crossSections, {'CrossSectBase'}, {'nonempty'});
             validateattributes(newObject.material, {'MaterialGeneric'}, {'nonempty'});
             validateattributes(newObject.makeSolid, {'MakeSolidBase'}, {'nonempty'});            
-            newObject.setGetNumObjects(newObject);
 
             % Compare new name with old name and throw error if neccessary.
             if strcmp(newObject.name, obj.name)
@@ -85,13 +91,13 @@ classdef Component < matlab.mixin.Copyable
         end
     end
     
-     methods(Access = protected)
-         function obj = createProperties(obj, len, args)
-             validateattributes(len, {'numeric'}, {'even'});
-             for i = 1:2:len 
-                 obj.(args{i}) = args{i+1};
-             end
-         end
-     end
+    methods(Access = protected)
+        function obj = createProperties(obj, len, args)
+            validateattributes(len, {'numeric'}, {'even'});
+            for i = 1:2:len 
+                obj.(args{i}) = args{i+1};
+            end
+        end
+    end
 end
 

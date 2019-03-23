@@ -32,11 +32,11 @@ classdef CrossSectBase < matlab.mixin.Heterogeneous & matlab.mixin.Copyable
             %All child classes must implement this function to support
             %contruction based on value pairs
     end
-    methods(Abstract = true)
-        newObject = clone(obj, varargin)
-            %All child classes must implement this function to support
-            %cloning
-    end
+    %     methods(Abstract = true)
+    %         newObject = clone(obj, varargin)
+    %             %All child classes must implement this function to support
+    %             %cloning
+    %     end
 
     methods(Static)
         function out = setGetNumObjects(obj)
@@ -64,7 +64,34 @@ classdef CrossSectBase < matlab.mixin.Heterogeneous & matlab.mixin.Copyable
             out = objectPool;
         end
     end    
-        
+    
+    methods
+        function newObject = clone(oldObject, varargin)
+            % Utilize the copy method of a Copyable object
+            newObject = copy(oldObject);
+            newObject.setGetNumObjects(newObject);
+
+            % Call the class constructor for newObject Here
+            newObject.createProps(length(varargin), varargin);
+            newObject.validateProps();
+
+            % Compare new name with old name and throw error if neccessary.
+            if strcmp(newObject.name, oldObject.name)
+                error('Error: method clone must be called with a new name.')
+            end
+            
+            % Compare new name with the names from object pool.
+            listOfNames = {newObject.setGetObjectPool.name};
+            len = length(listOfNames);
+            for i = 1:len
+                for j = i+1:len
+                    if strcmp(listOfNames(i), listOfNames(j))
+                        error('Error: There is already an object of this class named %s.', char(listOfNames(i)))
+                    end
+                end
+            end
+        end    
+    end
 %% Example implementation:
 %     methods
 %         function obj = comp(varargin)
