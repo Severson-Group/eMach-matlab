@@ -53,6 +53,11 @@ for j = 1:length(n)
     
     % get By in region at tooth center as a function of time
     thePoints = [BXPoints' BYPoint*ones(size(BXPoints')) BZPoint*ones(size(BXPoints'))];
+    
+    fieldData = [];
+    ByAll = [];
+    ByAvg = [];
+    
     for k = 1:length(time)
         fieldData{k} = mn_readFieldAtPoints(toolMn.mn, thePoints, ...
                                                 'B', 1, time(k));
