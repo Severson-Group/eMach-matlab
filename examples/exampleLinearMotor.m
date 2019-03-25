@@ -2,7 +2,7 @@ clc
 clear
 
 DRAW_MAGNET = 0;
-DRAW_TIKZ   = 0;
+DRAW_TIKZ   = 1;
 DRAW_XFEMM = 1;
 
 %% Define geometric parameters
@@ -197,15 +197,36 @@ end
 if (DRAW_XFEMM)
     toolXFEMM = XFEMM();
     toolXFEMM.newFemmProblem(0,'planar','millimeters');
-
+    
+    toolXFEMM.setGroupNumber(magnet1Comp, 1);
+    toolXFEMM.setGroupNumber(magnet2Comp, 1);
+    toolXFEMM.setGroupNumber(magnet3Comp, 1);
+    toolXFEMM.setGroupNumber(magnet4Comp, 1);
+    toolXFEMM.setGroupNumber(magnet5Comp, 1);
+    
     statorIronComp.make(toolXFEMM, toolXFEMM);    
     moverIronComp.make(toolXFEMM, toolXFEMM);
     magnet1Comp.make(toolXFEMM, toolXFEMM);
     magnet2Comp.make(toolXFEMM, toolXFEMM);
     magnet3Comp.make(toolXFEMM, toolXFEMM);
 %     FemmProblem = toolXFEMM.returnFemmProblem();
-    
+
     FemmProblem = toolXFEMM.removeOverlaps();
+    
+    toolXFEMM.plot();
 
     plotfemmproblem(FemmProblem);
 end
+
+
+
+toolXFEMM.drawLine(asdf)
+toolXFEMM.drawLine(asdf) % overlaps the prev one
+
+toolXFEEM.removeOverlaps();
+
+% manually go and look at FemmProblem struct to ensure they don't overlap
+% anymore
+
+if (not overlapping) TEST_PASSED!
+else BAD

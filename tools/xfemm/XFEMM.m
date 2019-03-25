@@ -10,6 +10,13 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         doc; % Document object
         arcInfo;
         arcIndex = 0;
+        
+    end
+    
+    methods (Access = 'private')
+        function foo = helperFunc(bar)
+            foo = bar + 1;
+        end
     end
     
     methods
@@ -84,8 +91,10 @@ i = 2;
 while (i <= numel(FemmProblem.Nodes))
     h = 0;
     for j = 1:(i-1)
-        if abs(FemmProblem.Nodes(i).Coords(1) - FemmProblem.Nodes(j).Coords(1)) < 0.001 && ...
-           abs(FemmProblem.Nodes(i).Coords(2) - FemmProblem.Nodes(j).Coords(2)) < 0.001
+%         equalish(a, b)
+        
+        if abs(FemmProblem.Nodes(i).Coords(1) - FemmProblem.Nodes(j).Coords(1)) < 0.00001 && ...
+           abs(FemmProblem.Nodes(i).Coords(2) - FemmProblem.Nodes(j).Coords(2)) < 0.00001
             % Remove one of the two overlapping nodes
             FemmProblem.Nodes(i) = [];
             % Renumber any remaining segments
@@ -139,7 +148,7 @@ while (i <= q)
         n20 = FemmProblem.Segments(j).n0;
         n21 = FemmProblem.Segments(j).n1;       
         if (n10 == n20 && n11 == n21) || (n10 == n21 && n11 == n20)                        
-            FemmProblem.Segments(i) = [];  
+            FemmProblem.Segments(i) = [];             
             q = q - 1;
             break
         else
@@ -162,9 +171,9 @@ while (i <= q)
         n21 = FemmProblem.ArcSegments(j).n1; 
         ArcLength1 = FemmProblem.ArcSegments(i).ArcLength;
         ArcLength2 = FemmProblem.ArcSegments(j).ArcLength;      
-        if (n10 == n20 && n11 == n21 && ArcLength1 == ArcLength2) % ...
-                %|| (n10 == n21 && n11 == n20 && ArcLength1 == -ArcLength2)                        
+        if (n10 == n20 && n11 == n21 && ArcLength1 == ArcLength2)                      
             FemmProblem.ArcSegments(i) = [];  
+            obj.arcInfo(i,:) = [];
             q = q - 1;
             break
         else
@@ -205,14 +214,17 @@ while (i <= q)
         p = [x1 y1 p1 - 1; x2 y2 p2 - 1; x3 y3 p3 - 1; x4 y4 p4 - 1];
         
         % Check if two segments partially overlap
-        if ((~((x3 <= x2 && x4 <= x2 && x3 <= x1 && x4 <= x1) || ...
-                (x3 >= x2 && x4 >= x2 && x3 >= x1 && x4 >= x1))) || ...
-            (~((y3 <= y2 && y4 <= y2 && y3 <= y1 && y4 <= y1) || ...
-                (y3 >= y2 && y4 >= y2 && y3 >= y1 && y4 >= y1)))) && ...
-                 (((abs(k1 - k2) < 0.001 && abs(b1 - b2) < 0.001)) || ...
-                 (abs(x1 - x2) < 0.001 && abs(x3 - x4) < 0.001 && abs(x1 - x3) < 0.001))
-            % Sort coordinates for new segments
-            if (abs(x1 - x2) < 0.001 && abs(x3 - x4) < 0.001 && abs(x1 - x3) < 0.001)
+        %del = 0.00000001;
+        if ((~((y3 <= y2 + 0.00001 && y4 <= y2 + 0.00001 && y3 <= y1 + 0.00001 && y4 <= y1 + 0.00001) || ...
+               (y3 >= y2 - 0.00001 && y4 >= y2 - 0.00001 && y3 >= y1 - 0.00001 && y4 >= y1 - 0.00001))) && ...
+              ((abs(k1) > 1e+9 && abs(k2) > 1e+9 && abs(x1 - x3) < 0.00001))) ||...
+           ((~((x3 <= x2 + 0.00001 && x4 <= x2 + 0.00001 && x3 <= x1 + 0.00001 && x4 <= x1 + 0.00001) || ...
+               (x3 >= x2 - 0.00001 && x4 >= x2 - 0.00001 && x3 >= x1 - 0.00001 && x4 >= x1 - 0.00001))) && ...
+              ((abs(k1 - k2) < 0.00001 && abs(b1 - b2) < 0.00001) && ...
+              abs(k1) < 1e+9 && abs(k2) < 1e+9))
+             
+             % Sort coordinates for new segments
+            if (abs(x1 - x2) < 0.00001 && abs(x3 - x4) < 0.00001 && abs(x1 - x3) < 0.00001)
                 p = sortrows(p,2);
             else
                 p = sortrows(p,1);
@@ -270,12 +282,8 @@ while (i <= q)
         p4 = FemmProblem.ArcSegments(j).n1 + 1; 
         x1 = FemmProblem.Nodes(p1).Coords(1);
         y1 = FemmProblem.Nodes(p1).Coords(2);
-%         x2 = FemmProblem.Nodes(p2).Coords(1);
-%         y2 = FemmProblem.Nodes(p2).Coords(2);
         x3 = FemmProblem.Nodes(p3).Coords(1);
         y3 = FemmProblem.Nodes(p3).Coords(2);
-%         x4 = FemmProblem.Nodes(p4).Coords(1);
-%         y4 = FemmProblem.Nodes(p4).Coords(2);
         
         angle1 = angle(x1 + 1i*y1)*180/pi;
         angle3 = angle(x3 + 1i*y3)*180/pi;
@@ -298,13 +306,13 @@ while (i <= q)
         p = [angle1 p1 - 1; angle2 p2 - 1; angle3 p3 - 1; angle4 p4 - 1];
         
         % Check if two arc segments partially overlap
-        if (~((angle3 <= angle2 && angle4 <= angle2 && ...
-               angle3 <= angle1 && angle4 <= angle1) || ...
-              (angle3 >= angle2 && angle4 >= angle2 && ...
-               angle3 >= angle1 && angle4 >= angle1))) && ...
-              (((abs(R1 - R2) < 0.001 && ...
-               abs(centerxy1(1) - centerxy2(1)) < 0.001) &&...
-               abs(centerxy1(2) - centerxy2(2)) < 0.001))
+        if (~((abs(angle3 <= angle2 + 0.00001 && angle4 <= angle2 + 0.00001 && ...
+               angle3 <= angle1 + 0.00001 && angle4 <= angle1 + 0.00001) || ...
+              (angle3 >= angle2 - 0.00001 && angle4 >= angle2 - 0.00001 && ...
+               angle3 >= angle1 - 0.00001 && angle4 >= angle1 - 0.00001))) && ...
+              ((abs(R1 - R2) < 0.00001 && ...
+               abs(centerxy1(1) - centerxy2(1)) < 0.00001 && ...
+               abs(centerxy1(2) - centerxy2(2)) < 0.00001)))
             % Sort angles for new arc segments
                 p = sortrows(p,1);
 
@@ -312,8 +320,14 @@ while (i <= q)
             FemmProblem.ArcSegments(end+1) = FemmProblem.ArcSegments(i);
             FemmProblem.ArcSegments(end+1) = FemmProblem.ArcSegments(j);
             FemmProblem.ArcSegments(end+1) = FemmProblem.ArcSegments(j);
+            obj.arcInfo(end+1,:) = obj.arcInfo(i,:);
+            obj.arcInfo(end+1,:) = obj.arcInfo(j,:);
+            obj.arcInfo(end+1,:) = obj.arcInfo(j,:);
+            
             FemmProblem.ArcSegments(i) = [];
             FemmProblem.ArcSegments(j) = [];
+            obj.arcInfo(i,:) = [];
+            obj.arcInfo(j,:) = [];
             
             FemmProblem.ArcSegments(end-2).n0 = p(1,2);
             FemmProblem.ArcSegments(end-2).n1 = p(2,2);
