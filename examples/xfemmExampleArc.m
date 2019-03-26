@@ -71,8 +71,8 @@ if (DRAW_XFEMM)
     toolXFEMM = XFEMM();
     toolXFEMM.newFemmProblem(0,'planar','millimeters');
     comp1.make(toolXFEMM,toolXFEMM);
-%     [FemmProblem, arcInfo] = toolXFEMM.returnFemmProblem();
+
     FemmProblem = toolXFEMM.removeOverlaps();
 
-    plotfemmproblem(FemmProblem);
+    toolXFEMM.plot();
 end
