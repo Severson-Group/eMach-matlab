@@ -19,14 +19,33 @@ classdef DimLinear < DimBase
         end
         
         function r = mtimes(lhs, rhs)
+            % lhs and rhs have to be at least doubles, non-empty
             validateattributes(lhs, {'double'}, {'nonempty'});
-            validateattributes(rhs, {'DimLinear'}, {'nonempty'});
-
+            validateattributes(rhs, {'double'}, {'nonempty'});
+            
+            % Check that both lhs and rhs aren't BOTH DimLinear
+            if (isa(lhs, 'DimLinear') && isa(rhs, 'DimLinear'))
+                error('Both lhs and rhs are DimLinear.');
+            end
+            
+            % At this point, we have confirmed that EITHER lhs is scalar,
+            % or rhs, but NOT BOTH!
+                        
             % Convert to DimMillimeter for calculation
-            product = lhs*double(rhs.toMillimeter());
-
+            if (isa(lhs, 'DimLinear'))
+                product = double(rhs) * double(lhs.toMillimeter());
+                retclass = class(lhs);
+            elseif (isa(rhs, 'DimLinear'))
+                product = double(lhs) * double(rhs.toMillimeter());
+                retclass = class(rhs);
+            else
+               % ERROR, this should never happen 
+               error('This should never happen due to checks above...');
+            end
+            
+            
             % Return object of same type as LHS
-            r = feval(class(rhs), DimMillimeter(product));
+            r = feval(retclass, DimMillimeter(product));
         end
         
         function r = minus(lhs, rhs)
