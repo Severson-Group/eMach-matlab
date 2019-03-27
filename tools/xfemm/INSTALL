@@ -1,0 +1,6 @@
+To install XFEMM, follow these steps:
+1. Download XFEMM through the following link: https://sourceforge.net/projects/xfemm/
+2. Unzip files
+3. Go to "xfemm_mingw_win64\mfemm" folder
+4. Open and run "mfemm_setup.m" located in the above folder
+5. Run any example that uses XFEMM Matlab functions.
