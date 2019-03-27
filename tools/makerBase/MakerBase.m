@@ -1,4 +1,4 @@
-classdef Maker3dBase < handle
+classdef MakerBase < handle
     %Drawer2dBase Abstract base class for software which can draw in 2D
     %   Requires subclass to implement:
     %   - drawLine()
@@ -6,16 +6,14 @@ classdef Maker3dBase < handle
     %   - select()
     
     methods
-        function obj = Maker3dBase(varargin)
+        function obj = MakerBase(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
         end
     end
    
-    methods(Abstract = true)
-        new = extrude(obj, name, depth)
-        new = prepareSection(obj, csToken)
-        %new = Move(obj)
+    methods(Abstract = true)        
+        new = prepareSection(obj, csToken)        
     end
     
      methods(Access = protected)

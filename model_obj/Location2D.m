@@ -26,21 +26,23 @@ classdef Location2D
             %This function takes in an nx2 array of coordinates of the form
             %[x,y] and returns rotated and translated coordinates. The
             %translation and rotation are described by obj.anchor_xy and
-            %obj.theta. The optional "add_theta" argument adds an
-            %additional angle of "add_theta" to the obj.theta attribute.
+            %obj.theta. The optional "addTheta" argument adds an
+            %additional angle of "addTheta" to the obj.theta attribute.
             
-            if exist('add_theta','var')
+            validateattributes(coords, {'DimLinear'},{})
+            
+            if exist('addTheta','var')
                 validateattributes(addTheta, {'DimAngular'}, {'size',[1,1]})
-                add_theta = addTheta.toRadians() + obj.theta.toRadians();
-                T = [ cos(add_theta), -sin(add_theta); ...
-                      sin(add_theta),  cos(add_theta) ];
+                addTheta = addTheta.toRadians() + obj.theta.toRadians();
+                T = [ cos(addTheta), -sin(addTheta); ...
+                      sin(addTheta),  cos(addTheta) ];
             else
                 T = obj.R;
             end
                
             rotateCoords = transpose(T*coords');
-            transCoords = zeros(size(rotateCoords));
             transCoords(:,1) = rotateCoords(:,1) + obj.anchor_xy(1);
+            transCoords(:,2) = rotateCoords(:,2) + obj.anchor_xy(2);
             transCoords(:,2) = rotateCoords(:,2) + obj.anchor_xy(2);
         end
         
