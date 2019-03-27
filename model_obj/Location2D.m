@@ -29,6 +29,8 @@ classdef Location2D
             %obj.theta. The optional "addTheta" argument adds an
             %additional angle of "addTheta" to the obj.theta attribute.
             
+            validateattributes(coords, {'DimLinear'},{})
+            
             if exist('addTheta','var')
                 validateattributes(addTheta, {'DimAngular'}, {'size',[1,1]})
                 addTheta = addTheta.toRadians() + obj.theta.toRadians();

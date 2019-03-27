@@ -6,6 +6,11 @@ classdef DimMillimeter < DimLinear
    
     methods
         function obj = DimMillimeter(vargin)
+            % Allow constructor to take in a DimLinear
+            if (isa(vargin, 'DimLinear'))
+                vargin = vargin.toMillimeter();
+            end
+
             obj = obj@DimLinear(vargin);
         end
         
@@ -18,7 +23,7 @@ classdef DimMillimeter < DimLinear
         function new = toInch(obj) 
             %TOINCHES Convert this dimension to inches
             
-           new = DimInch(obj/25.4); 
+           new = DimInch(double(obj) / 25.4); 
         end
     end
 end
