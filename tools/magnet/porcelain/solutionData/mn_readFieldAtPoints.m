@@ -8,7 +8,8 @@ function returnVector = mn_readFieldAtPoints(mn, thePoints, ...
 %           case)
 %   time: time to evaluate the field at (for transient solution) --
 %           not used for static solution
-%
+%   fieldName: 'B' for magnetic field, special options can be used for time
+%       harmonic
 %   Returns DataPoints: column 1 is the time step, column 2 is the field
 %           magnitude
 %
