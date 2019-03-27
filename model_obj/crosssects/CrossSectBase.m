@@ -21,6 +21,9 @@ classdef CrossSectBase < matlab.mixin.Heterogeneous
             %[obj] = clone(obj, name, varargin)
             %A new name is required along with a list of key-value pairs 
             %indicating which parameters should be changed.
+            if strcmp(obj.name, name)
+                error ('A new name must be specified for the cloned object')
+            end
             
             obj.name = name;
             obj = obj.createProps(nargin-2,varargin);          
