@@ -1,6 +1,12 @@
 close all
-n=1:20; lw = 3;
-
+n=[1:20, 50]; lw = 3;
+% 50 laminations results:
+% M19: 
+lossesTrM19_50 = 0.0096; peakBTrM19_50 = 0.7727; 
+lossesTHM19_50 = 0.0316; peakBTHM19_50 = 0.4158;
+% Hiperco: 
+lossesTrHip_50 = 0.0075; peakBTrHip_50 = 0.6460;
+lossesTHHip_50 = 0.0252; peakBTHHip_50 = 0.3453;
 %% M-19
 
 load('solDataStaticM19.mat')
@@ -22,12 +28,12 @@ end
 
 
 figure
-plot(n,IronOhmicLossesTHM19,n,IronOhmicLossesTrM19,'Linewidth',lw)
+plot(n,[IronOhmicLossesTHM19,lossesTHM19_50],n,[IronOhmicLossesTrM19,lossesTrM19_50],'Linewidth',lw)
 xlabel('Number of laminations'); ylabel('Iron ohmic losses (W)')
 legend('Time-harmonic','Transient')
 
 figure
-plot(n,ByStM19,n,ByTHM19,n,ByTrM19,'Linewidth',lw)
+plot(n,[ByStM19,1],n,[ByTHM19,peakBTHM19_50],n,[ByTrM19,peakBTrM19_50],'Linewidth',lw)
 xlabel('Number of laminations'); ylabel('|By| (T)')
 legend('Static','Time-harmonic','Transient')
 
@@ -52,25 +58,34 @@ end
 
 
 figure
-plot(n,IronOhmicLossesTHHiperco,n,IronOhmicLossesTrHiperco,'Linewidth',lw)
+plot(n,[IronOhmicLossesTHHiperco,lossesTHHip_50],n,[IronOhmicLossesTrHiperco,lossesTrHip_50],'Linewidth',lw)
 xlabel('Number of laminations'); ylabel('Iron ohmic losses (W)')
 legend('Time-harmonic','Transient')
 ylim([0 0.4])
 
 figure
-plot(n,ByStHiperco,n,ByTHHiperco,n,ByTrHiperco,'Linewidth',lw)
+plot(n,[ByStHiperco,1],n,[ByTHHiperco,peakBTHHip_50],n,[ByTrHiperco,peakBTrHip_50],'Linewidth',lw)
 xlabel('Number of laminations'); ylabel('|By| (T)')
 legend('Static','Time-harmonic','Transient')
 
 %% Both materials
 
 figure
-plot(n,IronOhmicLossesTrM19,n,IronOhmicLossesTrHiperco,'Linewidth',1.5)
+plot(n,[IronOhmicLossesTrM19,lossesTrM19_50],n,[IronOhmicLossesTrHiperco,lossesTrHip_50],'Linewidth',1.5)
 xlabel('Number of laminations'); ylabel('Iron ohmic losses (W)')
 legend('M-19, transient','Hiperco, transient')
 % ylim([0 0.4])
 
 figure
-plot(n,ByTrM19,n,ByTrHiperco,'Linewidth',lw)
+plot(n,[ByTrM19,peakBTrM19_50],n,[ByTrHiperco,peakBTrHip_50],'Linewidth',lw)
 xlabel('Number of laminations'); ylabel('|By| (T)')
 legend('M-19, transient','Hiperco, transient')
+
+%% Iron conductivity = 0
+k = ones(length(n),1); ByStCondZero = 1.05*k; ByTHCondZero = 0.71*k;
+ByTrCondZero = 1.05*k;
+figure
+plot(n,ByStCondZero,n,ByTHCondZero,n,ByTrCondZero,'Linewidth',lw)
+legend('Static','Time-harmonic','Transient')
+xlabel('Number of laminations'); ylabel('|By| (T)')
+ylim([0 1.2])
