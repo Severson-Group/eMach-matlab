@@ -46,3 +46,10 @@ val = twoMillimeters / oneMillimeter;
 expected = 2;
 assert(strcmp(class(val), class(expected)));
 assert(abs(val - expected) < tol);
+
+
+val = oneInch / twoMillimeters;
+expected = 12.7;
+assert(strcmp(class(val), class(expected)));
+assert(abs(val - expected) < tol);
+
