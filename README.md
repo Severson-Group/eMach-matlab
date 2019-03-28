@@ -1,2 +1,2 @@
-# machine_modeling
-modeling functions: analytic and fea
+# eMach
+An open source framework for modeling [electric] machinery.

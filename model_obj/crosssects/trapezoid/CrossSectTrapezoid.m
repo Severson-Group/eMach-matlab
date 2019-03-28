@@ -8,7 +8,6 @@ classdef CrossSectTrapezoid < CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_h;      %Height length: class type dimLinear
         dim_w;      %Bottom edge length: class type dimLinear
-        dim_depth;  %Depth of trapezoid: class type dimLinear
         dim_theta;  %Angular span of lower corner: class type dimAngular
     end
     
@@ -18,7 +17,7 @@ classdef CrossSectTrapezoid < CrossSectBase
             obj.validateProps();            
         end
         
-        function draw(obj, drawer)
+        function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             
             % Calculate points of trapezoid
@@ -26,32 +25,28 @@ classdef CrossSectTrapezoid < CrossSectBase
 
             h = obj.dim_h;
             w = obj.dim_w;
-            theta = obj.dim_theta;
+            theta = obj.dim_theta.toRadians();
             
             x = [-(w/2), -(w/2) + (h/tan(theta)), ...
                   (w/2) - (h/tan(theta)), (w/2)];
             
             y = [0, h, h, 0];
             
-            [x_trans, y_trans] = obj.location.transformCoords(x,y);
-
-            point1 = [x_trans(1), y_trans(1)];
-            point2 = [x_trans(2), y_trans(2)];
-            point3 = [x_trans(3), y_trans(3)];
-            point4 = [x_trans(4), y_trans(4)];
+            [p] = obj.location.transformCoords([x' y']);
 
             % Draw segments
-            [top_seg]    = drawer.drawLine(point2, point3);
-            [bottom_seg] = drawer.drawLine(point1, point4);
-            [left_seg]   = drawer.drawLine(point1, point2);
-            [right_seg]  = drawer.drawLine(point3, point4);
+            [top_seg]    = drawer.drawLine(p(2,:), p(3,:));
+            [bottom_seg] = drawer.drawLine(p(1,:), p(4,:));
+            [left_seg]   = drawer.drawLine(p(1,:), p(2,:));
+            [right_seg]  = drawer.drawLine(p(3,:), p(4,:));
 
-            %segments = [top_seg, bottom_seg, left_seg, right_seg];
+            %calculate a coordinate inside the surface
+            innerCoord = obj.location.transformCoords([0, h/2]);
+            
+            segments = [top_seg, bottom_seg, left_seg, right_seg];            
+            csToken = CrossSectToken(innerCoord, segments);
         end
         
-        function select(obj)
-            
-        end
     end
     
      methods(Access = protected)
@@ -63,9 +58,8 @@ classdef CrossSectTrapezoid < CrossSectBase
             
             %2. valudate the new properties that have been added here
             validateattributes(obj.dim_h,{'DimLinear'},{'nonnegative','nonempty'})            
-            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_depth,{'DimLinear'},{'nonnegative','nonempty'})
-            validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty', '<', pi})
+            validateattributes(obj.dim_w,{'DimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_theta,{'DimAngular'},{'nonnegative', 'nonempty'})
          end
                   
          function obj = createProps(obj, len, args)

@@ -48,7 +48,9 @@ classdef TikZ < ToolBase & Drawer2dBase
             );
         
             if nargout > 0
-                line = '==TikZ_Line_Object==';
+                % Return value must be a single quantity, i.e. not a matrix
+                % or array value. Strings cannot be returned from here!
+                line = 1;
             end
         end
         
@@ -58,12 +60,13 @@ classdef TikZ < ToolBase & Drawer2dBase
             %       draws an arc
             
             % Extract and rename variables for processing
+            
             h = centerxy(1);
             k = centerxy(2);
             x1 = startxy(1);
             y1 = startxy(2);
             x2 = endxy(1);
-%            y2 = endxy(2);
+            y2 = endxy(2);
 
             % Need to calculate: x, y, start, stop, radius...
             
@@ -72,17 +75,48 @@ classdef TikZ < ToolBase & Drawer2dBase
             
             radius = sqrt((x1 - h)^2 + (y1 - k)^2);
             
-            % TODO: there is a corner case here... angle sign changes
-            % and using first vs. second equation changes answer...
-            % Need to look into this...
+            % These are both "correct" ways of determining start variable,
+            % but only one works depending on orientation of arc. Hacks
+            % below help solve this issue.
             %
-            % i.e., both equations should give same answer, but sign
-            % changes sometimes under corner cases
-            
-%            start = acos((x1 - h) / radius);
-            start = asin((y1 - k) / radius);
+            start = acos((x1 - h) / radius); 
+            start2 = asin((y1 - k) / radius);
             
             stop = acos((x2 - h) / radius);
+            
+            % ----------
+            % HACKS START
+            % ----------
+            
+            % The code in this "hack" section is special cases for drawing
+            % an arc... This involves mostly cases where x1==x2 or
+            % y1==y2. I have not proved these are the correct solutions,
+            % but I have tried many arcs using various stator geometries
+            % and it seems to work for all cases...  ¯\_(?)_/¯
+            
+            if (start > stop)
+               start = -start;
+               stop = -stop;
+            end
+            
+            % Trying to check for start == stop.
+            % BUT, issues with rounding and floating numbers....
+            % Using this delta comparison fixes one silly case where
+            % rounding causes issues for direct comparison for equality...
+            % 
+            % Silly!
+            %
+            if (abs(start - stop) < 0.0000001)
+                if (y1-k < 0)
+                    start = -start;
+                elseif (x1-h < 0)
+                    stop = start + (2 * start2);
+                end
+            end
+            
+            % --------
+            % HACKS END
+            % --------
             
             fmt = '\\draw[black] (%12.8f,%12.8f) arc (%12.8f:%12.8f:%12.8f);\n';
             fprintf(obj.file, fmt, ...
@@ -91,7 +125,9 @@ classdef TikZ < ToolBase & Drawer2dBase
             );
         
             if nargout > 0
-                arc = '==TikZ_Arc_Object==';
+                % Return value must be a single quantity, i.e. not a matrix
+                % or array value. Strings cannot be returned from here!
+                arc = 1;
             end
         end
         

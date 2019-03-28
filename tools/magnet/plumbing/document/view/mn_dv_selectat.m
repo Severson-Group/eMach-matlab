@@ -5,7 +5,7 @@ function [] = mn_dv_selectat(mn, locxy, seltype, objcode)
 %
 %   [] = mn_dv_selectat(mn, [loc_x, _y], seltype, objcode) selects an 
 %   object of type objcode at the x,y coordinate location specified
-
+%
 %   [] = mn_dv_selectat(mn, [loc_x, _y], seltype, [cd1, cd2, ...]) selects an 
 %   object of any type listed in [cd1, cd2, ...] at the x,y coordinate 
 %   location specified
