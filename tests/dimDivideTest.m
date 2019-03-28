@@ -32,3 +32,17 @@ val = twoInches / 8;
 expected = DimInch(0.25);
 assert(strcmp(class(val), class(expected)));
 assert(abs(val - expected) < tol);
+
+
+%% Test 2: mrdivide of two DimLinear gets scalar ratio
+
+val = oneInch / oneInch;
+expected = 1;
+assert(strcmp(class(val), class(expected)));
+assert(abs(val - expected) < tol);
+
+
+val = twoMillimeters / oneMillimeter;
+expected = 2;
+assert(strcmp(class(val), class(expected)));
+assert(abs(val - expected) < tol);

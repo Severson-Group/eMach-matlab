@@ -50,23 +50,26 @@ classdef DimLinear < DimBase
         
         function r = mrdivide(lhs, rhs)
             % lhs must be DimLinear
-            % rhs must be double only
+            % rhs must be double or DimLinear only
             validateattributes(lhs, {'DimLinear'}, {'nonempty'});
-            validateattributes(rhs, {'double'}, {'nonempty'});
+            validateattributes(rhs, {'double', 'DimLinear'}, {'nonempty'});
             
-            % Check that both lhs and rhs aren't BOTH DimLinear
-            if (isa(lhs, 'DimLinear') && isa(rhs, 'DimLinear'))
-                error('Both lhs and rhs are DimLinear.');
-            end
+            % At this point, we have confirmed that EITHER:
+            % - LHS is DimLinear, RHS is DimLinear
+            % - LHS is DimLinear, RHS is scalar
             
-            % At this point, we have confirmed that lhs is DimLinear,
-            % and rhs is double, but NOT BOTH DimLinear!
-                        
-            % Convert to DimMillimeter for calculation
-            result = double(lhs.toMillimeter()) / double(rhs);
+            if (isa(rhs, 'DimLinear'))
+                % DimLinear / DimLinear, so should return scalar
+                r = double(lhs.toMillimeter()) / double(rhs.toMillimeter());
+            else
+                % DimLinear / scalar, so should return class of lhs
+                
+                % Convert to DimMillimeter for calculation
+                result = double(lhs.toMillimeter()) / double(rhs);
 
-            % Return object of same type as LHS
-            r = feval(class(lhs), DimMillimeter(result));
+                % Return object of same type as LHS
+                r = feval(class(lhs), DimMillimeter(result));
+            end
         end
         
         function r = minus(lhs, rhs)
