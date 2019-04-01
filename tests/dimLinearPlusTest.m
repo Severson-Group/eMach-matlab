@@ -13,25 +13,25 @@ tol = 1e-5;
 val = oneInch + oneInch;
 expected = DimInch(2);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = oneInch + twoInches;
 expected = DimInch(3);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = oneMillimeter + oneMillimeter;
 expected = DimMillimeter(2);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = oneMillimeter + twoMillimeters;
 expected = DimMillimeter(3);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 
@@ -40,23 +40,23 @@ assert(abs(val - expected) < tol);
 val = oneInch + oneMillimeter;
 expected = DimInch(1.0393701);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = oneInch + oneMillimeter + oneMillimeter;
 expected = DimInch(1.0787402);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = oneMillimeter + oneInch;
 expected = DimMillimeter(26.4);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = twoMillimeters + twoInches;
 expected = DimMillimeter(52.8);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
