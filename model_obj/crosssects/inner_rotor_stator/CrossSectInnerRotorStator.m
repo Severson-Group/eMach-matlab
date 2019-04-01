@@ -1,4 +1,4 @@
-classdef CrossSectInnerRotorPMStator < CrossSectBase
+classdef CrossSectInnerRotorStator < CrossSectBase
     %CrossSectInnerRotorPMStator Describes the inner rotor PM stator.
     %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is the center of the stator,
@@ -22,7 +22,7 @@ classdef CrossSectInnerRotorPMStator < CrossSectBase
     end
     
     methods
-        function obj = CrossSectInnerRotorPMStator(varargin)
+        function obj = CrossSectInnerRotorStator(varargin)
             obj = obj.createProps(nargin,varargin);
             obj.validateProps();            
         end
