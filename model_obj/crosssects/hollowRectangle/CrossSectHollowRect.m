@@ -20,7 +20,7 @@ classdef CrossSectHollowRect < CrossSectBase
         end
                 
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             axis = [0,0];
             w=obj.dim_w;
             h=obj.dim_h;
