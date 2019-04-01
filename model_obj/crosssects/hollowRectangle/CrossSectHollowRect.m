@@ -21,7 +21,7 @@ classdef CrossSectHollowRect < CrossSectBase
                 
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
-            axis = [0,0];
+            axis = DimMillimeter([0,0]);
             w=obj.dim_w;
             h=obj.dim_h;
             t1=obj.dim_t1;
