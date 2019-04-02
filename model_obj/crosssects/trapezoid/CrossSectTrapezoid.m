@@ -32,20 +32,8 @@ classdef CrossSectTrapezoid < CrossSectBase
             
             y = [0, h, h, 0];
             
-<<<<<<< HEAD
-<<<<<<< HEAD
-            [x_trans, y_trans] = obj.location.transformCoords(x,y);
-
-            point1 = [x_trans(1), y_trans(1)];
-            point2 = [x_trans(2), y_trans(2)];
-            point3 = [x_trans(3), y_trans(3)];
-            point4 = [x_trans(4), y_trans(4)];
-=======
-            [p] = obj.location.transformCoords( [x' y']);
->>>>>>> develop
-=======
             [p] = obj.location.transformCoords([x' y']);
->>>>>>> develop
+
 
             % Draw segments
             [top_seg]    = drawer.drawLine(p(2,:), p(3,:));
