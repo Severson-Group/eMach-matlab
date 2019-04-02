@@ -1,5 +1,5 @@
-classdef CrossSectInnerRotorPMRotor < CrossSectBase
-    %CrossSectInnerRotorPMRotor Describes the inner rotor PM rotor.
+classdef CrossSectInnerNotchedRotor < CrossSectBase
+    %CrossSectInnerNotchedRotor Describes the inner notched rotor.
     %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is the center of the rotor,
     %   with the x-axis directed along the center of one of the rotor poles
@@ -19,7 +19,7 @@ classdef CrossSectInnerRotorPMRotor < CrossSectBase
     end
     
     methods
-        function obj = CrossSectInnerRotorPMRotor(varargin)
+        function obj = CrossSectInnerNotchedRotor(varargin)
             obj = obj.createProps(nargin,varargin);
             obj.validateProps();            
         end
