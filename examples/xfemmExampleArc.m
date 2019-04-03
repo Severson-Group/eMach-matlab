@@ -3,7 +3,8 @@ clear
 
 DRAW_MAGNET = 0;
 DRAW_TIKZ   = 0;
-DRAW_XFEMM = 1;
+DRAW_XFEMM = 0;
+DRAW_JMAG = 1;
 
 %% Define cross sections
 
@@ -75,4 +76,16 @@ if (DRAW_XFEMM)
     FemmProblem = toolXFEMM.removeOverlaps();
 
     toolXFEMM.plot();
+end
+
+
+%% Draw via JMAG
+
+if (DRAW_JMAG)
+    toolJd = JMAG();
+    toolJd.open(0,0,true);
+
+    comp1.make(toolJd,toolJd);
+
+    %toolJd.viewAll();
 end

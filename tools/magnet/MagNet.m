@@ -53,7 +53,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             
             obj.view = invoke(obj.doc, 'getview');
             obj.consts = invoke(obj.mn, 'getConstants');
-            obj.setDefaultLengthUnit('millimeters', false);
+            %obj.setDefaultLengthUnit('millimeters', false);
         end
         
         function close(obj)
