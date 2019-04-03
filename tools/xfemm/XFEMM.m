@@ -1,4 +1,4 @@
-classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
+classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %XFEMM Encapsulation for the XFEMM FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -486,7 +486,7 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)
