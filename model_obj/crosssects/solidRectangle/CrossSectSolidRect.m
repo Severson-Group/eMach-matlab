@@ -16,15 +16,15 @@ classdef CrossSectSolidRect  < CrossSectBase
                 
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
-            axis = [0,0];
+
             w=obj.dim_w;
             h=obj.dim_h;
             
 %%Create points
-            points = [  axis(1),    axis(2); 
-                        axis(1),    axis(2)+h; 
-                        axis(1)+w,  axis(2)+h; 
-                        axis(1)+w,  axis(2)];
+            points = [ 0, 0; 
+                       0, h; 
+                       w, h; 
+                       w, 0];                    
         
 %%Transform Coordinates
             [points] = obj.location.transformCoords(points);
