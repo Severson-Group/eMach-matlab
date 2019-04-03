@@ -207,9 +207,9 @@ if (DRAW_XFEMM)
     
     statorIronComp.make(toolXFEMM, toolXFEMM);    
     moverIronComp.make(toolXFEMM, toolXFEMM);
-    magnet1Comp.make(toolXFEMM, toolXFEMM);
-    magnet2Comp.make(toolXFEMM, toolXFEMM);
-    magnet3Comp.make(toolXFEMM, toolXFEMM);
+%     magnet1Comp.make(toolXFEMM, toolXFEMM);
+%     magnet2Comp.make(toolXFEMM, toolXFEMM);
+%     magnet3Comp.make(toolXFEMM, toolXFEMM);
 
     FemmProblem = toolXFEMM.removeOverlaps();
     
