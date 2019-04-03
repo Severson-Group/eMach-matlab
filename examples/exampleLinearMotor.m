@@ -186,11 +186,11 @@ if (DRAW_TIKZ)
     toolTikz = TikZ();
     toolTikz.open('output.txt');
 
-    statorIronComp.make(toolTikz);
-    moverIronComp.make(toolTikz);
-    magnet1Comp.make(toolTikz);
-    magnet2Comp.make(toolTikz);
-    magnet3Comp.make(toolTikz);
+    statorIronComp.draw(toolTikz);
+    moverIronComp.draw(toolTikz);
+    magnet1Comp.draw(toolTikz);
+    magnet2Comp.draw(toolTikz);
+    magnet3Comp.draw(toolTikz);
     toolTikz.close();
 end
 

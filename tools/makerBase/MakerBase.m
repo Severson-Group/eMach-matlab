@@ -1,9 +1,7 @@
 classdef MakerBase < handle
-    %Drawer2dBase Abstract base class for software which can draw in 2D
+    %MakerBase Abstract base class for software which can "make" things
     %   Requires subclass to implement:
-    %   - drawLine()
-    %   - drawArc()
-    %   - select()
+    %   - prepareSection()
     
     methods
         function obj = MakerBase(varargin)
