@@ -28,7 +28,7 @@ classdef CrossSectInnerRotorStator < CrossSectBase
         end
         
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             %creating local variables of all of the attributes for more
             %readable code

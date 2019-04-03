@@ -105,7 +105,7 @@ if (DRAW_TIKZ)
     toolTikz = TikZ();
     toolTikz.open('output.txt');
 
-    comp1.make(toolTikz);
+    comp1.draw(toolTikz);
 
     toolTikz.close();
 end

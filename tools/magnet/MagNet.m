@@ -1,4 +1,4 @@
-classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
+classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %MAGNET Encapsulation for the MagNet FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -213,7 +213,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)

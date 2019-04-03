@@ -18,7 +18,7 @@ classdef CrossSectTrapezoid < CrossSectBase
         end
         
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             % Calculate points of trapezoid
             % Bottom left is 1, rotating clockwise for 2, 3, 4
