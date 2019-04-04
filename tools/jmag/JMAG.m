@@ -19,10 +19,11 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         consts; % Program constants (not used)
         defaultLength = 'dimMillimeter'; % Default length unit is mm (not used)
         workDir = './';
+        sketchList;
     end
     
     methods (Access = 'private')
-        function c = almostEqual(obj,a,b)
+        function c = almostEqual(~,a,b)
             tol = 0.00001;
             c = abs(a - b) < tol;
         end
@@ -76,11 +77,6 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             obj.view = obj.jd.View();
             obj.consts = [];
             obj.app = obj.jd;
-
-            obj.checkGeomApp();
-            if isnumeric(obj.sketch)
-                obj.sketch = obj.getSketch(0);
-            end
         end
         
         function obj = close(obj)
@@ -91,9 +87,9 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
 
-            self.checkGeomApp();
             if isnumeric(self.sketch)
                 self.sketch = self.getSketch(0);
+                self.sketch.OpenSketch();
             end
             
             % Convert DimMillimeter to double
@@ -108,11 +104,10 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
-            self.checkGeomApp();
             if isnumeric(self.sketch)
                 self.sketch = self.getSketch(0);
+                self.sketch.OpenSketch();
             end
-            self.sketch.OpenSketch();
             
             % Convert DimMillimeter to double
             centerxy = double(centerxy);
@@ -129,34 +124,49 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         
         function geomApp = checkGeomApp(self)
             if ~isnumeric(self.geomApp)
-                geomApp = self.geomApp;
+                ;
             else
                 self.app.LaunchGeometryEditor();
-                geomApp = self.app.CreateGeometryEditor(true);
-                self.geomApp = geomApp;
+                self.geomApp = self.app.CreateGeometryEditor(true);
+                self.doc = self.geomApp.NewDocument();                
             end
+            geomApp = self.geomApp;
         end
         
-        function sketch = getSketch(self, iSketch)
-            if ~isnumeric(self.sketch)
-                sketch = self.sketch;
+        function sketch = getSketch(self, iSketch, varargin)
+            if isnumeric(iSketch)
+                sketchName = strcat('mySketch', num2str(iSketch));
             else
-                if isnumeric(iSketch)
-                    self.geomApp = self.checkGeomApp();
-                    self.geomApp.NewDocument();
-                    self.doc = self.geomApp.GetDocument();
-                    self.ass = self.doc.GetAssembly();
-                    ref1 = self.ass.GetItem('XY Plane');
-                    ref2 = self.doc.CreateReferenceFromItem(ref1);
-                    self.sketch = self.ass.CreateSketch(ref2);
-                    self.sketch.SetProperty('Name', 'Sketch1')
-                    self.sketch.SetProperty('Color', 'k')
+                sketchName = iSketch;
+            end
+
+            for i = 1:length(self.sketchList)
+                if self.sketchList(i) == sketchName
+                    self.sketch = self.ass.GetItem(sketchName);
+                    % open sketch for drawing (must be closed before switch to another sketch)
+                    self.sketch.OpenSketch();
                     sketch = self.sketch;
-                else
-                    sketch = self.ass.GetItem(iSketch); % iSketch is the name of sketch here
+                    return
                 end
             end
-            self.sketch.OpenSketch();           
+            if i == length(self.sketchList)
+                self.sketchList(end) = sketchName;
+            end
+            
+            self.geomApp = self.checkGeomApp();
+            self.doc = self.geomApp.GetDocument();
+            self.ass = self.doc.GetAssembly();
+            ref1 = self.ass.GetItem('XY Plane');
+            ref2 = self.doc.CreateReferenceFromItem(ref1);
+            self.sketch = self.ass.CreateSketch(ref2);
+            self.sketch.SetProperty('Name', sketchName)
+            if nargin>2
+                self.sketch.SetProperty('Color', varargin);
+            end
+            
+            % open sketch for drawing (must be closed before switch to another sketch)
+            self.sketch.OpenSketch();
+            sketch = self.sketch;
         end
         
         function select(obj)
@@ -186,6 +196,92 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         
         function setVisibility(obj, visibility)
 
+        end
+        
+        function new_region = regionMirrorCopy(self, region, edge4ref, symmetry_type, bMerge)
+            % Default: edge4ref=None, symmetry_type=None, bMerge=True
+
+            mirror = self.sketch.CreateRegionMirrorCopy();
+            mirror.SetProperty('Merge', bMerge)
+            ref2 = self.doc.CreateReferenceFromItem(region);
+            mirror.SetPropertyByReference('Region', ref2)
+            
+            if isempty(edge4ref)
+                if isempty(symmetry_type)
+                    error('At least give one of edge4ref and symmetry_type')
+                else
+                    mirror.SetProperty('SymmetryType', symmetry_type)
+                end
+            else
+                ref1 = self.sketch.GetItem(edge4ref.GetName()); % e.g., u"Line"
+                ref2 = self.doc.CreateReferenceFromItem(ref1);
+                mirror.SetPropertyByReference('Symmetry', ref2);
+            end
+            
+            if bMerge == false && strcmp(region.GetName(), 'Region')
+                new_region = self.ass.GetItem('Region.1');
+            end 
+        end
+
+        function regionCircularPattern360Origin(self, region, Q_float, bMerge, do_you_have_region_in_the_mirror)
+            % default: bMerge=True, do_you_have_region_in_the_mirror=False
+            circular_pattern = self.sketch.CreateRegionCircularPattern();
+            circular_pattern.SetProperty('Merge', bMerge);
+
+            ref2 = self.doc.CreateReferenceFromItem(region);
+            circular_pattern.SetPropertyByReference('Region', ref2);
+            face_region_string = circular_pattern.GetProperty('Region');
+            %face_region_string = face_region_string[0];
+            
+            if do_you_have_region_in_the_mirror == true
+                % Those are python codes for plotting stator coils. The problem occurs
+                % because the left layer and right layer are not merged. The
+                % generation of face-reference in JMAG is crazy.
+                %             if do_you_have_region_in_the_mirror == true
+                %                 # 这里假设face_region_string最后两位是数字
+                %                 if face_region_string[-7:-3] == 'Item'
+                %                     number_plus_1 = str(int(face_region_string[-3:-1]) + 1)
+                %                     refarray = [0 for i in range(2)]
+                %                     refarray[0] = u"faceregion(TRegionMirrorPattern%s+%s_2)" % (number_plus_1, face_region_string)
+                %                     refarray[1] = face_region_string
+                %                     circular_pattern.SetProperty(u"Region", refarray)
+                %                     # print refarray[0]
+                %                     # print refarray[1]
+                %                 elif face_region_string[-6:-2] == 'Item'
+                %                     # 这里假设face_region_string最后一位是数字
+                %                     number_plus_1 = str(int(face_region_string[-2:-1]) + 1)
+                %                     refarray = [0 for i in range(2)]
+                %                     refarray[0] = u"faceregion(TRegionMirrorPattern%s+%s_2)" % (number_plus_1, face_region_string)
+                %                     refarray[1] = face_region_string
+                %                     circular_pattern.SetProperty(u"Region", refarray)
+                %                 elif face_region_string[-8:-4] == 'Item'
+                %                     # 这里假设face_region_string最后三位是数字
+                %                     number_plus_1 = str(int(face_region_string[-4:-1]) + 1)
+                %                     refarray = [0 for i in range(2)]
+                %                     refarray[0] = u"faceregion(TRegionMirrorPattern%s+%s_2)" % (number_plus_1, face_region_string)
+                %                     refarray[1] = face_region_string
+                %                     circular_pattern.SetProperty(u"Region", refarray)
+                %             end
+            end
+            
+            if true
+                origin = self.sketch.CreateVertex(0,0);
+                origin_is = origin.GetName()
+                ref1 = self.ass.GetItem(self.sketch.GetName()).GetItem(origin.GetName());
+                ref1 = self.ass.GetItem(self.sketch.GetName()).GetItem('Vertex.3');
+                ref2 = self.doc.CreateReferenceFromItem(ref1);
+                circular_pattern.SetPropertyByReference('Center', ref2)
+            elseif true
+                % Matlab's actxserver cannot pass integer to JMAG (the following 1)
+                circular_pattern.SetProperty('CenterType', 1);
+                circular_pattern.SetProperty('CenterPosX', 2.0);
+                circular_pattern.SetProperty('CenterPosY', 5.0);
+            else
+                % Matlab's actxserver cannot pass integer to JMAG (the following 2)
+                circular_pattern.SetProperty('CenterType', 2);
+            end
+            circular_pattern.SetProperty('Angle', sprintf('360/%d', Q_float));
+            circular_pattern.SetProperty('Instance', num2str(Q_float));
         end
     end
     

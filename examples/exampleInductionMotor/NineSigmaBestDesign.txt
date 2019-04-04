@@ -1,0 +1,103 @@
+*~ results from utility.py ~*
+
+BEST metrics: 2 0.967916042905
+Best design:
+224.610598737 0.967916042905
+55 --------------
+run#194gen#0001ind#0025-ID16-1-25
+1,25,2.51607
+0.717428,0.968811,15.7086,0.0367045,127.145,0.0634837,3.88242,206.961,248.264,1683.69,1368.48,315.209,414.849,276.477
+1.18203,0.734091,0.384033,1.26967,0.776483,0.950007
+4.65747,1.41687,1.10679,6.3,1.13483,1.59126,0.5
+ID16-1-25Tran2TSS
+Average Torque: 15.7086 Nm
+Normalized Torque Ripple: 3.67045 %
+Average Force Mag: 127.145 N
+Normalized Force Error Mag: 6.34837%, (+)6.08519% (-)-6.61154%
+Maximum Force Error Angle: 3.88242 [deg], (+)3.33295 deg (-)-4.43188 deg
+Extra Info:
+    Average Force Vecotr: (-102.395, 75.3727) N
+    Torque Ripple (Peak-to-Peak) 1.15315 Nm
+    Force Mag Ripple (Peak-to-Peak) 16.1433 N
+    basic info:('Case', 1.0)('freq', 750.0)('slip', 0.00338889)
+    jmag loss info:206.961, 248.264, 1683.69, 1368.48, 315.209
+    femm loss info:414.849, 276.477
+    PF: 0.717428
+    eta: 0.968811
+
+[Finished in 66.1s]
+
+OP_PS_Qr16_M19Gauge29_DPNV_NoEndRing
+
+- Bearingless Induction Motor Individual #16-1-25
+	Angle_RotorSlotSpan = 22.5, 
+	Angle_StatorSlotOpen = 1.591262123206707, 
+	Angle_StatorSlotSpan = 15.0, 
+	Bar_Conductivity = 47619047.619, 
+	BeariW_CurrentAmp = 5.42780253846, 
+	BeariW_Freq = 750.0, 
+	BeariW_Rs = 0.006142, 
+	BeariW_poles = 4, 
+	BeariW_turns = 4.0, 
+	CommutatingSequenceB = 0, 
+	CommutatingSequenceD = 1, 
+	Copper_Loss = 412.836763628, 
+	DriveW_CurrentAmp = 211.684299, 
+	DriveW_Freq = 750.0, 
+	DriveW_Rs = 0.006142, 
+	DriveW_poles = 2.0, 
+	DriveW_turns = 4.0, 
+	End_Ring_Resistance = 0, 
+	ID = 16-1-25, 
+	Length_AirGap = 1.4168714808296823, 
+	Length_HeadNeckRotorSlot = 1.1348252075519367, 
+	Location_RotorBarCenter = 25.757668424038076, 
+	Location_RotorBarCenter2 = 17.40950965258518, 
+	MODEL_ROTATE = False, 
+	Omega = 4710.92499821, 
+	Qr = 16.0, 
+	Qs = 24.0, 
+	RSH = [-12746.272, -11246.271999999999, 11246.271999999999, 12746.272], 
+	Radius_InnerStator = 30.21687148082968, 
+	Radius_InnerStatorYoke = 54.588019795715965, 
+	Radius_OuterRotor = 28.8, 
+	Radius_OuterStatorYoke = 73.703866, 
+	Radius_Shaft = 2.633926, 
+	Radius_of_RotorSlot = 1.9075063684099876, 
+	Radius_of_RotorSlot2 = 0.2683492266976364, 
+	Width_RotorSlotOpen = 1.1067883900384972, 
+	Width_StatorTeethBody = 4.657469706821289, 
+	Width_StatorTeethHeadThickness = 0.5, 
+	Width_StatorTeethNeck = 0.25, 
+	bool_3PhaseCurrentSource = False, 
+	bool_initial_design = False, 
+	coil_pitch = 9, 
+	design_parameters = [4.65746971 1.41687148 1.10678839 6.3        1.13482521 1.59126212
+ 0.5       ], 
+	dict_coil_connection = {41: ['U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V'], 42: ['+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-'], 21: ['U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U'], 22: ['+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+']}, 
+	fea_config_dict = {'number_of_steps_2ndTTS': 32, 'delete_results_after_calculation': False, 'End_Ring_Resistance': 0, 'femm_deg_per_step': None, 'dir_parent': 'D:/OneDrive - UW-Madison/c/', 'bool_refined_bounds': True, 'dir_lib': 'D:/OneDrive - UW-Madison/c/codes/', 'DPNV': True, 'run_folder': 'run#194/', 'Bar_Conductivity': 47619047.61904761, 'model_name_prefix': 'OP_PS_Qr16_M19Gauge29_DPNV_NoEndRing', 'OnlyTableResults': False, 'dir_project_files': 'D:/JMAG_Files/', 'flag_optimization': True, 'TranRef-StepPerCycle': 80, 'Restart': False, 'Steel': 'M19Gauge29', 'Active_Qr': 16, 'dir_interpreter': 'D:\\OneDrive - UW-Madison\\c\\codes', 'dir_codes': 'D:/OneDrive - UW-Madison/c/codes/', 'local_sensitivity_analysis': False, 'pc_name': 'Y730', 'JMAG_Scheduler': False, 'FEMM_Coarse_Mesh': True, 'dir_femm_files': 'D:/femm42/', 'DPNV_separate_winding_implementation': False, 'jmag_run_list': [0, 1, 0, 0, 0], 'use_weights': 'O3'}, 
+	grouping_AC = [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1], 
+	individual_index = 25, 
+	individual_name = ID16-1-25, 
+	l21 = ['U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U'], 
+	l22 = ['+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+'], 
+	l41 = ['U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V'], 
+	l42 = ['+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-'], 
+	l_leftlayer1 = ['U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U'], 
+	l_leftlayer2 = ['+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+'], 
+	l_rightlayer1 = ['U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V', 'U', 'U', 'U', 'U', 'W', 'W', 'W', 'W', 'V', 'V', 'V', 'V'], 
+	l_rightlayer2 = ['+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-', '+', '+', '+', '+', '-', '-', '-', '-'], 
+	max_nonlinear_iteration = 50, 
+	meshSize_Rotor = 1.8, 
+	model_name_prefix = OP_PS_Qr16_M19Gauge29_DPNV_NoEndRing, 
+	no_slot_per_pole = 8.0, 
+	number_current_generation = 1, 
+	number_parallel_branch = 2.0, 
+	omega = None, 
+	parameters_for_imposing_constraints_among_design_parameters = [0.00016181989527, 2.628586591e-05, 3.36787657e-05, 1.5, 1.4, 10250000.0, 0.00623895], 
+	slip_freq_breakdown_torque = None, 
+	stack_length = 237.525816, 
+	the_slip = 0.000310666666667, 
+	the_speed = 44986.02, 
+	thermal_penalty = 0.0, 
+	use_drop_shape_rotor_bar = True
