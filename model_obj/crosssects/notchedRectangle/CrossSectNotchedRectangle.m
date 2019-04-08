@@ -19,7 +19,7 @@ classdef CrossSectNotchedRectangle < CrossSectBase
         end
                 
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});   
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             % notched retangle parameters
             w = obj.dim_w;

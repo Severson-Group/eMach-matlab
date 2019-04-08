@@ -15,8 +15,8 @@ classdef CrossSectSolidRect  < CrossSectBase
         end
                 
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
-            axis = [0,0];
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
+            axis = DimMillimeter([0,0]);
             w=obj.dim_w;
             h=obj.dim_h;
             
@@ -67,4 +67,4 @@ classdef CrossSectSolidRect  < CrossSectBase
          end
      end
 end
-    
+

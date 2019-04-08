@@ -1,4 +1,4 @@
-classdef TikZ < ToolBase & Drawer2dBase
+classdef TikZ < ToolBase & DrawerBase
     %TIKZ Encapsulation for TikZ graphics
     %   TODO: add more description
     %   TODO: add more description
@@ -145,7 +145,7 @@ classdef TikZ < ToolBase & Drawer2dBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)

@@ -16,7 +16,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
         end
                 
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             r = obj.dim_r_o;
             t = obj.dim_d_a;                  
