@@ -7,8 +7,8 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
     
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_alpha_rm; %angular span of the pole: class type DimAngular
-        dim_alpha_rp; %pole pitch: class type DimAngular
         dim_alpha_rs; %segment span: class type DimAngular
+        %dim_alpha_rp;
         dim_r_ri; %inner radius of rotor: class type DimLinear
         dim_d_ri; %rotor iron thickness: class type DimLinear
         dim_d_rp; %interpolar iron thickness: class type DimLinear
@@ -27,14 +27,14 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
         function [csToken] = draw(obj, drawer)
             validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
             alpha_rm=obj.dim_alpha_rm.toRadians();
-            alpha_rp = obj.dim_alpha_rp.toRadians();
             alpha_rs = obj.dim_alpha_rs.toRadians();
             r_ri = obj.dim_r_ri;
             d_ri = obj.dim_d_ri;
             d_rp = obj.dim_d_rp;
             d_rs=obj.dim_d_rs;
             p = obj.num_pole;
-            s = obj.num_seg;                              
+            s = obj.num_seg; 
+            alpha_rp = 2*pi/p;
             alpha_k = (alpha_rm-s*(alpha_rs))/(s-1);
              
 %%Compute angles of various rotor segment start and end points           
@@ -139,7 +139,6 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
             
             %2. validate the new properties that have been added here
              validateattributes(obj.dim_alpha_rm,{'DimAngular'},{'nonnegative', 'nonempty'});
-             validateattributes(obj.dim_alpha_rp,{'DimAngular'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_alpha_rs,{'DimAngular'},{'nonnegative','nonempty'}); 
              validateattributes(obj.dim_r_ri,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_t_i,{'DimLinear'},{'nonnegative','nonempty'});
