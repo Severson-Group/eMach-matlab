@@ -20,7 +20,7 @@ classdef CrossSectBreadloaf < CrossSectBase
         end
         
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             %create local variables for more readable code
             w = obj.dim_w;

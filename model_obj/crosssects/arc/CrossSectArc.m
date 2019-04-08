@@ -18,7 +18,7 @@ classdef CrossSectArc < CrossSectBase
         end
         
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             t = obj.dim_d_a;
             r = obj.dim_r_o;

@@ -20,8 +20,8 @@ classdef CrossSectHollowRect < CrossSectBase
         end
                 
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
-            axis = [0,0];
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
+            axis = DimMillimeter([0,0]);
             w=obj.dim_w;
             h=obj.dim_h;
             t1=obj.dim_t1;
@@ -29,29 +29,29 @@ classdef CrossSectHollowRect < CrossSectBase
             t3=obj.dim_t3;
             t4=obj.dim_t4;            
          
-%%Create inner and outer points
+            % Create inner and outer points
             points_i=[axis(1)+t3,axis(2)+t4; axis(1)+t3,axis(2)+h-t2;...
             w-t1+axis(1), h-t2+axis(2);w-t1+axis(1),t4+axis(2);];
             points_o = [axis(1),axis(2); axis(1),axis(2)+h; axis(1)+w, ....
             axis(2)+h; axis(1)+w,axis(2)];
         
-%%Transform Coordinates
+            % Transform Coordinates
             [points_i] = obj.location.transformCoords(points_i);
             [points_o] = obj.location.transformCoords(points_o);
             
-%% Draw Inner Rectangle
+            % Draw Inner Rectangle
             [l_i1] = drawer.drawLine(points_i(1,:),points_i(2,:));
             [l_i2] = drawer.drawLine(points_i(2,:),points_i(3,:));
             [l_i3] = drawer.drawLine(points_i(3,:),points_i(4,:));
             [l_i4] = drawer.drawLine(points_i(4,:),points_i(1,:));
 
-%% Draw Outer Rectangle
+            % Draw Outer Rectangle
             [l_o1] = drawer.drawLine(points_o(1,:),points_o(2,:));
             [l_o2] = drawer.drawLine(points_o(2,:),points_o(3,:));
             [l_o3] = drawer.drawLine(points_o(3,:),points_o(4,:));
             [l_o4] = drawer.drawLine(points_o(4,:),points_o(1,:));
             
-%compute coordinate inside the surface to extrude
+            % Compute coordinate inside the surface to extrude
             x_coord = w/2;
             y_coord = t4/2;
             innerCoord = obj.location.transformCoords([x_coord, y_coord]);             
