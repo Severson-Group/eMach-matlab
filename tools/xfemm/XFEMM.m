@@ -443,10 +443,9 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             % Remove partially overlapping arcs and make reconnections
             obj.FemmProblem = removePartiallyOverlappingArcSegments(obj);
-                                   
+
             % Return modified FemmProblem struct
             FemmProblem = obj.FemmProblem;
-            
         end
         
         
