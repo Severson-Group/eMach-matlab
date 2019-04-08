@@ -14,7 +14,7 @@ toolXFEMM.drawArc([0 0],[21.2132 -7.0711],[-7.0711 21.2132]);
 FemmProblem = toolXFEMM.removeOverlaps();  
 toolXFEMM.plot();
 
-% We know that 2 arc segment should be removed and 3 rac segments should be
+% We know that 2 arc segment should be removed and 3 arc segments should be
 % added
 if length(FemmProblem.ArcSegments) == 3
     fprintf('TEST PASSED!\n');
