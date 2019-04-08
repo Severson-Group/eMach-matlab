@@ -215,16 +215,3 @@ if (DRAW_XFEMM)
     
     toolXFEMM.plot();
 end
-
-
-% to do:
-% toolXFEMM.drawLine(asdf)
-% toolXFEMM.drawLine(asdf) % overlaps the prev one
-% 
-% toolXFEEM.removeOverlaps();
-
-% manually go and look at FemmProblem struct to ensure they don't overlap
-% anymore
-
-% if (not overlapping) TEST_PASSED!
-% else BAD
