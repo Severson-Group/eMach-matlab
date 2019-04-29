@@ -145,8 +145,8 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
              validateattributes(obj.dim_d_ri,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rp,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
-             validateattributes(obj.s,{'double'},{'nonnegative','nonempty'});
-             validateattributes(obj.p,{'double'},{'nonnegative','nonempty'});        
+             validateattributes(obj.s,{'double'},{'positive','nonempty'});
+             validateattributes(obj.p,{'double'},{'positive','nonempty'});        
             
             
          end
