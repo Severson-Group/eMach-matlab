@@ -151,8 +151,16 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
              validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.s,{'double'},{'positive','nonempty'});
              validateattributes(obj.p,{'double'},{'positive','nonempty'});        
-            
-            
+             
+             if (obj.dim_alpha_rm>180/obj.p) %Validates that magnet spans only one pole pitch    
+                 error('Invalid alpha_rm. Check that it is less than 180/p')
+             elseif(obj.dim_alpha_rs>obj.dim_alpha_rm)  %Validates that segments lie within the magnet span
+                 error('Invalid alpha_rs. Check that it is Lesser than or equal to alpha_rm')
+             elseif(obj.dim_alpha_rm==obj.dim_alpha_rs)&&(obj.s>1) %Validates that segments lie within the magnet span 
+                 error('Invalid alpha_rs. Check that it is Lesser than alpha_rm')
+             elseif (obj.dim_alpha_rs>obj.dim_alpha_rm/obj.s) %Validates that segment span is legitimate 
+                 error('Invalid alpha_rs. Check that it is less than or equal to alpha_rm/s')
+             end
          end
                   
          function obj = createProps(obj, len, args)
