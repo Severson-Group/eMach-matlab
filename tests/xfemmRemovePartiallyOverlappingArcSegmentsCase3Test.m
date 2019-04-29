@@ -1,7 +1,3 @@
-clc
-clear   
-close all
-
 % Create FemmProblem
 toolXFEMM = XFEMM();
 toolXFEMM.newFemmProblem(0,'planar','millimeters');
@@ -18,8 +14,8 @@ pStart1 = (R*cos(angleArc1/2) - 1i*R*sin(angleArc1/2))*exp(1i*angleRotate1);
 pEnd1   = pStart1*exp(1i*angleArc1);
 
 % Arc 2
-angleArc2 = 60*pi/180; % angle of arc 2
-angleRotate2 = 240*pi/180; % rotate arc by angleRotate2 counterclockwise
+angleArc2 = 180*pi/180; % angle of arc 2
+angleRotate2 = 270*pi/180; % rotate arc by angleRotate2 counterclockwise
 % Start and end node coordinates of the arc in the form of x + jy
 pStart2 = (R*cos(angleArc2/2) - 1i*R*sin(angleArc2/2))*exp(1i*angleRotate2);
 pEnd2   = pStart2*exp(1i*angleArc2);
@@ -30,18 +26,11 @@ toolXFEMM.drawArc([0 0],[real(pStart2) imag(pStart2)],[real(pEnd2) imag(pEnd2)])
 
 % Remove all arc segments and add new non-overlapping arc segments
 FemmProblem = toolXFEMM.removeOverlaps();  
-toolXFEMM.plot();
-hold on
-plot([-5 5],[0 0],'--black'); plot([0 0],[-5 5],'--black')
-xlim([-5 5]); ylim([-5 5])
+% toolXFEMM.plot();
+% hold on
+% plot([-5 5],[0 0],'--black'); plot([0 0],[-5 5],'--black')
+% xlim([-5 5]); ylim([-5 5])
 
-% We know that 2 arc segment should be removed and 2 arc segments with new
-% angles should be added for this case
-if length(FemmProblem.ArcSegments) == 2
-    fprintf('TEST PASSED!\n');
-else
-    fprintf('TEST FAILED\n');
-end
-
-% You can manually go and look at FemmProblem struct to ensure there are no
-% partially overlapping arc segments anymore
+% We know that 2 arc segment should be removed and 3 arc segments should be
+% added
+assert(length(FemmProblem.ArcSegments) == 3);
