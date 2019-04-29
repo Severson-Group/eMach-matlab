@@ -14,7 +14,6 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
         dim_d_rs; %inter segment iron thickness: class type DimLinear
         p; %number of pole pairs
         s; %number of segments  
-        dim_t_i; %inner thickness: class type DimLinear
     end
     
     methods
@@ -117,6 +116,12 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
                 end
             end
 %%Draw inner surface          
+      if (r_ri == 0)
+          point_i = obj.location.anchor_xy;
+          innerCoord = obj.location.transformCoords(point_i);
+          csToken = CrossSectToken(innerCoord, arc_c);
+      else
+
          point_i = [r_ri,0]+obj.location.anchor_xy;
          point_i2 = [-r_ri,0]+obj.location.anchor_xy;
          arc_i1 = drawer.drawArc(obj.location.anchor_xy, point_i,point_i2);
@@ -125,7 +130,7 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
          innerCoord = obj.location.transformCoords([rad, 0]);
          segments = [arc_c,arc_i1,arc_i2];
          csToken = CrossSectToken(innerCoord, segments);
-                     
+      end               
         end
         
     end
@@ -141,7 +146,6 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
              validateattributes(obj.dim_alpha_rm,{'DimAngular'},{'nonnegative', 'nonempty'});
              validateattributes(obj.dim_alpha_rs,{'DimAngular'},{'nonnegative','nonempty'}); 
              validateattributes(obj.dim_r_ri,{'DimLinear'},{'nonnegative','nonempty'});
-             validateattributes(obj.dim_t_i,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_ri,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rp,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
