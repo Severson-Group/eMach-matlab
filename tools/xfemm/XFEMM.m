@@ -10,6 +10,13 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         doc; % Document object
         arcInfo;
         arcIndex = 0;
+        lineTokenIndex = 0;
+        arcTokenIndex = 0;
+        innerCoord;
+        token;
+        lineToken;
+        arcToken;
+        
         
     end
     
@@ -396,6 +403,8 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 nodeids(1), nodeids(2));
             
             line = seginds;
+            obj.lineTokenIndex = obj.lineTokenIndex + 1;
+            obj.lineToken(obj.lineTokenIndex) = seginds;
         end
         
         function [arc] = drawArc(obj, centerxy, startxy, endxy)
@@ -420,6 +429,9 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.arcIndex = obj.arcIndex + 1;
             obj.arcInfo(obj.arcIndex,1:2) = [centerxy(1), centerxy(2)];
             obj.arcInfo(obj.arcIndex,3) = R;
+            
+            obj.arcTokenIndex = obj.arcTokenIndex + 1;
+            obj.arcToken(obj.arcTokenIndex) = arcseginds;
         end
         
         function FemmProblem = removeOverlaps(obj)
@@ -452,18 +464,64 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function select(obj)
 
         end
-        
+        % Add block label and assign material
         function new = revolve(obj, name, material, center, axis, angle)
-
-        end
-        
-        function extrude(obj, name, material, depth)
-
-        end
-        
-        function prepareSection(obj, csToken)
+            validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'}); 
             
-        end        
+            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
+            obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
+                obj.innerCoord(1), obj.innerCoord(2), ...
+                                   'BlockType', material); 
+        end
+        % Add block label and assign material
+        function extrude(obj, name, material, depth)
+            validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'}); 
+            
+            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
+            obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
+                obj.innerCoord(1), obj.innerCoord(2), ...
+                                   'BlockType', material);          
+        end
+        % Save information about inner coordinates of the cross-section
+        function prepareSection(obj, csToken)
+            validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
+            obj.innerCoord = double(csToken.innerCoord);
+        end
+        
+        % Set group number to nodes and block label
+        function setGroupNumber(obj, groupNumber)
+            % Set group number to nodes
+            for i = 1:length(obj.lineToken)
+                n0 = obj.FemmProblem.Segments(obj.lineToken(i)).n0 + 1;
+                obj.FemmProblem.Nodes(n0).InGroup = groupNumber;
+                n1 = obj.FemmProblem.Segments(obj.lineToken(i)).n1 + 1;
+                obj.FemmProblem.Nodes(n1).InGroup = groupNumber;
+            end
+            
+            for i = 1:length(obj.arcToken)
+                n0 = obj.FemmProblem.ArcSegments(obj.arcToken(i)).n0 + 1;
+                obj.FemmProblem.Nodes(n0).InGroup = groupNumber;
+                n1 = obj.FemmProblem.ArcSegments(obj.arcToken(i)).n1 + 1;
+                obj.FemmProblem.Nodes(n1).InGroup = groupNumber;
+            end        
+            obj.lineToken = [];
+            obj.arcToken = [];
+            obj.lineTokenIndex = 0;
+            obj.arcTokenIndex = 0;
+            
+            % Set group number to block labels
+            for i = 1:length(obj.FemmProblem.BlockLabels)
+                innerCoords(i) = obj.FemmProblem.BlockLabels(i).Coords(1) + ...
+                    1i*obj.FemmProblem.BlockLabels(i).Coords(2);
+            end
+            givenCoord = obj.innerCoord(1) + 1i*obj.innerCoord(2);
+            [x, n] = min(abs(givenCoord - innerCoords));
+            obj.FemmProblem.BlockLabels(n).InGroup = groupNumber;
+        end
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
 
