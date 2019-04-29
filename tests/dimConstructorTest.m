@@ -7,16 +7,16 @@ tol = 1e-5;
 val = DimMillimeter(DimInch(1));
 expected = DimMillimeter(25.4);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = DimMillimeter(DimMillimeter(DimMillimeter(25.4)));
 expected = DimMillimeter(25.4);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
 
 
 val = DimInch(DimMillimeter(DimInch(25.4)));
 expected = DimInch(25.4);
 assert(strcmp(class(val), class(expected)));
-assert(abs(val - expected) < tol);
+assert(abs(double(val) - double(expected)) < tol);
