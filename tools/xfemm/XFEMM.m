@@ -1,4 +1,4 @@
-classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
+classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %XFEMM Encapsulation for the XFEMM FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -273,10 +273,10 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
                     % modifications so that the node in the 4th quadrant
                     % has larger angle (origin is arc center)
                     if (angle1 >= 90 && angle1 <= 180) && ...
-                            (angle3 >= - 180 && angle3 < - 90)
+                            (angle3 >= - 180 && angle3 <= - 90)
                         angle3 = angle3 + 360;
                     elseif (angle3 >= 90 && angle3 <= 180) && ...
-                            (angle1 >= - 180 && angle1 < - 90)
+                            (angle1 >= - 180 && angle1 <= - 90)
                         angle1 = angle1 + 360;
                     end
                     
@@ -423,6 +423,12 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         function FemmProblem = removeOverlaps(obj)
+            
+            % Change each coordinate from being object to double
+            for ii = 1:length(obj.FemmProblem.Nodes)
+                obj.FemmProblem.Nodes(ii).Coords = double(obj.FemmProblem.Nodes(ii).Coords);
+            end
+            
             % Remove one of the overlapping nodes
             obj.FemmProblem = removeExtraNodes(obj);
             
@@ -437,7 +443,7 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             
             % Remove partially overlapping arcs and make reconnections
             obj.FemmProblem = removePartiallyOverlappingArcSegments(obj);
-            
+
             % Return modified FemmProblem struct
             FemmProblem = obj.FemmProblem;
         end
@@ -479,7 +485,7 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)
