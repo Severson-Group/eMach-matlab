@@ -154,12 +154,18 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
              
              if (obj.dim_alpha_rm>180/obj.p) %Validates that magnet spans only one pole pitch    
                  error('Invalid alpha_rm. Check that it is less than 180/p')
-             elseif(obj.dim_alpha_rs>obj.dim_alpha_rm)  %Validates that segments lie within the magnet span
-                 error('Invalid alpha_rs. Check that it is Lesser than or equal to alpha_rm')
-             elseif(obj.dim_alpha_rm==obj.dim_alpha_rs)&&(obj.s>1) %Validates that segments lie within the magnet span 
-                 error('Invalid alpha_rs. Check that it is Lesser than alpha_rm')
-             elseif (obj.dim_alpha_rs>obj.dim_alpha_rm/obj.s) %Validates that segment span is legitimate 
-                 error('Invalid alpha_rs. Check that it is less than or equal to alpha_rm/s')
+             end
+             if (obj.s>1)&&(obj.dim_d_rs==0) %Validates that d_rs is non zero if there are segments 
+                 error('Invalid d_rs. Check that it is positive for s>1')    
+             end
+             if (obj.s>1)&&(obj.dim_alpha_rs>=obj.dim_alpha_rm/obj.s) %Validates that segment span is legitimate 
+                 error('Invalid alpha_rs. Check that it is less than alpha_rm/s')
+             end
+             if (obj.s==1)&&(obj.dim_alpha_rs~=(obj.dim_alpha_rm/obj.s)) % Validates that alpha_rs and alpha_rm are equal for s =1
+                 error('Invalid alpha_rs. Check that it is equal to alpha_rm for s=1')
+             end
+             if (obj.s==1)&&(obj.dim_d_rs~=0)  % Validates that d_rs is zero for s=1
+                 error('Invalid d_rs. Check that it is equal to 0 for s =1')    
              end
          end
                   
