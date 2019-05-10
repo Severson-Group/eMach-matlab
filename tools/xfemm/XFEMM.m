@@ -476,7 +476,7 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                                    'BlockType', material); 
         end
         % Add block label and assign material
-        function extrude(obj, name, material, depth)
+        function extrude(obj, name, material, depth, tok)
             validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'}); 
