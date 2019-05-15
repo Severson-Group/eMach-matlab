@@ -333,22 +333,6 @@
          inkscape:connector-curvature="0" />
     </marker>
     <marker
-       inkscape:isstock="true"
-       style="overflow:visible"
-       id="marker7640"
-       refX="0"
-       refY="0"
-       orient="auto"
-       inkscape:stockid="Arrow1Mend"
-       inkscape:collect="always">
-      <path
-         transform="matrix(-0.4,0,0,-0.4,-4,0)"
-         style="fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:#808080;stroke-width:1.00000003pt;stroke-opacity:1"
-         d="M 0,0 5,-5 -12.5,0 5,5 Z"
-         id="path7638"
-         inkscape:connector-curvature="0" />
-    </marker>
-    <marker
        inkscape:stockid="Arrow1Mend"
        orient="auto"
        refY="0"
@@ -811,7 +795,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8284272"
-     inkscape:cx="203.33736"
+     inkscape:cx="138.63709"
      inkscape:cy="234.68195"
      inkscape:document-units="mm"
      inkscape:current-layer="layer3"
@@ -846,7 +830,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1035,12 +1019,6 @@
        style="display:inline;fill:none;stroke:#808080;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker7438)"
        d="m 66.352112,115.79303 15.486204,15.9491 m 4.148136,4.27213 6.690645,6.89063"
        id="path7016"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccc" />
-    <path
-       style="display:inline;fill:none;stroke:#808080;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker7640)"
-       d="m 66.352112,115.79303 32.601076,28.81877 m 4.965522,4.38944 17.94622,15.86414"
-       id="path7018"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
     <path
@@ -1240,19 +1218,6 @@
          id="tspan13262-5">r<tspan
    style="font-size:2.75166631px;baseline-shift:sub;stroke-width:0.26458332"
    id="tspan13260-9">si</tspan></tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#808080;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="99.461693"
-       y="147.33934"
-       id="text13112-1-2-3-6-1"><tspan
-         sodipodi:role="line"
-         x="99.461693"
-         y="147.33934"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';baseline-shift:baseline;fill:#808080;stroke:none;stroke-width:0.26458332"
-         id="tspan13262-5-7">r<tspan
-   style="font-size:2.75166631px;baseline-shift:sub;stroke-width:0.26458332"
-   id="tspan13260-9-7">so</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:5.64444447px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"

@@ -18,11 +18,10 @@ classdef CrossSectOuterRotorStator < CrossSectBase
         dim_r_sf;     % fillet between tooth tip and base: class type DimLinear
         dim_r_sb;     % fillet at tooth base: class type DimLinear
         dim_Q;        % number of stator slots (integer)
-        
     end
     
     methods
-        function obj = CrossSectInnerRotorStator(varargin)
+        function obj = CrossSectOuterRotorStator(varargin)
             obj = obj.createProps(nargin,varargin);
             obj.validateProps();            
         end
@@ -44,70 +43,84 @@ classdef CrossSectOuterRotorStator < CrossSectBase
             r_sf = obj.dim_r_sf;
             r_sb = obj.dim_r_sb;
             Q = obj.dim_Q;
-			
-			% TODO: this code is from Nick and draws the inner rotor stator...
-			% Please modify to draw the outer rotor stator as drawn in diagram
             
             alpha_total = DimDegree(360/Q).toRadians();
             
-            x1 = r_si*cos(alpha_st/2);
-            beta2 = alpha_st/2 - alpha_so;
-            x2 = x1 + d_so*cos( beta2 );
-            r3 = r_si + d_sp;
-            beta3 = asin((w_st/2)/r3);
-            x3 = r3*cos(beta3);
-            r4 = r3 + d_st;
-            beta4 = asin((w_st/2)/r4);
-            x4 = r4*cos(beta4);
-            x5 = r4*cos(alpha_total/2);
-            x6 = (r4 + d_sy)*cos(alpha_total/2);
-            disp(r4 + d_sy)
+            % Inner arc
+            x1 = r_si * cos(alpha_total/2);
+            y1 = r_si * sin(alpha_total/2);
+
+            % Outer arc on tooth
+            r = r_si + d_sy + d_st + d_sp;
+            x2 = r * cos(alpha_st/2);
+            y2 = r * sin(alpha_st/2);
             
-            y1 = r_si*sin(alpha_st/2);
-            y2 = y1 + d_so*sin(beta2);
-            y3 = w_st/2;
-            y4 = w_st/2;
-            y5 = r4*sin(alpha_total/2);
-            y6 = (r4 + d_sy)*sin(alpha_total/2);
+            % Outer wall arc (above tooth [below is mirror])
+            r = r_si + d_sy;
+            x3 = r * cos(alpha_total/2); % top point
+            y3 = r * sin(alpha_total/2); % top point
             
-            x_arr = [ x1, x1, x2, x3, x4, x5, x6, x6, x5, x4, x3, x2 ];
-            y_arr = [-y1, y1, y2, y3, y4, y5, y6, -y6, -y5, -y4, -y3, -y2];
+            phi = asin((w_st / 2) / r);
+            x4 = r * cos(phi); % lower point (still above x-axis)
+            y4 = r * sin(phi); % lower point (still above x-axis)
             
+            % Tooth horizontal line outer point
+            r = r_si + d_sy + d_st;
+            phi = asin((w_st / 2) / r);
+            x5 = r * cos(phi); % lower point (still above x-axis)
+            y5 = r * sin(phi); % lower point (still above x-axis)
+            
+            % Left point of d_so line
+            theta = alpha_st / 2;
+            phi = DimDegree(180).toRadians() - alpha_so + theta;
+            L = r_si + d_sy + d_st + d_sp;
+            R = d_so;
+            x6 = L * cos(theta) + R * cos(phi);
+            y6 = L * sin(theta) + R * sin(phi);
+
+            x_arr = [x1,  x1,  x2,  x2,  x3,  x4,  x3,  x4,  x5,  x5,  x6,  x6];
+            y_arr = [y1, -y1,  y2, -y2,  y3,  y4, -y3, -y4,  y5, -y5,  y6, -y6];
+
             for i = 1:Q
                 p = obj.location.transformCoords([x_arr',y_arr'], DimRadian((i-1)*alpha_total));
-                
+
                 x = p(:,1);
                 y = p(:,2);
 
-                p1 = [x(1), y(1)];
-                p2 = [x(2), y(2)];
-                p3 = [x(3), y(3)];
-                p4 = [x(4), y(4)];
-                p5 = [x(5), y(5)];
-                p6 = [x(6), y(6)];
+                p1 = [x(2), y(2)];
+                p2 = [x(1), y(1)];
+
+                p3 = [x(4), y(4)];
+                p4 = [x(3), y(3)];
+
+                p5 = [x(6), y(6)];
+                p6 = [x(5), y(5)];
+
                 p7 = [x(7), y(7)];
                 p8 = [x(8), y(8)];
+
                 p9 = [x(9), y(9)];
                 p10 = [x(10), y(10)];
+
                 p11 = [x(11), y(11)];
                 p12 = [x(12), y(12)];
 
                 arc1(i) = drawer.drawArc(obj.location.anchor_xy, p1, p2);
-                seg1(i) = drawer.drawLine(p2, p3);
-                seg2(i) = drawer.drawLine(p3, p4);
-                seg3(i) = drawer.drawLine(p4, p5);
-                arc2(i) = drawer.drawArc(obj.location.anchor_xy, p5, p6);
-                arc3(i) = drawer.drawArc(obj.location.anchor_xy, p8, p7);
-                arc4(i) = drawer.drawArc(obj.location.anchor_xy, p9, p10);
-                seg4(i) = drawer.drawLine(p10, p11);
-                seg5(i) = drawer.drawLine(p11, p12);
-                seg6(i) = drawer.drawLine(p12, p1);
-            
+                arc2(i) = drawer.drawArc(obj.location.anchor_xy, p3, p4);
+                arc3(i) = drawer.drawArc(obj.location.anchor_xy, p5, p6);
+                arc4(i) = drawer.drawArc(obj.location.anchor_xy, p7, p8);
+                
+                seg1(i) = drawer.drawLine(p5, p9);
+                seg2(i) = drawer.drawLine(p8, p10);
+                seg3(i) = drawer.drawLine(p4, p11);
+                seg4(i) = drawer.drawLine(p3, p12);
+                seg5(i) = drawer.drawLine(p11, p9);
+                seg6(i) = drawer.drawLine(p12, p10);
             end
             
-            rad = (x3 + x4)/2;
+            rad = r_si + (d_sy / 2);
             innerCoord = obj.location.transformCoords([rad, 0]); 
-            segments = [arc1, seg1, seg2, seg3, arc2, arc3, arc4, seg4, seg5, seg6];
+            segments = [arc1, arc2, arc3, arc4, seg1, seg2, seg3, seg4, seg5, seg6];
             csToken = CrossSectToken(innerCoord, segments);
         end
         
