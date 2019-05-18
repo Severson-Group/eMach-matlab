@@ -23,7 +23,7 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
         end
         
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             alpha_rm=obj.dim_alpha_rm.toRadians();
             alpha_rs = obj.dim_alpha_rs.toRadians();
             r_ri = obj.dim_r_ri;
