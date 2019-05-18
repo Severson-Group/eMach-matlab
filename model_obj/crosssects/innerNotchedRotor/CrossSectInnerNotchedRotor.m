@@ -151,18 +151,25 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
              validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.s,{'double'},{'positive','nonempty'});
              validateattributes(obj.p,{'double'},{'positive','nonempty'});        
+            
+            %3. Validate parameters specific to geometry
+             %Validate that magnet spans only one pole pitch  
              assert(obj.dim_alpha_rm<(180/obj.p),...
-                 'Invalid alpha_rm. Check that it is less than 180/p'); %Validates that magnet spans only one pole pitch    
+                 'Invalid alpha_rm. Check that it is less than 180/p');   
              if(obj.s>1)
-             assert((obj.dim_d_rs~=0),...
-                 'Invalid d_rs. Check that it is positive for s>1'); %Validates that d_rs is non zero if there are segments 
-             assert((obj.dim_alpha_rs<=obj.dim_alpha_rm/obj.s),...
-                 'Invalid alpha_rs. Check that it is less than alpha_rm/s') %Validates that segment span is legitimate 
+             %Validate that d_rs is non zero if there are segments  
+                assert((obj.dim_d_rs~=0),...
+                 'Invalid d_rs. Check that it is positive for s>1'); 
+              %Validate that segment span is legitimate
+                assert((obj.dim_alpha_rs<=obj.dim_alpha_rm/obj.s),...
+                 'Invalid alpha_rs. Check that it is less than alpha_rm/s') 
              elseif (obj.s==1)
-             assert(obj.dim_alpha_rs==(obj.dim_alpha_rm/obj.s),...
-                 'Invalid alpha_rs. Check that it is equal to alpha_rm for s=1') % Validates that alpha_rs and alpha_rm are equal for s =1
-             assert(obj.dim_d_rs==0,...
-                 'Invalid d_rs. Check that it is equal to 0 for s =1')  % Validates that d_rs is zero for s=1
+              % Validate that alpha_rs and alpha_rm are set equal for s =1 
+                assert(obj.dim_alpha_rs==(obj.dim_alpha_rm/obj.s),...
+                 'Invalid alpha_rs. Check that it is equal to alpha_rm for s=1')
+              % Validate that d_rs is set zero for s=1
+                 assert(obj.dim_d_rs==0,...
+                 'Invalid d_rs. Check that it is equal to 0 for s =1')  
              end
             
          end
