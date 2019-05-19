@@ -8,7 +8,7 @@ function [boundary] = mn_d_createEvenPeriodicBoundaryCondition(mn, problemID, su
 %   Face - The face number within the component to which the boundary condition is applied. 
 %   x,y,z - The coordinates of the shift vector.
 %   name: name assigned to the boundary condition
-%   This is a wrapper for Document::makeSimpleCoil
+%   This is a wrapper for Document::createBoundaryCondition
 validateattributes(problemID, {'numeric'}, {'positive','integer'});
 
 invoke(mn, 'processcommand', 'getDocument.beginUndoGroup("Assign Boundary Condition")');
