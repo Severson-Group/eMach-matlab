@@ -1,15 +1,15 @@
 clc
 clear
 %%
-w = 16.5;   % Conductor width
-w_c = 61.6; % Coil pitch
-t_m = 17.6; % Magnet thickness (axial)
-t_y = 7.9;  % Rotor Back Iron thickness (axial)
-h = 28;     % Stator thickness (axial)
-g = 1;      % Air gap thickness
-w_m = 46.2; % Magnet width
-p = 2;      % No. of pole pairs being modeled
-Q = 3;      % No. of stator coils being modeled
+w = 16.5;
+w_c = 61.6;
+t_m = 17.6;
+t_y = 7.9;
+h = 28;
+g = 1;
+w_m = 46.2;
+p = 2;
+Q = 3;
 %%
 timeStep = 0.005; %ms
 elecFreq = 1000; %Hz
