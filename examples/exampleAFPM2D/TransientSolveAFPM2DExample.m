@@ -1,25 +1,28 @@
-clc
-clear
-%%
-w = 16.5;   % Conductor width
-w_c = 61.6; % Coil pitch
-t_m = 17.6; % Magnet thickness (axial)
-t_y = 7.9;  % Rotor Back Iron thickness (axial)
-h = 28;     % Stator thickness (axial)
-g = 1;      % Air gap thickness
-w_m = 46.2; % Magnet width
-p = 2;      % No. of pole pairs being modeled
-Q = 3;      % No. of stator coils being modeled
-%%
-timeStep = 0.005; %ms
-elecFreq = 1000; %Hz
-elecPeriod = 1/elecFreq*1e3; %ms
-currentAmplitude = 167.3; %Amp
+clc;
+clear all;
+%%Dimensions
+    w = 16.5;   % Conductor width (mm)
+    w_c = 61.6; % Coil pitch (mm)
+    t_m = 17.6; % Magnet thickness (axial)(mm)
+    t_y = 7.9;  % Rotor Back Iron thickness (axial)(mm)
+    h = 28;     % Stator thickness (axial)(mm)
+    g = 1;      % Air gap thickness (mm)
+    w_m = 46.2; % Magnet width (mm)
+    p = 2;      % No. of pole pairs being modeled
+    Q = 3;      % No. of stator coils being modeled
+    R_avg = 58.8e-3; %Avg magnet radius at which model is made (meters)
+    RPM = 15000; %Machine speed in Rev/sec
+    linspeed = (RPM*2*pi/60)*R_avg; %Equivalent Linear speed at Avg. Magnet radius (m/s)
 
-  
+%%Transient parameters
+    timeStep = 0.05; %ms
+    elecFreq = 1000; %Hz
+    elecPeriod = 1/elecFreq*1e3; %ms
+    currentAmplitude = 167.3; %Amp
+
 %% Call the function to construct the model
     
-    [toolMn,coil_A,coil_B,coil_C] = ConstructAFPM2DExample(t_y, t_m, g, h, w_m, w_c, w, p, Q);
+    [toolMn,coil_A,coil_B,coil_C] = ConstructAFPM2DExample(t_y, t_m, g, h, w_m, w_c, w, p, Q,linspeed);
 
 %% Set up the excitation
     mn_d_setparameter(toolMn.doc, coil_A, 'WaveFormType', 'SIN', ...
@@ -47,5 +50,40 @@ currentAmplitude = 167.3; %Amp
         get(toolMn.consts,'infoArrayParameter'));
     
     solData = invoke(toolMn.doc, 'solveTransient2dwithmotion');
+    
+ %% Post Processing
+
+%%Forces on moving components
+    moving_comps = [{'compStatorVA'},{'compCoilIn1'},{'compCoilIn2'},{'compCoilIn3'},...
+    {'compCoilOut1'},{'compCoilOut2'},{'compCoilOut3'}];
+
+    time = mn_getTimeInstants(toolMn.mn, 1, true);
+    group = '';
+    for i = 1:length(moving_comps)
+        group = [group ' + ' moving_comps{i} ] ;  
+    end
+    group = group(4:length(group));
+    Forces_X = mn_getComponentForce(toolMn.mn, toolMn.doc, group, 1, 0); 
+
+%%Flux waveforms
+    flux_A = mn_getCoilFlux(toolMn.mn, toolMn.doc, coil_A, 1);
+    flux_B = mn_getCoilFlux(toolMn.mn, toolMn.doc, coil_B, 1);
+    flux_C = mn_getCoilFlux(toolMn.mn, toolMn.doc, coil_C, 1);
+%%Voltage waveforms
+    voltage_A = mn_getCoilVoltage(toolMn.mn, toolMn.doc, coil_A, 1);
+    voltage_B = mn_getCoilVoltage(toolMn.mn, toolMn.doc, coil_B, 1);
+    voltage_C = mn_getCoilVoltage(toolMn.mn, toolMn.doc, coil_C, 1);
+
+    solutiondata.time=time;
+    solutiondata.force = 2*Forces_X(:,2);
+    solutiondata.torque = 2*Forces_X(:,2)*R_avg;
+    solutiondata.flux_A = 2*flux_A(:,2);
+    solutiondata.flux_B = 2*flux_B(:,2);
+    solutiondata.flux_C = 2*flux_C(:,2);
+    solutiondata.voltage_A = 2*voltage_A(:,2);
+    solutiondata.voltage_B = 2*voltage_B(:,2);
+    solutiondata.voltage_C = 2*voltage_C(:,2);
+
+save('AFPMSolution.mat','solutiondata');
 
 
