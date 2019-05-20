@@ -384,7 +384,7 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             plotfemmproblem(obj.FemmProblem);
         end
         
-        function [line] = drawLine(obj, startxy, endxy)
+        function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
             
@@ -396,12 +396,11 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             [obj.FemmProblem, seginds] = addsegments_mfemm(obj.FemmProblem,...
                 nodeids(1), nodeids(2));
-            
-            line = {seginds;0};
-            
+
+            tokenDraw = TokenDraw(seginds, 0);
         end
         
-        function [arc] = drawArc(obj, centerxy, startxy, endxy)
+        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current XFEMM document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
@@ -422,11 +421,11 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             [obj.FemmProblem, arcseginds] = addarcsegments_mfemm(...
                 obj.FemmProblem, nodeids(1), nodeids(2), angle);
             
-            arc = {arcseginds;1};
+            tokenDraw = TokenDraw(arcseginds, 1);            
+            
             obj.arcIndex = obj.arcIndex + 1;
             obj.arcInfo(obj.arcIndex,1:2) = [centerxy(1), centerxy(2)];
             obj.arcInfo(obj.arcIndex,3) = R;
-            
         end
         
         function FemmProblem = removeOverlaps(obj)

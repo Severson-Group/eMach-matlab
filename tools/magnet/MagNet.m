@@ -64,7 +64,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
            % Implement this...
         end
 
-        function [line] = drawLine(obj, startxy, endxy)
+        function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line in the current MagNet document.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
             %
@@ -79,11 +79,12 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
 
             if nargout > 0
                 invoke(obj.mn, 'processcommand', 'call setvariant(0, line, "matlab")')
-                line = invoke(obj.mn, 'getvariant', 0, 'matlab');    
+                line = invoke(obj.mn, 'getvariant', 0, 'matlab');
+                tokenDraw = TokenDraw(line, 0);
             end
         end
         
-        function [arc] = drawArc(obj, centerxy, startxy, endxy)
+        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current MagNet document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
@@ -99,7 +100,8 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
 
             if nargout > 0
                 invoke(obj.mn, 'processcommand', 'call setvariant(0, arc, "matlab")')
-                arc = invoke(obj.mn, 'getvariant', 0, 'matlab');    
+                arc = invoke(obj.mn, 'getvariant', 0, 'matlab');   
+                tokenDraw = TokenDraw(arc, 1);
             end   
         end
         

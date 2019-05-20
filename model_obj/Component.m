@@ -15,7 +15,7 @@ classdef Component
             obj.validateProps();
         end
         
-        function [rettok] = make(obj, drawer, maker)
+        function [tokenMake] = make(obj, drawer, maker)
             validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             validateattributes(maker,  {'MakerBase'},  {'nonempty'});
             
@@ -23,9 +23,7 @@ classdef Component
                 cs(i) = obj.crossSections(i).draw(drawer);                
             end
             
-            tok2 = obj.makeSolid.run(obj.name, obj.material.name, cs, maker);
-            
-            rettok = {cs, tok2};
+            tokenMake = obj.makeSolid.run(obj.name, obj.material.name, cs, maker);
         end
 
         function draw(obj, drawer)

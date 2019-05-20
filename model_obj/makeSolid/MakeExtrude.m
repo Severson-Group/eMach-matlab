@@ -14,23 +14,23 @@ classdef MakeExtrude < MakeSolidBase
             obj.validateProps();            
         end
                 
-        function [tok] = run(obj, name, material, csToken, maker)
+        function [tokenMake] = run(obj, name, material, csToken, maker)
             %RUN Make the cross-section solid
             
             validateattributes(maker,{'MakerExtrudeBase'},{'nonempty'})   
             
             %1. Prepare to extrude
             for i = 1:length(csToken)
-                tok1 = maker.prepareSection(csToken);
+                token1 = maker.prepareSection(csToken);
             end
             
             %2. Make via extrusion
-            tok2 = maker.extrude(name, material, obj.dim_depth, tok1);
+            token2 = maker.extrude(name, material, obj.dim_depth, token1);
             
             %3. TO DO: Move to final location
             %maker.Move(name, obj.location);
             
-            tok = {tok1, tok2};
+            tokenMake = TokenMake(csToken, token1, token2);
         end
     end
     
