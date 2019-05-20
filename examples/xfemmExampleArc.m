@@ -83,11 +83,11 @@ if (DRAW_XFEMM)
     toolXFEMM = XFEMM();
     toolXFEMM.newFemmProblem(0,'planar','millimeters');
     
-    comp1.make(toolXFEMM,toolXFEMM);
-    toolXFEMM.setGroupNumber(1);
+    tokenComp1 = comp1.make(toolXFEMM,toolXFEMM);
+    tokenComp2 = comp2.make(toolXFEMM,toolXFEMM);
     
-    comp2.make(toolXFEMM,toolXFEMM);
-    toolXFEMM.setGroupNumber(2);
+    toolXFEMM.setGroupNumber(1,tokenComp1);
+    toolXFEMM.setGroupNumber(2,tokenComp2);
 
     FemmProblem = toolXFEMM.removeOverlaps();
 
