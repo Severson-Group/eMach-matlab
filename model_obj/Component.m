@@ -23,7 +23,7 @@ classdef Component
                 cs(i) = obj.crossSections(i).draw(drawer);                
             end
             
-            tok2 = obj.makeSolid.run(obj.name, obj.material.name, cs, maker)
+            tok2 = obj.makeSolid.run(obj.name, obj.material.name, cs, maker);
             
             rettok = {cs, tok2};
         end
