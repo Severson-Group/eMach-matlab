@@ -115,7 +115,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             % lines and surfaces that need to be selected
         end
         
-        function new = revolve(obj, name, material, center, axis, angle)
+        function new = revolve(obj, name, material, center, axis, angle, token)
             %REVOLVE Revolve a cross-section along an arc    
             %new = revolve(obj, name, material, center, axis, angle)
             %   name   - name of the newly extruded component
@@ -138,7 +138,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                     angle.toDegrees(), name, material, flags);
         end
         
-        function new = extrude(obj, name, material, depth)
+        function new = extrude(obj, name, material, depth, token)
             validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});
