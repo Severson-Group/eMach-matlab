@@ -7,15 +7,13 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
     
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_alpha_rm; %angular span of the pole: class type DimAngular
-        dim_alpha_rp; %pole pitch: class type DimAngular
         dim_alpha_rs; %segment span: class type DimAngular
         dim_r_ri; %inner radius of rotor: class type DimLinear
         dim_d_ri; %rotor iron thickness: class type DimLinear
         dim_d_rp; %interpolar iron thickness: class type DimLinear
         dim_d_rs; %inter segment iron thickness: class type DimLinear
-        num_pole; %number of poles
-        num_seg; %number of segments  
-        dim_t_i; %inner thickness: class type DimLinear
+        p; %number of pole pairs
+        s; %number of segments  
     end
     
     methods
@@ -25,16 +23,17 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
         end
         
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             alpha_rm=obj.dim_alpha_rm.toRadians();
-            alpha_rp = obj.dim_alpha_rp.toRadians();
             alpha_rs = obj.dim_alpha_rs.toRadians();
             r_ri = obj.dim_r_ri;
             d_ri = obj.dim_d_ri;
             d_rp = obj.dim_d_rp;
             d_rs=obj.dim_d_rs;
-            p = obj.num_pole;
-            s = obj.num_seg;                              
+            p = obj.p;
+            s = obj.s; 
+            P = 2*p;
+            alpha_rp = 2*pi/P;
             alpha_k = (alpha_rm-s*(alpha_rs))/(s-1);
              
 %%Compute angles of various rotor segment start and end points           
@@ -100,9 +99,9 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
             end
             
 %%Draw p poles with s segments per pole            
-            for i = 1:p
-                [points] = obj.location.transformCoords(points, DimRadian(2*pi/p));
-                [inner_points]=obj.location.transformCoords(inner_points, DimRadian(2*pi/p));
+            for i = 1:P
+                [points] = obj.location.transformCoords(points, DimRadian(2*pi/P));
+                [inner_points]=obj.location.transformCoords(inner_points, DimRadian(2*pi/P));
                 for j=1:2*s+1
                     if mod(j,2)==0
                      arc_c(j) = drawer.drawArc(obj.location.anchor_xy, points(j,:),...
@@ -117,6 +116,12 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
                 end
             end
 %%Draw inner surface          
+      if (r_ri == 0)
+          point_i = obj.location.anchor_xy;
+          innerCoord = obj.location.transformCoords(point_i);
+          csToken = CrossSectToken(innerCoord, arc_c);
+      else
+
          point_i = [r_ri,0]+obj.location.anchor_xy;
          point_i2 = [-r_ri,0]+obj.location.anchor_xy;
          arc_i1 = drawer.drawArc(obj.location.anchor_xy, point_i,point_i2);
@@ -125,7 +130,7 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
          innerCoord = obj.location.transformCoords([rad, 0]);
          segments = [arc_c,arc_i1,arc_i2];
          csToken = CrossSectToken(innerCoord, segments);
-                     
+      end               
         end
         
     end
@@ -139,16 +144,33 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
             
             %2. validate the new properties that have been added here
              validateattributes(obj.dim_alpha_rm,{'DimAngular'},{'nonnegative', 'nonempty'});
-             validateattributes(obj.dim_alpha_rp,{'DimAngular'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_alpha_rs,{'DimAngular'},{'nonnegative','nonempty'}); 
              validateattributes(obj.dim_r_ri,{'DimLinear'},{'nonnegative','nonempty'});
-             validateattributes(obj.dim_t_i,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_ri,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rp,{'DimLinear'},{'nonnegative','nonempty'});
              validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
-             validateattributes(obj.num_seg,{'double'},{'nonnegative','nonempty'});
-             validateattributes(obj.num_pole,{'double'},{'nonnegative','nonempty'});        
+             validateattributes(obj.s,{'double'},{'positive','nonempty'});
+             validateattributes(obj.p,{'double'},{'positive','nonempty'});        
             
+            %3. Validate parameters specific to geometry
+             %Validate that magnet spans only one pole pitch  
+             assert(obj.dim_alpha_rm<(180/obj.p),...
+                 'Invalid alpha_rm. Check that it is less than 180/p');   
+             if(obj.s>1)
+             %Validate that d_rs is non zero if there are segments  
+                assert((obj.dim_d_rs~=0),...
+                 'Invalid d_rs. Check that it is positive for s>1'); 
+              %Validate that segment span is legitimate
+                assert((obj.dim_alpha_rs<=obj.dim_alpha_rm/obj.s),...
+                 'Invalid alpha_rs. Check that it is less than alpha_rm/s') 
+             elseif (obj.s==1)
+              % Validate that alpha_rs and alpha_rm are set equal for s =1 
+                assert(obj.dim_alpha_rs==(obj.dim_alpha_rm/obj.s),...
+                 'Invalid alpha_rs. Check that it is equal to alpha_rm for s=1')
+              % Validate that d_rs is set zero for s=1
+                 assert(obj.dim_d_rs==0,...
+                 'Invalid d_rs. Check that it is equal to 0 for s =1')  
+             end
             
          end
                   
