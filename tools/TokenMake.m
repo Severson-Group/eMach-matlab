@@ -11,7 +11,8 @@ classdef TokenMake
         function obj = TokenMake(csToken, prepSectToken, makeSolidToken)
             % TOKENMAKE Constructor of a TokenMake
             
-            % TODO: validate `csToken` is an ARRAY of CrossSectToken objects:
+            % TODO: validate `csToken` has two properties: 1 - an ARRAY of 
+            % CrossSectToken objects, 2 - innerCoords:
             % validateattributes(csToken, {});
             
             % TODO: consider validating the other tokens...

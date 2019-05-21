@@ -34,7 +34,7 @@ classdef MakeRevolve < MakeSolidBase
             %3. TO DO: Move to final location
             %maker.Move(name, obj.location);
             
-            tokenMake = TokenMake(token1, token2);
+            tokenMake = TokenMake(csToken, token1, token2);
         end
     end
     

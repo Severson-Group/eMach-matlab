@@ -380,7 +380,8 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             arcInfo = obj.arcInfo;
         end
         
-        function plot(obj)
+        function plot(obj,FemmProblem)
+            obj.FemmProblem = FemmProblem;
             plotfemmproblem(obj.FemmProblem);
         end
         
@@ -453,8 +454,16 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function select(obj)
 
         end
+        
+        function addAirRegion(obj, Coord)
+            Coord = double(Coord);
+            obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
+                Coord(1), Coord(2), ...
+                                   'BlockType', 'Air');
+        end
+        
         % Add block label and assign material
-        function tok2 = revolve(obj, name, material, center, axis, angle, innerCoord)
+        function token = revolve(obj, name, material, center, axis, angle, innerCoord)
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});            
             validateattributes(center, {'numeric'}, {'size',[1,2]})
@@ -465,10 +474,10 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
                 innerCoord(1), innerCoord(2), ...
                                    'BlockType', material);
-            tok2 = []; 
+            token = []; 
         end
         % Add block label and assign material
-        function tok2 = extrude(obj, name, material, depth, innerCoord)
+        function token = extrude(obj, name, material, depth, innerCoord)
             validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'}); 
@@ -477,7 +486,7 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
                 innerCoord(1), innerCoord(2), ...
                                    'BlockType', material);
-            tok2 = [];
+            token = [];
         end
         % Save information about inner coordinates of the cross-section
         function innerCoord = prepareSection(obj,csToken)
@@ -488,11 +497,11 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function setGroupNumber(obj, groupNumber, tokenComp)
             lineToken = [];
             arcToken = [];
-            for i = 1:length(tokenComp{1}.token)
-                if tokenComp{1}.token{2,i} == 0
-                    lineToken(end+1) = tokenComp{1}.token{1,i};
+            for i = 1:length(tokenComp.csToken.token)
+                if tokenComp.csToken.token(1, i).geometryType == 0
+                    lineToken(end+1) = tokenComp.csToken.token(1, i).segmentIndices;
                 else
-                    arcToken(end+1) = tokenComp{1}.token{1,i};
+                    arcToken(end+1) = tokenComp.csToken.token(1, i).segmentIndices;
                 end
             end
             % Set group number to nodes
@@ -511,8 +520,8 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             % Set group number to block labels
-            givenCoord = double(tokenComp{1}.innerCoord(1)) + 1i*...
-                double(tokenComp{1}.innerCoord(2));
+            givenCoord = double(tokenComp.csToken.innerCoord(1)) + 1i*...
+                double(tokenComp.csToken.innerCoord(2));
             for i = 1:length(obj.FemmProblem.BlockLabels)
                 innerCoords(i) = obj.FemmProblem.BlockLabels(i).Coords(1) + ...
                     1i*obj.FemmProblem.BlockLabels(i).Coords(2);
