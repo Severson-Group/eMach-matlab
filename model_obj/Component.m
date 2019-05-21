@@ -15,7 +15,7 @@ classdef Component
             obj.validateProps();
         end
         
-        function make(obj, drawer, maker)
+        function [tokenMake] = make(obj, drawer, maker)
             validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             validateattributes(maker,  {'MakerBase'},  {'nonempty'});
             
@@ -23,7 +23,7 @@ classdef Component
                 cs(i) = obj.crossSections(i).draw(drawer);                
             end
             
-            obj.makeSolid.run(obj.name, obj.material.name, cs, maker)
+            tokenMake = obj.makeSolid.run(obj.name, obj.material.name, cs, maker);
         end
 
         function draw(obj, drawer)
