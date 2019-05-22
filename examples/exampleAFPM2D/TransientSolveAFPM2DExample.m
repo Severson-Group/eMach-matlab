@@ -66,13 +66,13 @@ clear all;
     Forces_X = mn_getComponentForce(toolMn.mn, toolMn.doc, group, 1, 0); 
 
 %%Flux waveforms
-    flux_A = mn_getCoilFlux(toolMn.mn, toolMn.doc, coil_A, 1);
-    flux_B = mn_getCoilFlux(toolMn.mn, toolMn.doc, coil_B, 1);
-    flux_C = mn_getCoilFlux(toolMn.mn, toolMn.doc, coil_C, 1);
+    flux_A = mn_readCoilFluxLinkage(toolMn.mn, toolMn.doc, coil_A, 1);
+    flux_B = mn_readCoilFluxLinkage(toolMn.mn, toolMn.doc, coil_B, 1);
+    flux_C = mn_readCoilFluxLinkage(toolMn.mn, toolMn.doc, coil_C, 1);
 %%Voltage waveforms
-    voltage_A = mn_getCoilVoltage(toolMn.mn, toolMn.doc, coil_A, 1);
-    voltage_B = mn_getCoilVoltage(toolMn.mn, toolMn.doc, coil_B, 1);
-    voltage_C = mn_getCoilVoltage(toolMn.mn, toolMn.doc, coil_C, 1);
+    voltage_A = mn_readCoilVoltage(toolMn.mn, toolMn.doc, coil_A, 1);
+    voltage_B = mn_readCoilVoltage(toolMn.mn, toolMn.doc, coil_B, 1);
+    voltage_C = mn_readCoilVoltage(toolMn.mn, toolMn.doc, coil_C, 1);
 
     solutiondata.time=time;
     solutiondata.force = 2*Forces_X(:,2);
