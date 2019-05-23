@@ -505,9 +505,11 @@ end
     get(toolMn.consts,'infoNumberParameter'));
 
 %%Set up Periodic Boundary Conditions
-    boundary = mn_d_createEvenPeriodicBoundaryCondition(toolMn.mn, 1, [{'compStatorVA'},{'compRotorAir1'},...
+
+ mn_d_createBoundaryCondition(toolMn.mn, 1, [{'compStatorVA'},{'compRotorAir1'},...
      {'compRotorAir2'},{'compRotor1Remesh'},{'compRotor1VA'},{'compRotor2VA'},{'compRotor2Remesh'},...
-     {'compStator1Remesh'},{'compStator2Remesh'}], 4 , -2*p*w_m, 0, 0, 'Boundary1' )
+     {'compStator1Remesh'},{'compStator2Remesh'}], 4 , 'Boundary1' )
+mn_d_setEvenPeriodic(toolMn.mn, -2*p*w_m, 0, 0, 'Boundary1' )
  
 %%Set up Motion
     motion = mn_d_makeMotionComponent(toolMn.mn, 1, [{'compCoilIn1'}, {'compCoilIn2'},{'compCoilIn3'}...
