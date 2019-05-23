@@ -63,7 +63,7 @@ clear all;
         group = [group ' + ' moving_comps{i} ] ;  
     end
     group = group(4:length(group));
-    Forces_X = mn_getComponentForce(toolMn.mn, toolMn.doc, group, 1, 0); 
+    Forces_X = mn_readForceOnBody(toolMn.mn, toolMn.doc, 1, 0, 1); 
 
 %%Flux waveforms
     flux_A = mn_readCoilFluxLinkage(toolMn.mn, toolMn.doc, coil_A, 1);
