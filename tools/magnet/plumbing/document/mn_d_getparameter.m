@@ -1,7 +1,7 @@
 function [value, paramType] = mn_d_getparameter(mn, opath, param)
-%MN_DV_GETPARAMETER Read a parameter value.
+%MN_D_GETPARAMETER Read a parameter value.
 %   [value, paramType] mn_d_getparameter(doc, objectpath, param_name)
-%       Sets that specified parameter name. 
+%       Gets that specified parameter name. 
 
 %   objectpath is '' for a global parameter. 
 %
