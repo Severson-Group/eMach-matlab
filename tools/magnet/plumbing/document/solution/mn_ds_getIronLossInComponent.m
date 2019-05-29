@@ -13,12 +13,12 @@ if (exist('solutionID') ~= 1)
     pid = 1;
 end
 
-invoke(MN, 'processcommand', 'ReDim Losses(1)');
+invoke(mn, 'processcommand', 'ReDim Losses(1)');
 invoke(mn, 'processcommand', ...
     ['call getDocument().getSolution().getIronLossInComponent(' ...
     num2str(pid) ', "' componentName '", Losses)']);
 
 invoke(mn, 'processcommand', 'Call setVariant(0, Losses, "MATLAB")');
-Losses = invoke(MN,  'getVariant', 0, 'MATLAB');
-hystLoss = Losses(1);
-eddyCurLoss = Losses(2);
+Losses = invoke(mn,  'getVariant', 0, 'MATLAB');
+hystLoss = Losses{1};
+eddyCurLoss = Losses{2};
