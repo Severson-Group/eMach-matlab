@@ -1,12 +1,11 @@
-function mn_d_createBoundaryCondition(mn, problemID, surfacesFace, Face , name )
+function mn_d_createBoundaryCondition(mn, surfacesFace, Face , name )
 %MN_D_CREATEBOUNDARYCONDITION Creates a boundary condition.
-%   mn_d_createBoundaryCondition(mn, problemID, surfacesFace, Face , name )
-%   problemID - integer problem ID. 
+%   mn_d_createBoundaryCondition(mn, surfacesFace, Face , name )
 %   surfacesFace - Single string or a cell array of strings of the
 %       geometry to which boundary condition is assigned. 
 %   Face - The face number within the component to which the boundary condition is applied. 
+%   name: name assigned to the boundary condition
 %   This is a wrapper for Document::createBoundaryCondition
-validateattributes(problemID, {'numeric'}, {'positive','integer'});
 
     if iscell(surfacesFace) 
         invoke(mn, 'processcommand', ...
