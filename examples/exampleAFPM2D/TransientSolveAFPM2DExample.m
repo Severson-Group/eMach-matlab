@@ -52,18 +52,10 @@ clear all;
     solData = invoke(toolMn.doc, 'solveTransient2dwithmotion');
     
  %% Post Processing
-
+time = mn_getTimeInstants(toolMn.mn, 1, true);
 %%Forces on moving components
-    moving_comps = [{'compStatorVA'},{'compCoilIn1'},{'compCoilIn2'},{'compCoilIn3'},...
-    {'compCoilOut1'},{'compCoilOut2'},{'compCoilOut3'}];
-
-    time = mn_getTimeInstants(toolMn.mn, 1, true);
-    group = '';
-    for i = 1:length(moving_comps)
-        group = [group ' + ' moving_comps{i} ] ;  
-    end
-    group = group(4:length(group));
-    Forces_X = mn_readForceOnBody(toolMn.mn, toolMn.doc, 1, 0, 1); 
+bodyID = mn_findBody(toolMn.mn, toolMn.doc, 'compStatorVA', 1);
+Forces_X = mn_readForceOnBody(toolMn.mn, toolMn.doc, bodyID, 0, 1);
 
 %%Flux waveforms
     flux_A = mn_readCoilFluxLinkage(toolMn.mn, toolMn.doc, coil_A, 1);
@@ -85,5 +77,4 @@ clear all;
     solutiondata.voltage_C = 2*voltage_C(:,2);
 
 save('AFPMSolution.mat','solutiondata');
-
-
+invoke(toolMn.mn, 'processcommand','CALL close(False)');
