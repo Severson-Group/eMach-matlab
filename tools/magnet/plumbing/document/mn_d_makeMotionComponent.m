@@ -1,14 +1,12 @@
-function [motion] = mn_d_makeMotionComponent(mn, problemID, surfacesVolume)
+function [motion] = mn_d_makeMotionComponent(mn, surfacesVolume)
 %MN_D_MAKEMOTIONCOMPONENT Creates a motion component.
 %   mn_d_setMotionComponent(mn, problemID, surfacesVolume)
 %       
-%   problemID - integer problem ID. 
 %   surfacesVolume - Single string or a cell array of strings of the
 %       geometry to be moved. 
 %
 %   Return value: a path to the motion component.
 %   This is a wrapper for Document::makeMotionComponent
-validateattributes(problemID, {'numeric'}, {'positive','integer'});
 if iscell(surfacesVolume) 
     invoke(mn, 'processcommand', ...
         sprintf('REDIM nmArray(%i)', length(surfacesVolume)-1));

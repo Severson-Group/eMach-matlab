@@ -506,14 +506,14 @@ end
 
 %%Set up Periodic Boundary Conditions
 
- mn_d_createBoundaryCondition(toolMn.mn, 1, [{'compStatorVA'},{'compRotorAir1'},...
+mn_d_createBoundaryCondition(toolMn.mn, [{'compStatorVA'},{'compRotorAir1'},...
      {'compRotorAir2'},{'compRotor1Remesh'},{'compRotor1VA'},{'compRotor2VA'},{'compRotor2Remesh'},...
      {'compStator1Remesh'},{'compStator2Remesh'}], 4 , 'Boundary1' )
-mn_d_setEvenPeriodic(toolMn.mn, -2*p*w_m, 0, 0, 'Boundary1' )
+mn_d_setEvenPeriodic(toolMn.mn,'Boundary1','Null', 'Null', 'Null', 'Null', [-2*p*w_m 0 0], 'Null');
  
 %%Set up Motion
-    motion = mn_d_makeMotionComponent(toolMn.mn, 1, [{'compCoilIn1'}, {'compCoilIn2'},{'compCoilIn3'}...
-    {'compCoilOut1'},{'compCoilOut2'},{'compCoilOut3'},{'compStator2Remesh'},{'compStator1Remesh'},{'compStatorVA'}])
+    motion = mn_d_makeMotionComponent(toolMn.mn, [{'compCoilIn1'}, {'compCoilIn2'},{'compCoilIn3'}...
+    {'compCoilOut1'},{'compCoilOut2'},{'compCoilOut3'},{'compStator2Remesh'},{'compStator1Remesh'},{'compStatorVA'}]);
     PositionAtStartup = 0;
     SpeedAtStartup = 0;
     TimeArray = 0;
