@@ -508,7 +508,7 @@ end
 
 mn_d_createBoundaryCondition(toolMn.mn, [{'compStatorVA'},{'compRotorAir1'},...
      {'compRotorAir2'},{'compRotor1Remesh'},{'compRotor1VA'},{'compRotor2VA'},{'compRotor2Remesh'},...
-     {'compStator1Remesh'},{'compStator2Remesh'}], 4 , 'Boundary1' )
+     {'compStator1Remesh'},{'compStator2Remesh'}], [4,4,4,4,4,4,4,4,4] , 'Boundary1' )
 mn_d_setEvenPeriodic(toolMn.mn,'Boundary1','Null', 'Null', 'Null', 'Null', [-2*p*w_m 0 0], 'Null');
  
 %%Set up Motion
