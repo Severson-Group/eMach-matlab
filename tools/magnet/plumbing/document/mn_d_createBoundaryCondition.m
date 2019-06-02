@@ -1,24 +1,25 @@
-function mn_d_createBoundaryCondition(mn, surfacesFace, Face , name )
+function mn_d_createBoundaryCondition(mn, componentNames, face, name)
 %MN_D_CREATEBOUNDARYCONDITION Creates a boundary condition.
 %   mn_d_createBoundaryCondition(mn, surfacesFace, Face , name )
-%   surfacesFace - Single string or a cell array of strings of the
+%   componentNames - Single string or a cell array of strings of the
 %       geometry to which boundary condition is assigned. 
-%   Face - The face number within the component to which the boundary condition is applied. 
+%   face - Array containing the face number within the component to which 
+%   the boundary condition is applied. 
 %   name: name assigned to the boundary condition
 %   This is a wrapper for Document::createBoundaryCondition
 
-    if iscell(surfacesFace) 
+    if iscell(componentNames) 
         invoke(mn, 'processcommand', ...
-        sprintf('REDIM nmArray(%i)', length(surfacesFace)-1));
-        for i = 1:length(surfacesFace)
+        sprintf('REDIM nmArray(%i)', length(componentNames)-1));
+        for i = 1:length(componentNames)
             invoke(mn, 'processcommand', ...
-            sprintf('nmArray(%i)= "%s,Face#%i"', i-1, surfacesFace{i}, Face));
+            sprintf('nmArray(%i)= "%s,Face#%i"', i-1, componentNames{i}, face(i)));
         end
     else
         
         invoke(mn, 'processcommand', 'REDIM nmArray(0)');
         invoke(mn, 'processcommand', ...
-        sprintf('nmArray(0)= "%s,Face#%i"', surfacesFace, Face));    
+        sprintf('nmArray(0)= "%s,Face#%i"', componentNames, face));    
     end
 cmdstring = sprintf('call getDocument.createBoundaryCondition(nmArray,"%s")', name); 
 invoke(mn, 'processcommand', cmdstring);
