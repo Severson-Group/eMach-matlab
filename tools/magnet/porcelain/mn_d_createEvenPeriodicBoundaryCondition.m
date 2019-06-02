@@ -1,4 +1,4 @@
-function mn_d_createEvenPeriodicBoundaryCondition(mn, surfacesFace, Face,...
+function mn_d_createEvenPeriodicBoundaryCondition(mn, componentNames, face,...
     name, scale_factor, rotation_angle, RotationAxis, MirrorNormal, ShiftVector, Center)
 %MN_D_CREATEBOUNDARYCONDITION Creates an even periodic boundary condition.
 %   mn_d_createEvenPeriodicBoundaryCondition(mn, surfacesFace, Face,
@@ -15,5 +15,5 @@ function mn_d_createEvenPeriodicBoundaryCondition(mn, surfacesFace, Face,...
 %   Center: reference point coordinates in (mm)
 %   This is a porcelain function that uses mn_d_createBoundaryCondition and
 %   mn_d_setEvenPeriodic to create even periodic boundary condition
-mn_d_createBoundaryCondition(mn, surfacesFace, Face , name );
-mn_d_setEvenPeriodic(mn, name,scale_factor, rotation_angle, RotationAxis, MirrorNormal, ShiftVector, Center);
+mn_d_createBoundaryCondition(mn, componentNames, face, name );
+mn_d_setEvenPeriodic(mn, name, scale_factor, rotation_angle, RotationAxis, MirrorNormal, ShiftVector, Center);
