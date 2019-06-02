@@ -51,4 +51,6 @@ end
 
 arguments = sprintf('"%s",%s,%s,%s, %s, %s, %s',...
     name,num2str(scale_factor),num2str(rotation_angle),axis,normal,shift,reference);
+
+invoke(mn, 'processcommand', ['call getDocument().setEvenPeriodic(' arguments ')']);
 end
