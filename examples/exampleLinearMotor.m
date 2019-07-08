@@ -41,7 +41,7 @@ d_n = d_rm - d_re; % height of notch
 
 %% Define cross sections
 
-% Create a cross-section of a stator iron
+% Create a cross-section of the stator iron
 statorIron = CrossSectLinearMotorStator( ...
         'name', 'stator_iron', ...
         'dim_w_s', DimMillimeter(w_s), ...
@@ -61,7 +61,7 @@ statorIron = CrossSectLinearMotorStator( ...
         ) ...
         );
  
-% Create a cross-section of a mover iron    
+% Create a cross-section of he mover iron    
 moverIron = CrossSectNotchedRectangle( ...
         'name', 'mover_iron', ...
         'dim_w', DimMillimeter(w), ...
@@ -255,12 +255,24 @@ if (DRAW_TIKZ)
     toolTikz.close();
 end
 
+airgapmesharea = 0.4;
+rotorironmesharea = 2;
+statorironmesharea = 2;
+coilmesharea = 3;
+magnetmesharea = 2;
+slotopeningmesharea = 2.5;
+maxmesharea = 4;
+
+%% Draw via XFEMM
+
 if (DRAW_XFEMM)
     toolXFEMM = XFEMM();
     
     % Create new problem
     toolXFEMM.newFemmProblem(0,'axi','millimeters');
-    
+    toolXFEMM.addmaterial('Hiperco-50');
+    toolXFEMM.addmaterial('16 AWG');
+    toolXFEMM.addmaterial('NdFeB 37 MGOe');
     % Create components
     token1 = statorIronComp.make(toolXFEMM, toolXFEMM);    
     token2 = moverIronComp.make(toolXFEMM, toolXFEMM);
@@ -271,13 +283,19 @@ if (DRAW_XFEMM)
     token7 = coil2Comp.make(toolXFEMM, toolXFEMM);  
     
     % Assign group labels to each component
-    toolXFEMM.setGroupNumber(1,token1);
-    toolXFEMM.setGroupNumber(2,token2);
-    toolXFEMM.setGroupNumber(2,token3);
-    toolXFEMM.setGroupNumber(2,token4);
-    toolXFEMM.setGroupNumber(2,token5);
-    toolXFEMM.setGroupNumber(1,token6);
-    toolXFEMM.setGroupNumber(1,token7);
+    toolXFEMM.setCompParameters(token1,'groupNumber',1,...
+            'maxMeshArea',DimMillimeter(statorironmesharea));
+    toolXFEMM.setCompParameters(token2,'groupNumber',2,...
+            'maxMeshArea',DimMillimeter(rotorironmesharea));
+    toolXFEMM.setCompParameters(token3,'groupNumber',2,...
+            'maxMeshArea',DimMillimeter(magnetmesharea),...
+            'magnetDirection',DimDegree(180));
+    toolXFEMM.setCompParameters(token4,'groupNumber',2,...
+            'maxMeshArea',DimMillimeter(magnetmesharea),...
+            'magnetDirection',DimDegree(270));
+    toolXFEMM.setCompParameters(token5,'groupNumber',2,...
+            'maxMeshArea',DimMillimeter(magnetmesharea),...
+            'magnetDirection',DimDegree(360));
     
     % Draw a boundary and set air region
     BoundaryCenterXY = DimMillimeter([0,w_s/2]);
@@ -285,8 +303,8 @@ if (DRAW_XFEMM)
     BoundaryEndXY = DimMillimeter([0,1.2*sqrt((w_s/2)^2+(r_so)^2)+w_s/2]);
     toolXFEMM.drawArc(BoundaryCenterXY,BoundaryStartXY,BoundaryEndXY);
     toolXFEMM.drawLine(BoundaryStartXY,BoundaryEndXY);
-    toolXFEMM.addAirRegion(DimMillimeter([r_so+10,w_s/2]));
-    
+    toolXFEMM.addAirRegion(DimMillimeter([r_so+10,w_s/2]),...
+        'maxMeshArea',DimMillimeter(maxmesharea));    
     % Remove overlaps
     FemmProblem = toolXFEMM.removeOverlaps();
     
@@ -296,9 +314,6 @@ if (DRAW_XFEMM)
     FemmProblem.BlockLabels(7).Turns = -100;
     FemmProblem.BlockLabels(6).InCircuit = 'Circuit 1';
     FemmProblem.BlockLabels(7).InCircuit = 'Circuit 1';
-    FemmProblem.BlockLabels(3).MagDir = 180;
-    FemmProblem.BlockLabels(4).MagDir = 270;
-    FemmProblem.BlockLabels(5).MagDir = 360;
 
     % Plot the geometry
     toolXFEMM.plot(FemmProblem);
