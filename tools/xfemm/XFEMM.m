@@ -375,9 +375,9 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 'LengthUnits', units);
         end
         
-        function [FemmProblem, arcInfo] = returnFemmProblem(obj)
+        function FemmProblem = returnFemmProblem(obj)
             FemmProblem = obj.FemmProblem;
-            arcInfo = obj.arcInfo;
+%             arcInfo = obj.arcInfo;
         end
         
         function plot(obj,FemmProblem)
@@ -385,9 +385,17 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             plotfemmproblem(obj.FemmProblem);
         end
         
-        function [tokenDraw] = drawLine(obj, startxy, endxy)
+        function [tokenDraw] = drawLine(obj, startxy, endxy, varargin)
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
+            p = inputParser;
+            
+            % Default values
+            addParameter(p,'groupNumber',0);
+            
+            % Process input
+            parse(p,varargin{:});
+            groupNumber = p.Results.groupNumber;            
             
             startxy = double(startxy);
             endxy = double(endxy);
@@ -397,14 +405,25 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             [obj.FemmProblem, seginds] = addsegments_mfemm(obj.FemmProblem,...
                 nodeids(1), nodeids(2));
+            
+            obj.FemmProblem.Nodes(end-1).InGroup = groupNumber;
+            obj.FemmProblem.Nodes(end).InGroup = groupNumber;
 
             tokenDraw = TokenDraw(seginds, 0);
         end
         
-        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
+        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy, varargin)
             %DRAWARC Draw an arc in the current XFEMM document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
+                        p = inputParser;
+            
+            % Default values
+            addParameter(p,'groupNumber',0);
+            
+            % Process input
+            parse(p,varargin{:});
+            groupNumber = p.Results.groupNumber; 
             
             centerxy = double(centerxy);
             startxy = double(startxy);
@@ -413,7 +432,11 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 (centerxy(2) - startxy(2))^2);
             L = sqrt((endxy(1) - startxy(1))^2 + ...
                 (endxy(2) - startxy(2))^2);
-            angle = 2*asin(L/2/R)*180/pi;
+            if obj.almostEqual(L/2, R)
+                angle = 2*90;
+            else
+                angle = 2*asin(L/2/R)*180/pi;
+            end
             
             [obj.FemmProblem, nodeinds, nodeids] = addnodes_mfemm(...
                 obj.FemmProblem, [startxy(1); endxy(1)],...
@@ -421,6 +444,9 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             [obj.FemmProblem, arcseginds] = addarcsegments_mfemm(...
                 obj.FemmProblem, nodeids(1), nodeids(2), angle);
+            
+            obj.FemmProblem.Nodes(end-1).InGroup = groupNumber;
+            obj.FemmProblem.Nodes(end).InGroup = groupNumber;
             
             tokenDraw = TokenDraw(arcseginds, 1);            
             
@@ -455,11 +481,38 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
 
         end
         
-        function addAirRegion(obj, Coord)
+        function addAirRegion(obj, Coord, varargin)
+            
+            p = inputParser;
+            
+            % Default values
+            addParameter(p,'groupNumber',0);
+            addParameter(p,'maxMeshArea',-1);
+            
+            % Process input
+            parse(p,varargin{:});
+            groupNumber = p.Results.groupNumber;
+            maxMeshArea = p.Results.maxMeshArea;
+                       
             Coord = double(Coord);
             obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
                 Coord(1), Coord(2), ...
-                                   'BlockType', 'Air');
+                                   'BlockType', 'Air','InGroup',groupNumber);
+            
+                        
+            givenCoord = Coord(1) + 1i*Coord(2);
+            
+            for i = 1:length(obj.FemmProblem.BlockLabels)
+                innerCoords(i) = obj.FemmProblem.BlockLabels(i).Coords(1) + ...
+                    1i*obj.FemmProblem.BlockLabels(i).Coords(2);
+            end
+            [x, n] = min(abs(givenCoord - innerCoords));                   
+            obj.FemmProblem.BlockLabels(n).MaxArea = double(maxMeshArea);                   
+        end
+        
+        % Add material
+        function addmaterial(obj, material)
+            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
         end
         
         % Add block label and assign material
@@ -470,7 +523,7 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(axis, {'numeric'}, {'size',[1,2]})
             validateattributes(angle, {'DimAngular'}, {'nonempty'});
             
-            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
+%             obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
             obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
                 innerCoord(1), innerCoord(2), ...
                                    'BlockType', material);
@@ -482,7 +535,7 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'}); 
             
-            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
+%             obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
             obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
                 innerCoord(1), innerCoord(2), ...
                                    'BlockType', material);
@@ -494,7 +547,21 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         % Set group number to nodes and block label
-        function setGroupNumber(obj, groupNumber, tokenComp)
+        function setCompParameters(obj, tokenComp, varargin)
+            
+            p = inputParser;
+            
+            % Default values
+            addParameter(p,'groupNumber',0);
+            addParameter(p,'maxMeshArea',-1);
+            addParameter(p,'magnetDirection',NaN);
+            
+            % Process input
+            parse(p,varargin{:});
+            groupNumber = p.Results.groupNumber;
+            maxMeshArea = p.Results.maxMeshArea;
+            magnetDirection = p.Results.magnetDirection;
+            
             lineToken = [];
             arcToken = [];
             for i = 1:length(tokenComp.csToken.token)
@@ -528,7 +595,9 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             [x, n] = min(abs(givenCoord - innerCoords));
             obj.FemmProblem.BlockLabels(n).InGroup = groupNumber;
-        end
+            obj.FemmProblem.BlockLabels(n).MaxArea = double(maxMeshArea);
+            obj.FemmProblem.BlockLabels(n).MagDir = double(magnetDirection);
+        end        
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
 
