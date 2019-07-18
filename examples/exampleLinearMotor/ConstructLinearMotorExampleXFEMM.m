@@ -1,8 +1,4 @@
-function [FemmProblem,otherParams] = ConstructLinearMotorExample(DRAW_TOOL,params,source)
-
-DRAW_MAGNET = DRAW_TOOL(1);
-DRAW_TIKZ   = DRAW_TOOL(2);
-DRAW_XFEMM = DRAW_TOOL(3);
+function [FemmProblem,otherParams] = ConstructLinearMotorExampleXFEMM(DRAW_MAGNET,DRAW_TIKZ,DRAW_XFEMM,params,source)
 
 if (DRAW_MAGNET)
     IronMaterial = 'M-19 24 Ga';

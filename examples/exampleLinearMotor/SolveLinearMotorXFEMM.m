@@ -15,7 +15,7 @@ source.np = 1;
 params = [73.3282125684640,0.585679708175381,0.490939703883842,0.510995493884558,0.334803805164151,0.698325727773407,11.1902820494481,1.07027060534535,62.8885392079727,1.23142283575328,0.127156092792599,0.341968957871397,1,0.784733853086332];
 params = round(params,2);
 
-[FemmProblem,otherParams] = ConstructLinearMotorExample([0 0 1],params,source);
+FemmProblem = ConstructLinearMotorExample(0,0,1,params,source);
 
 plotfemmproblem(FemmProblem);
 
