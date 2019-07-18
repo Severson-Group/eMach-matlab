@@ -19,7 +19,7 @@ if (DRAW_XFEMM)
     MagnetMaterial2 = 'NdFe35';
     MagnetMaterial3 = 'NdFe35';
     CoilMaterial = 'Coil';
-end 
+end
 
 %% Define parameters
 
