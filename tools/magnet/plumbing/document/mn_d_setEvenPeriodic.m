@@ -13,9 +13,9 @@ function[status] = mn_d_setEvenPeriodic(mn, name, scaleFactor, rotationAngle, ro
  if ~isempty(shiftVector)
     shift = 'ShiftVector';
     invoke(mn, 'processcommand', 'REDIM ShiftVector(2)');
-    invoke(mn, 'processcommand', sprintf('ShiftVector(0)= %s', num2str(shiftVector(1))));
-    invoke(mn, 'processcommand', sprintf('ShiftVector(1)= %s', num2str(shiftVector(2))));
-    invoke(mn, 'processcommand', sprintf('ShiftVector(2)= %s', num2str(shiftVector(3))));
+    invoke(mn, 'processcommand', sprintf('ShiftVector(0)= %s', num2str(shiftVector(1),8)));
+    invoke(mn, 'processcommand', sprintf('ShiftVector(1)= %s', num2str(shiftVector(2),8)));
+    invoke(mn, 'processcommand', sprintf('ShiftVector(2)= %s', num2str(shiftVector(3),8)));
 else
     shift = 'Null';
 end
