@@ -15,7 +15,7 @@ classdef AnsysMech < ToolBase & DrawerBase
             obj.validateProps();            
         end
         
-        function obj = open(obj, scratch_path)%, job_name)
+        function obj = open(obj, scratch_path, job_name)
             
             %scratch_path is folder where ansys writes to as well as places
             %server key
@@ -25,68 +25,110 @@ classdef AnsysMech < ToolBase & DrawerBase
             %apdl launcher with the -aas parameter specified under the
             %additional parameters section
             
-%             exec_path = '"C:\Program Files\ANSYS Inc\v190\ansys\bin\winx64\MAPDL.exe"';
-%             job_flag = sprintf('-j %s', job_name);
-%             misc_flags = ' -p aa_r -np 2 -lch -s read -l en-us -aas -t -d win32';
-%             dir_flag = sprintf('-dir "%s"', scatch_path);
-%             
-%             cmd_str = sprintf('%s %s %s %s', exec_path, dir_flag, job_flag, misc_flags);
-%             system(cmd_str); %start ansys in as a server (aaS) mode
+            exec_path = '"C:\Program Files\ANSYS Inc\v190\ansys\bin\winx64\MAPDL.exe"';
+            job_flag = sprintf('-j %s', job_name);
+            misc_flags = ' -p aa_r -np 2 -lch -s read -l en-us -aas -t -d win32';
+            dir_flag = sprintf('-dir "%s"', scratch_path);
+            
+            cmd_str = sprintf('%s %s %s %s', exec_path, dir_flag, job_flag, misc_flags);
+            system(cmd_str); %start ansys in as a server (aaS) mode
             
             orb = initialize_orb(); %this function comes from ansys matlab toolbox
             load_ansys_aas; %aas stands for ansys as a server
-            key_str = sprintf('"%s"\aaS_MapdlId.txt', scratch_path);
+            key_str = sprintf('%s\\aaS_MapdlId.txt', scratch_path);
             obj.iCoMapdlUnit = actmapdlserver(orb, key_str);
             
         end
         
         function close(obj)
-           % CLOSE Closes MagNet application
-           %     close()
-           
-           % TODO:
-           % Implement this...
-        end
-
-        function [tokenDraw] = drawLine(obj, startxy, endxy)
-            %DRAWLINE Draw a line in the current MagNet document.
-            %   drawLine([start_x, _y], [end_x, _y]) draws a line
-            %
-            %   This is a wrapper for the Document::View::newLine function.
-  
-            invoke (obj.mn, 'processcommand', 'redim line(0)');
-            invoke (obj.mn, 'processcommand', sprintf(...
-                'call getDocument.getView.newLine( %f, %f, %f, %f, line)', ...    
-                startxy(1), startxy(2), ...
-                endxy(1), endxy(2)) ...
-            );
-
-            if nargout > 0
-                invoke(obj.mn, 'processcommand', 'call setvariant(0, line, "matlab")')
-                line = invoke(obj.mn, 'getvariant', 0, 'matlab');
-                tokenDraw = TokenDraw(line, 0);
-            end
+            %this may still not work properly yet
+            obj.iCoMapdlUnit.executeCommandToString('/EXIT,NOSAVE');
         end
         
-        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
-            %DRAWARC Draw an arc in the current MagNet document.
-            %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
+        function reset(obj)
+           obj.iCoMapdlUnit.executeCommandToString('FINISH');
+           obj.iCoMapdlUnit.executeCommandToString('/CLEAR,NOSTART');
+        end
+        
+        function preprocesser(obj)
+            obj.iCoMapdlUnit.executeCommandToString('FINISH');
+            obj.iCoMapdlUnit.executeCommandToString('/PREP7');
+        end
+        
+        function [kp_num] = create_keypoint(obj, x,y,z)
+            
+            %creates a keypoint at x,y,z and returns the id of the keypoint
+            %created as an integer. keypoints are numbered automatically
+
+            cmd_str = sprintf('K,0,%f,%f,%f', x,y,z); %create APDL command string
+    
+            out_str = obj.iCoMapdlUnit.executeCommandToString(cmd_str); %returns java.lang.String object
+            out_str = string(out_str);%conver to matlab string
+            
+            %extract keypoint number out of string and convert to int type
+            t = strsplit(strip(out_str));
+            kp_num = uint64(str2double(t(end))); 
+
+        end
+
+        function [tokenLine] = drawLine(obj, startxy, endxy)
+            
+            %DRAWLINE Draw a line in the current Ansys APDL document.
+            %   drawLine([start_x, _y], [end_x, _y]) draws a line
+  
+            kp_start = obj.create_keypoint(startxy(1), startxy(2), 0);
+            kp_end = obj.create_keypoint(endxy(1),   endxy(2), 0);
+            
+            kp_nums = [kp_start, kp_end];
+    
+            line_cmd = sprintf('LSTR,%d,%d',kp_nums(1), kp_nums(2));
+            line_output = obj.iCoMapdlUnit.executeCommandToString(line_cmd);
+            line_output = string(line_output);
+            
+%             tokenLine = [kp_nums, line_output];
+            tokenLine = kp_nums(1);
+            
+        end
+        
+        function [tokenArc] = drawArc(obj, centerxy, startxy, endxy)
+            %DRAWARC Draw an arc in the current Ansys APDL document.
+            %   drawarc([center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
-            %
-            %   This is a wrapper for the Document::View::newArc function.
 
-            invoke (obj.mn, 'processcommand', 'redim arc(0)')
-            invoke (obj.mn, 'processcommand', sprintf(...
-                'call getDocument.getView.newArc(%f, %f, %f, %f, %f, %f, arc)', ...
-                centerxy(1), centerxy(2), ...
-                startxy(1), startxy(2), ...
-                endxy(1), endxy(2)));
+            p_center = obj.create_keypoint(centerxy(1), centerxy(2), 0);
+            p_zero = obj.create_keypoint(startxy(1), startxy(2), 0);
+            p_axis = obj.create_keypoint(centerxy(1), centerxy(2), 1);
 
-            if nargout > 0
-                invoke(obj.mn, 'processcommand', 'call setvariant(0, arc, "matlab")')
-                arc = invoke(obj.mn, 'getvariant', 0, 'matlab');   
-                tokenDraw = TokenDraw(arc, 1);
-            end   
+            kp_nums = [p_center, p_zero, p_axis];
+
+            v1 = [startxy - centerxy, 0];
+            v2 = [endxy - centerxy, 0];
+
+            c = cross(v1,v2);
+            deg = sign(c(3))*atan2d(norm(c),dot(v1,v2));
+
+            if deg <0
+               deg = deg + 360; 
+            end
+
+            rad = norm(v1);
+
+            arc_cmd = sprintf('CIRCLE,%d,%f,%d,%d,%f', p_center, rad, p_axis, p_zero, deg);
+            arc_output = obj.iCoMapdlUnit.executeCommandToString(arc_cmd);
+            arc_output = string(arc_output);  
+            
+%             tokenArc = [kp_nums, arc_output];
+            tokenArc = kp_nums(1);
+            
+        end
+        
+        
+        function [save_output] = save_IGES(obj, path)
+
+            save_cmd = sprintf("IGESOUT,'%s','IGES',,1", path);
+            save_output = obj.iCoMapdlUnit.executeCommandToString(save_cmd);
+            save_output = string(save_output);
+
         end
         
         function select(obj)
@@ -110,40 +152,12 @@ classdef AnsysMech < ToolBase & DrawerBase
             %             direction) (0, -1) to rotate clockwise about the y axis
             %   angle  - Angle of rotation (dimAngular) 
             
-            
-            validateattributes(material, {'char'}, {'nonempty'});
-            validateattributes(name, {'char'}, {'nonempty'});            
-            validateattributes(center, {'numeric'}, {'size',[1,2]})
-            validateattributes(axis, {'numeric'}, {'size',[1,2]})
-            validateattributes(angle, {'DimAngular'}, {'nonempty'});
-            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
-            
-            %TODO: Convert center and axis to the appropriate default unit.
-            
-            new = mn_dv_makeComponentInAnArc(obj.mn, center, axis, ...
-                    angle.toDegrees(), name, material, flags);
-        end
-        
-        function new = extrude(obj, name, material, depth, token)
-            validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
-            validateattributes(material, {'char'}, {'nonempty'});
-            validateattributes(name, {'char'}, {'nonempty'});
-            flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
-            
-            %TO DO: Convert center and axis to the appropriate default unit.
-            new = mn_dv_makeComponentInALine(obj.mn, depth, name, ...
-                material, flags); 
         end
         
         function new = prepareSection(obj, csToken)
             
-            validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
-            seltype = get(obj.consts,'InfoSetSelection');
-            objcode = get(obj.consts,'infoSliceSurface');
+            %TO DO: implement function if necessary            
             
-            %TO DO: how to deal with the units of the coordinate?? 
-            mn_dv_selectat(obj.mn, csToken.innerCoord, seltype, objcode);
-            new = 1;
         end
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
@@ -164,32 +178,17 @@ classdef AnsysMech < ToolBase & DrawerBase
             %
             %   This is a wrapper for Document::setDefaultLengthUnit
 
-            %update length unit type, this is needed for unit conversions
-            %in extruding/drawing/moving/etc. (not yet implemented).
-            if strcmp(userUnit, 'millimeters')
-                obj.defaultLength = 'DimMillimeter';
-            elseif strcmp(userUnit, 'inches')
-                obj.defaultLength = 'DimInches';
-            else
-                error('unsupported length unit')
-            end
+            %TO DO: implement if necessary
             
-            invoke(obj.doc, 'setDefaultLengthUnit', userUnit, makeAppDefault);
         end
         
         function viewAll(obj)
-            %VIEWALL View the entire model
-            %   viewAll()
-
-            invoke(obj.mn, 'processcommand', 'Call getDocument().getView().viewAll()');
+            %TO DO: implement if necessary
         end
         
         
         function setVisibility(obj, visibility)
-            %SETVISIBLE Sets visibility of MagNet application
-            %    setVisibility(true)
-            
-            set(obj.mn, 'Visible', visibility);
+            %TO DO: implement if necessary
         end
     end
     
