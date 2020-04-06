@@ -1,4 +1,4 @@
-function returnParameter = ConstructLinearMotorExample(DRAW_MAGNET,DRAW_TIKZ,DRAW_XFEMM,params,source)
+function returnParameter = ConstructLinearMotor(DRAW_MAGNET,DRAW_TIKZ,DRAW_XFEMM,params,source)
 
 revAngle = 0;
 
@@ -15,61 +15,53 @@ end
 
 if (DRAW_XFEMM)
     IronMaterial = 'M19-24Ga';
-    MagnetMaterial1 = 'NdFe35';
-    MagnetMaterial2 = 'NdFe35';
-    MagnetMaterial3 = 'NdFe35';
+    MagnetMaterial1 = 'NdFe40';
+    MagnetMaterial2 = 'NdFe40';
+    MagnetMaterial3 = 'NdFe40';
     CoilMaterial = 'Coil';
-end 
+end
 
 %% Define parameters
 
 % Constant parameters
 J = source.J;
 coilfillfactor = source.coilfillfactor;
-number_of_dups = source.number_of_dups;
 wire_cond = source.wire_cond;
 f = source.f; 
 Pout_des = source.Pout_des;
 P_des = source.P_des;
-NS = source.NS; % number of slots
-np = source.np; % number of pole pairs
+Q = source.Q; % number of slots
+p = source.p; % number of pole pairs
 
 % Optimization variables
-r_so = params(1);
-rsi_rso = params(2);
-wst_wst_wss = params(3);
-wso_wss = params(4);
-wrr_wr = params(5);
-drm_drm_g = params(6);
-d_ri = params(7);
-gap = params(8);
-w_s = params(9);
-dsy_dri = params(10);
-dsp_rso_rsi = params(11);
-dso_dsp = params(12);
-Bs = params(13);
-dre_drm = params(14);
+w_s = params(1);
+w_st = params(2);
+w_so = params(3);
+d_st = params(4);
+d_sy = params(5);
+d_so = params(6);
+d_sp = params(7);
+d_rm = params(8);
+d_ri = params(9);
+w_rr = params(10);
+delta = params(11);
+BS = params(12);
 
-stroke = (4*Pout_des./(P_des*2*pi*f.*Bs.^2)).^(1/3);
-tau = w_s/2;
-r_si = r_so*rsi_rso;
-% Rotor geometric parameters
-w_r = w_s;
-w_rr = wrr_wr*w_r;
-w_ra = tau-w_rr;
-d_rm = drm_drm_g/(1-drm_drm_g)*gap;
-r_ri = r_si - gap - d_rm - d_ri;
-d_re = dre_drm*d_rm;
+stroke = (4*Pout_des./(P_des*2*pi*f.*BS.^2)).^(1/3)*1000;
+
+% Other rotor geometric parameters in mm
+w_r = w_s*Q/2/p;
+tau = w_r/2;
+
+w_ra = tau - w_rr;
 w_rs = (w_r - w_ra - 2*w_rr)/2;
+d_re = 0.7*d_rm;
+r_ri = 5;
 
-% Stator geometric parameters
-w_st = wst_wst_wss*w_s/2;
-w_ss = (w_s-2*w_st)/2;
-w_so = wso_wss*w_ss;
-d_sy = dsy_dri*d_ri;
-d_sp = dsp_rso_rsi*(r_so-r_si);
-d_so = dso_dsp*d_sp;
-d_st = r_so - r_si - d_sy - d_sp;
+% Other stator geometric parameters in mm
+w_ss = (w_s - 2*w_st)/2;
+r_si = d_ri + d_rm + delta + r_ri;
+r_so = r_si + d_sp + d_st + d_sy;
 
 % radii of fillets
 r_st = 3;
@@ -79,7 +71,7 @@ r_sb = 3;
 % Notched rectangle parameters based on the mover parameters
 w = w_r; % length of rectangle
 w_n = (w - w_ra - 2*w_rr)/2; % length of notch
-d = r_si - gap - d_rm - r_ri; % height of notched part of rectangle
+d = r_si - delta - d_rm - r_ri; % height of notched part of rectangle
 d_n = d_rm - d_re; % height of notch
 
 % Rotor and stator r and z coordinates
@@ -120,7 +112,7 @@ wire_diam=sqrt(4*coilfillfactor*slot_area/pi);
 %% Define cross sections
 
 % Create a cross-section of a stator iron
-for i = 1:NS/2
+for i = 1:Q/2
 statorIron(i) = CrossSectLinearMotorStator( ...
         'name', ['stator_iron' num2str(i)], ...
         'dim_w_s', DimMillimeter(w_s), ...
@@ -142,7 +134,7 @@ statorIron(i) = CrossSectLinearMotorStator( ...
 end
  
 % Create a cross-section of a mover iron   
-for i = 1:np
+for i = 1:p
 moverIron(i) = CrossSectNotchedRectangle( ...
         'name', ['mover_iron' num2str(i)], ...
         'dim_w', DimMillimeter(w), ...
@@ -187,27 +179,27 @@ magnet3(i) = CrossSectSolidRect( ...
         );
 end
 
-for i = 1:np
+for i = 1:p
 moverAirGap(i) = CrossSectNotchedRectangle( ...
         'name', ['mover_air_gap' num2str(i)], ...
         'dim_w', DimMillimeter(w), ...
         'dim_w_n', DimMillimeter(w_rs), ...   
-        'dim_d', DimMillimeter(gap/2), ...
+        'dim_d', DimMillimeter(delta/2), ...
         'dim_d_n', DimMillimeter(d_re), ...         
         'location', Location2D( ...
-            'anchor_xy', DimMillimeter([r_si-gap/2, -w*(i-1)]), ...
+            'anchor_xy', DimMillimeter([r_si-delta/2, -w*(i-1)]), ...
             'theta', DimDegree([90]).toRadians() ...
         ) ...
         );
 end
 
-for i = 1:NS/2
+for i = 1:Q/2
 statorAirGap(i) = CrossSectSolidRect( ...
         'name', ['stator_air_gap' num2str(i)], ...
-        'dim_w',DimMillimeter(gap/2),...
+        'dim_w',DimMillimeter(delta/2),...
         'dim_h',DimMillimeter(w_s),...
         'location', Location2D( ...
-            'anchor_xy', DimMillimeter([r_si-gap/2, -w_s*(i-1)]), ...
+            'anchor_xy', DimMillimeter([r_si-delta/2, -w_s*(i-1)]), ...
             'theta', DimDegree([0]).toRadians() ...
         ) ...
         );   
@@ -276,7 +268,7 @@ coil22(i) = CrossSectTrapezoid( ...
 end
     
 %% Define components
-for i = 1:NS/2
+for i = 1:Q/2
 statorIronComp(i) = Component( ...
         'name', ['StatorIronComp' num2str(i)], ...
         'crossSections', statorIron(i), ...
@@ -292,7 +284,7 @@ statorIronComp(i) = Component( ...
         ));  
 end
 
-for i = 1:np
+for i = 1:p
 moverIronComp(i) = Component( ...
         'name', ['moverIronComp' num2str(i)], ...
         'crossSections', moverIron(i), ...
@@ -351,7 +343,7 @@ magnet3Comp(i) = Component( ...
         ));
 end
 
-for i = 1:np
+for i = 1:p
 moverAirGapComp(i) = Component( ...
         'name', ['moverAirGapComp' num2str(i)], ...
         'crossSections', moverAirGap(i), ...
@@ -367,7 +359,7 @@ moverAirGapComp(i) = Component( ...
         ));  
 end
 
-for i = 1:NS/2
+for i = 1:Q/2
 statorAirGapComp(i) = Component( ...
         'name', ['statorAirGapComp' num2str(i)], ...
         'crossSections', statorAirGap(i), ...
@@ -475,7 +467,7 @@ if (DRAW_MAGNET)
     toolMn.setDefaultLengthUnit('millimeters', false);
 
     % Create components
-    for i = 1:NS/2
+    for i = 1:Q/2
         statorIronComp(i).make(toolMn, toolMn); toolMn.viewAll();   
         statorAirGapComp(i).make(toolMn, toolMn); toolMn.viewAll();   
         slotOpening1Comp(i).make(toolMn, toolMn); toolMn.viewAll();
@@ -486,7 +478,7 @@ if (DRAW_MAGNET)
         coil22Comp(i).make(toolMn, toolMn); toolMn.viewAll();        
     end
     
-    for i = 1:np
+    for i = 1:p
         moverIronComp(i).make(toolMn, toolMn); toolMn.viewAll();
         magnet1Comp(i).make(toolMn, toolMn); toolMn.viewAll();
         magnet2Comp(i).make(toolMn, toolMn); toolMn.viewAll();
@@ -497,7 +489,7 @@ if (DRAW_MAGNET)
     toolMn.viewAll();
     
     % Specify magnet directions
-    for i = 1:np
+    for i = 1:p
         mn_d_setparameter(toolMn.doc, magnet1Comp(i).name, ...
             'MaterialCenter','[0, 0, 0]',...
             get(toolMn.consts,'InfoArrayParameter'));
@@ -543,7 +535,7 @@ if (DRAW_MAGNET)
     magnetmes = 1.5;
     slotopeningmes = 1;
     maxmesharea = 4;
-    for i = 1:NS/2
+    for i = 1:Q/2
         mn_d_setparameter(toolMn.doc, statorIronComp(i).name, 'MaximumElementSize', ...
             sprintf('%g %%mm', statorironmes), ...
             get(toolMn.consts,'infoNumberParameter'));
@@ -569,7 +561,7 @@ if (DRAW_MAGNET)
             sprintf('%g %%mm', airgapmes), ...
             get(toolMn.consts,'infoNumberParameter'));         
     end
-    for i = 1:np
+    for i = 1:p
         mn_d_setparameter(toolMn.doc, moverIronComp(i).name, 'MaximumElementSize', ...
             sprintf('%g %%mm', moverironmes), ...
             get(toolMn.consts,'infoNumberParameter'));
@@ -604,10 +596,11 @@ if (DRAW_XFEMM)
     toolXFEMM = XFEMM();
     
     % Create new problem
-    toolXFEMM.newFemmProblem(0,'axi','millimeters');
+    toolXFEMM.newFemmProblem(0,'pl','millimeters');
     
     % Add new materials
-    Magnet = newmaterial_mfemm(MagnetMaterial1, 'Mu_x', 1.0997785, 'Mu_y', 1.0997785, 'H_c', 890000, 'Sigma', 0.625);
+%     Magnet = newmaterial_mfemm(MagnetMaterial1, 'Mu_x', 1.0997785, 'Mu_y', 1.0997785, 'H_c', 890000, 'Sigma', 0.625);
+    Magnet = newmaterial_mfemm(MagnetMaterial1, 'Mu_x', 1.05, 'Mu_y', 1.05, 'H_c', 1.0231e+06, 'Sigma', 0.625);
     load('M19_24Ga');
     Iron = newmaterial_mfemm(IronMaterial, 'BHPoints', M19_24Ga, 'Sigma', 1.9);
     Coil = newmaterial_mfemm(CoilMaterial, 'Sigma', wire_cond, 'WireD', wire_diam);
@@ -617,10 +610,10 @@ if (DRAW_XFEMM)
     toolXFEMM.addmaterial(Coil);
        
     % Create components
-    for i = 1:NS/2
+    for i = 1:Q/2
         token1(i) = statorIronComp(i).make(toolXFEMM, toolXFEMM);    
     end
-    for i = 1:np
+    for i = 1:p
         token2(i) = moverIronComp(i).make(toolXFEMM, toolXFEMM);
         token3(i) = magnet1Comp(i).make(toolXFEMM, toolXFEMM);
         token4(i) = magnet2Comp(i).make(toolXFEMM, toolXFEMM);
@@ -635,62 +628,65 @@ if (DRAW_XFEMM)
     maxmesharea = 4;
     % Set other component parameters: group number (nodes, block labels),
     % maximum mesh area
-    for i = 1:NS/2
-        toolXFEMM.setCompParameters(token1(i),'groupNumber',1,...
+    for i = 1:Q/2
+        toolXFEMM.setCompParameters(token1(i),'groupNumber',3,...
             'maxMeshArea',DimMillimeter(statorironmesharea));
     end
-    for i = 1:np
-        toolXFEMM.setCompParameters(token2(i),'groupNumber',2,...
+    for i = 1:p
+        toolXFEMM.setCompParameters(token2(i),'groupNumber',1,...
             'maxMeshArea',DimMillimeter(rotorironmesharea));
-        toolXFEMM.setCompParameters(token3(i),'groupNumber',2,...
+        toolXFEMM.setCompParameters(token3(i),'groupNumber',11 + 3*(i - 1),...
             'maxMeshArea',DimMillimeter(magnetmesharea),...
             'magnetDirection',DimDegree(180));
-        toolXFEMM.setCompParameters(token4(i),'groupNumber',2,...
+        toolXFEMM.setCompParameters(token4(i),'groupNumber',12 + 3*(i - 1),...
             'maxMeshArea',DimMillimeter(magnetmesharea),...
             'magnetDirection',DimDegree(270));
-        toolXFEMM.setCompParameters(token5(i),'groupNumber',2,...
+        toolXFEMM.setCompParameters(token5(i),'groupNumber',13 + 3*(i - 1),...
             'maxMeshArea',DimMillimeter(magnetmesharea),...
             'magnetDirection',DimDegree(360));
     end
     
     % Draw coil, slot opening, and air-gap regions
     % Slot opening:
-    for i = 1:NS/2
+    for i = 1:Q/2
         toolXFEMM.drawLine(DimMillimeter([rs2,zs3-(i-1)*w_s]),DimMillimeter([rs2,zs4-(i-1)*w_s]));
         toolXFEMM.drawLine(DimMillimeter([rs2,zs7-(i-1)*w_s]),DimMillimeter([rs2,zs8-(i-1)*w_s]));
         toolXFEMM.drawLine(DimMillimeter([rs1,zs3-(i-1)*w_s]),DimMillimeter([rs1,zs4-(i-1)*w_s]));
         toolXFEMM.drawLine(DimMillimeter([rs1,zs7-(i-1)*w_s]),DimMillimeter([rs1,zs8-(i-1)*w_s]));   
     end
     % Stator air-gap:
-    toolXFEMM.drawLine(DimMillimeter([rs1-gap/2,zs1-(np-1)*w_r]),DimMillimeter([rs1-gap/2,zs10]),...
+    toolXFEMM.drawLine(DimMillimeter([rs1-delta/2,zs1-(p-1)*w_r]),DimMillimeter([rs1-delta/2,w_r]),...
         'groupNumber',2);
-    toolXFEMM.drawLine(DimMillimeter([rs1,zs1-(NS/2-1)*w_s]),DimMillimeter([rs1-gap/2,zs1-(np-1)*w_r]));
-    toolXFEMM.drawLine(DimMillimeter([rs1,zs10]),DimMillimeter([rs1-gap/2,zr6]));
+    toolXFEMM.drawLine(DimMillimeter([rs1,zs1-(Q/2-1)*w_s]),DimMillimeter([rs1-delta/2,zs1-(p-1)*w_r]));
+    toolXFEMM.drawLine(DimMillimeter([rs1,zs10]),DimMillimeter([rs1-delta/2,w_r]));
     % Mover air-gap: 
-    toolXFEMM.drawLine(DimMillimeter([rs1-gap/2,zs1-(np-1)*w_r]),DimMillimeter([rrnew,zr1-(np-1)*w_r]),...
+    toolXFEMM.drawLine(DimMillimeter([rs1-delta/2,zs1-(p-1)*w_r]),DimMillimeter([rrnew,zr1-(p-1)*w_r]),...
         'groupNumber',2);
-    toolXFEMM.drawLine(DimMillimeter([rs1-gap/2,zs10]),DimMillimeter([rrnew,zr6]),...
+    toolXFEMM.drawLine(DimMillimeter([rs1-delta/2,w_r]),DimMillimeter([rrnew,w_r]),...
         'groupNumber',2);
 
     % Draw a boundary and set air region
-    dist_center = (w_s*NS/2-w_r*np)/2;
-    R = max(np/2*w_r+stroke/2+20,sqrt((max(NS/2,np)/2*max(w_s,w_r))^2+r_so^2)+20);
-    BoundaryCenterXY = DimMillimeter([0,-(max(NS/2,np)-2)*max(w_s,w_r)/2-dist_center]);
-    BoundaryStartXY = DimMillimeter([0,-R-(max(NS/2,np)-2)*max(w_s,w_r)/2-dist_center]);
-    BoundaryEndXY = DimMillimeter([0,R-(max(NS/2,np)-2)*max(w_s,w_r)/2-dist_center]);
+%     dist_center = (w_s*Q/2-w_r*p)/2;
+    
+    dist_center = (w_r*(2 - p) + w_s*(Q/2 - 2))/2;
+        
+    R = max(p/2*w_r+stroke/2+20,sqrt((max(Q/2,p)/2*max(w_s,w_r))^2+r_so^2)+20);
+    BoundaryCenterXY = DimMillimeter([0,-(max(Q/2,p)-2)*max(w_s,w_r)/2]);
+    BoundaryStartXY = DimMillimeter([0,-R-(max(Q/2,p)-2)*max(w_s,w_r)/2]);
+    BoundaryEndXY = DimMillimeter([0,R-(max(Q/2,p)-2)*max(w_s,w_r)/2]);
     toolXFEMM.drawArc(BoundaryCenterXY,BoundaryStartXY,BoundaryEndXY);
     toolXFEMM.drawLine(BoundaryStartXY,BoundaryEndXY);
     toolXFEMM.addAirRegion(DimMillimeter([rs5+10,(zs1+zs10)/2]),...
-        'groupNumber',1,'maxMeshArea',DimMillimeter(maxmesharea));
-    for i = 1:NS/2
+        'groupNumber',0,'maxMeshArea',DimMillimeter(maxmesharea));
+    for i = 1:Q/2
         toolXFEMM.addAirRegion(DimMillimeter([(rs1+rs2)/2,(zs7+zs8)/2-(i-1)*w_s]),...
-            'groupNumber',1,'maxMeshArea',DimMillimeter(slotopeningmesharea));
+            'groupNumber',5,'maxMeshArea',DimMillimeter(slotopeningmesharea));
         toolXFEMM.addAirRegion(DimMillimeter([(rs1+rs2)/2,(zs3+zs4)/2-(i-1)*w_s]),...
-            'groupNumber',1,'maxMeshArea',DimMillimeter(slotopeningmesharea));
+            'groupNumber',5,'maxMeshArea',DimMillimeter(slotopeningmesharea));
     end
-    toolXFEMM.addAirRegion(DimMillimeter([rs1-gap/4,(zr1+zr6)/2]),...
-        'groupNumber',1,'maxMeshArea',DimMillimeter(airgapmesharea));
-    toolXFEMM.addAirRegion(DimMillimeter([rr3+gap/4,(zr1+zr6)/2]),...
+    toolXFEMM.addAirRegion(DimMillimeter([rs1-delta/4,w_s/2]),...
+        'groupNumber',5,'maxMeshArea',DimMillimeter(airgapmesharea));
+    toolXFEMM.addAirRegion(DimMillimeter([rr3+delta/4,w_r/2]),...
         'groupNumber',2,'maxMeshArea',DimMillimeter(airgapmesharea)); 
     
     % Remove overlaps
@@ -699,23 +695,52 @@ if (DRAW_XFEMM)
     % Set other parameters (using xfemm's own functions)
     
     % Add circuit
-    FemmProblem = addcircuit_mfemm(FemmProblem, 'Circuit 1', ...
-        'TotalAmps_re', J*coilfillfactor*slot_area);
+%     FemmProblem = addcircuit_mfemm(FemmProblem, 'Circuit 1', ...
+%         'TotalAmps_re', J*coilfillfactor*slot_area);
     
-    % Add coil material
-    for i = 1:NS/2
-        FemmProblem = addblocklabel_mfemm(FemmProblem, (rs3+rs4)/2, (zs7+zs8)/2-(i-1)*w_s,...
-            'BlockType', CoilMaterial, 'InCircuit', 'Circuit 1', 'Turns', 1,...
-            'MaxArea',coilmesharea,'InGroup',1);
-        FemmProblem = addblocklabel_mfemm(FemmProblem, (rs3+rs4)/2, (zs3+zs4)/2-(i-1)*w_s,...
-            'BlockType', CoilMaterial, 'InCircuit', 'Circuit 1', 'Turns', -1,...
-            'MaxArea',coilmesharea,'InGroup',1);
+    if source.phases == 1
+        FemmProblem = addcircuit_mfemm(FemmProblem, 'Circuit 1', ...
+            'TotalAmps_re', 0);
     end
-    otherParams = 1;
+
+    if source.phases == 3
+        FemmProblem = addcircuit_mfemm(FemmProblem, 'U', ...
+            'TotalAmps_re', 0);
+        FemmProblem = addcircuit_mfemm(FemmProblem, 'V', ...
+            'TotalAmps_re', 0);
+        FemmProblem = addcircuit_mfemm(FemmProblem, 'W', ...
+            'TotalAmps_re', 0);
+    end
+    % Add coil material
+    if source.phases == 1
+        for i = 1:Q/2
+            FemmProblem = addblocklabel_mfemm(FemmProblem, (rs3+rs4)/2, (zs7+zs8)/2-(i-1)*w_s,...
+                'BlockType', CoilMaterial, 'InCircuit', 'Circuit 1', 'Turns', -1,...
+                'MaxArea',coilmesharea,'InGroup',4);
+            FemmProblem = addblocklabel_mfemm(FemmProblem, (rs3+rs4)/2, (zs3+zs4)/2-(i-1)*w_s,...
+                'BlockType', CoilMaterial, 'InCircuit', 'Circuit 1', 'Turns', 1,...
+                'MaxArea',coilmesharea,'InGroup',4);
+        end
+    elseif source.phases == 3
+        R_wdg = (rs3 + rs4)/2;
+        Z_wdg0 = (zs7 + zs8)/2;
+        zQ = source.winding.slots.zQ;
+        circuit = source.winding.slots.circuit;
+        
+        for i = 1:Q
+            FemmProblem = addblocklabel_mfemm(FemmProblem, R_wdg, Z_wdg0-(i-1)*w_s/2,...
+                'BlockType', CoilMaterial, 'InCircuit', circuit{i}, 'Turns', zQ(i),...
+                'MaxArea',coilmesharea,'InGroup',4);           
+        end        
+    end
+        otherParams = 1;
     
     % Center mover and stator
+    FemmProblem = translategroups_mfemm(FemmProblem, 1, 0, -dist_center);
     FemmProblem = translategroups_mfemm(FemmProblem, 2, 0, -dist_center);
-
+    for m = 11:(10+3*source.p)
+        FemmProblem = translategroups_mfemm(FemmProblem, m, 0, -dist_center);
+    end
 end
 
 if DRAW_MAGNET
@@ -727,7 +752,10 @@ if DRAW_MAGNET
     returnParameter.motionComponent = motionComponent;
     returnParameter.stroke = stroke;
 elseif DRAW_XFEMM
-    returnParameter = FemmProblem;
+    returnParameter.FemmProblem = FemmProblem;
+    returnParameter.slot_area = slot_area;
+    returnParameter.mover_weight=1;
+    returnParameter.motor_volume=1;
 end
 
 end
