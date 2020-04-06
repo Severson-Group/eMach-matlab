@@ -1,7 +1,7 @@
 % construct: adjust some parts to any number of slots and poles or use
 % symmetry
 % construct: XFEMM with pure components
-% extract parameters: force, field values, losses
+% extract field values if needed (maybe for PM loss at post-processing)
 % get results for different number of slots/poles
 % try a different motor: single-sided or double-sided flat
 
@@ -20,7 +20,8 @@ source.NS = 2;
 source.np = 1;
 num_iter = 30;
 
-params = [73.3282125684640,0.585679708175381,0.490939703883842,0.510995493884558,0.334803805164151,0.698325727773407,11.1902820494481,1.07027060534535,62.8885392079727,1.23142283575328,0.127156092792599,0.341968957871397,1,0.784733853086332];
+% params = [73.3282125684640,0.585679708175381,0.490939703883842,0.510995493884558,0.334803805164151,0.698325727773407,11.1902820494481,1.07027060534535,62.8885392079727,1.23142283575328,0.127156092792599,0.341968957871397,1,0.784733853086332];
+params = [73.3282125684640,0.585679708175381,0.490939703883842,0.510995493884558,0.334803805164151,0.698325727773407,11.1902820494481,1.07027060534535,62.8885392079727,1.23142283575328,0.127156092792599,0.341968957871397,1,1];
 params = round(params,2);
 
 returnParameter = ConstructLinearMotorExample(1, 0, 0,params,source);
@@ -57,6 +58,8 @@ if solveStatic
     % Solve static
     solData = invoke(toolMn.doc, 'solveStatic2d');
     
+    
+    
 elseif solveTransient
     
     Freq = source.f; %Hz
@@ -92,12 +95,85 @@ elseif solveTransient
     % Set up transient solver parameters
     Period = 1/Freq*1e3; %ms
     timeStep = Period/50; %ms
-    endTime = Period; %ms
+    startTime = 2*Period; %ms
+    endTime = 3*Period; %ms
     timeSettings = [0, timeStep, endTime];
     
     mn_d_setparameter(toolMn.doc, '', 'TimeSteps', ...
         sprintf('[%g %%ms, %g %%ms, %g %%ms]', timeSettings), ...
         get(toolMn.consts,'infoArrayParameter'));
+    
+    % Set transient solver options and solve
+    mn_d_setparameter(toolMn.doc,'','TransientAveragePowerLossStartTime', [sprintf("%d",startTime),'%ms'],...
+        get(toolMn.consts,'InfoNumberParameter')); %Transient Power loss start time
+    mn_d_setparameter(toolMn.doc,'','TransientAveragePowerLossStopTime', [sprintf("%d",endTime),'%ms'],...
+        get(toolMn.consts,'InfoNumberParameter')); %Transient Power loss stop time
+      
     % Solve transient with motion
     solData = invoke(toolMn.doc, 'solveTransient2dwithMotion');
+    
+    %% Post Processing
+    time = mn_getTimeInstants(toolMn.mn, 1, true); %Get the time instants
+
+    % Forces on moving components
+    bodyID = mn_findBody(toolMn.mn, toolMn.doc, 'moverIronComp1', 1); %Find body ID of the mover
+                                                                    
+    forcesY = mn_readForceOnBody(toolMn.mn, toolMn.doc, bodyID, 1, 1); %Find x direction force on the mover
+    
+    % Ohmic losses (includes eddy current losses)
+    StatorOhmicLosses = mn_readConductorOhmicLoss(toolMn.mn, toolMn.doc, 'statorIronComp1',1);
+    StatorOhmicLosses = mean(StatorOhmicLosses(end-round(Period/timeStep):end,2));
+    MoverOhmicLosses = mn_readConductorOhmicLoss(toolMn.mn, toolMn.doc, 'moverIronComp1',1);
+    MoverOhmicLosses = mean(MoverOhmicLosses(end-round(Period/timeStep):end,2));
+    coil11OhmicLosses = mn_readConductorOhmicLoss(toolMn.mn, toolMn.doc, 'coil11Comp1',1);
+    coil11OhmicLosses = mean(coil11OhmicLosses(end-round(Period/timeStep):end,2)); 
+    coil12OhmicLosses = mn_readConductorOhmicLoss(toolMn.mn, toolMn.doc, 'coil12Comp1',1);
+    coil12OhmicLosses = mean(coil12OhmicLosses(end-round(Period/timeStep):end,2)); 
+    coil21OhmicLosses = mn_readConductorOhmicLoss(toolMn.mn, toolMn.doc, 'coil21Comp1',1);
+    coil21OhmicLosses = mean(coil21OhmicLosses(end-round(Period/timeStep):end,2)); 
+    coil22OhmicLosses = mn_readConductorOhmicLoss(toolMn.mn, toolMn.doc, 'coil22Comp1',1);
+    coil22OhmicLosses = mean(coil22OhmicLosses(end-round(Period/timeStep):end,2)); 
+    coilOhmicLosses = coil11OhmicLosses+coil12OhmicLosses+coil21OhmicLosses+coil22OhmicLosses;
+    
+    % Iron losses using Steinmetz equations
+    [hystLoss1, ecLoss1] = mn_ds_getIronLossInComponent(toolMn.mn, ...
+                                'statorIronComp1', 1);
+    [hystLoss2, ecLoss2] = mn_ds_getIronLossInComponent(toolMn.mn, ...
+                                'moverIronComp1', 1);
+    hystLoss = hystLoss1 + hystLoss2;
+    ecLoss = ecLoss1+ecLoss2;
+    
+    % Magnet losses
+    magnets =[{'magnet1Comp1'},{'magnet2Comp1'},{'magnet3Comp1'}];
+
+    for i = 1:length(magnets)
+         PMLosses = mn_readConductorOhmicLoss(toolMn.mn, ...
+                                toolMn.doc, magnets{i}, 1);
+         PMLoss(i) = mean(PMLosses(end-round(Period/timeStep):end,2)); %Compute Magnet loss starting from the avg transient power loss start time
+    end
+    totalPMLoss = sum(PMLoss);
+    
+    % Total loss
+    allLossesECSolve = StatorOhmicLosses+MoverOhmicLosses+hystLoss+coilOhmicLosses+totalPMLoss;
+    allLosses = ecLoss+hystLoss+coilOhmicLosses+totalPMLoss;
+    
+    % Output power
+    force = -forcesY(end-round(Period/timeStep):end,2);
+    speed = stroke/2*2*pi*Freq*sin(2*pi*Freq*time/1000);      
+    speed = speed(end-round(Period/timeStep):end);    
+    Pout = mean(force.*speed);
+    
+    % Efficiency
+    EffECSolve = Pout/(Pout+allLossesECSolve);
+    Eff = Pout/(Pout+allLosses);
+    
+    Output.Eff = Eff;
+    Output.Pout = Pout;
+    Output.force = force;
+    Output.time = time(101:151);
+    
+% %%save('AFPMSolution.mat','solutiondata');
+% %% dos('taskkill /F /IM MagNet.exe');
+% invoke(toolMn.mn, 'processcommand','CALL close(False)'); %%Close MagNet
+    
 end
