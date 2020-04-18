@@ -621,13 +621,33 @@ if (DRAW_XFEMM)
         token4(i) = magnet2Comp(i).make(toolXFEMM, toolXFEMM);
         token5(i) = magnet3Comp(i).make(toolXFEMM, toolXFEMM); 
     end
-    airgapmesharea = 0.4;
-    rotorironmesharea = 2;
-    statorironmesharea = 2;
-    coilmesharea = 3;
-    magnetmesharea = 2;
-    slotopeningmesharea = 2.5;
-    maxmesharea = 4;
+    
+    R = max(p/2*w_r+stroke/2+20,sqrt((max(Q/2,p)/2*max(w_s,w_r))^2+r_so^2)+20);
+    AreaAirGap = delta*w_r+2*d_re*w_rs;
+    AreaMoverIron = source.p*(w_r*d_ri+2*w_rs*(d_rm-d_re));
+    AreaStatorIron = Q/2*4*(w_s/4*d_sy)+((d_st + d_sp)*w_st/2)+...
+        ((w_s/4-w_so/2-w_st/2)*d_so)+(0.5*(w_s/4-w_so/2-w_st/2)*(d_sp-d_so));
+    slot_area = w_ss*d_st + (d_sp - d_so)*0.5*(w_so + w_ss);
+    AreaPM = p*(w_r-2*w_rs)*d_rm;
+    AreaSlotOpening = d_so*w_so;
+    RemainingArea = pi*R^2-Q/2*w_s*(r_so-r_ri);
+    
+    slot_areaBase = 234.6433;
+    AreaMoverIronBase = 709.2811;
+    AreaStatorIronBase = 1.0049e+03;
+    AreaPMBase = 130.0667;
+    AreaSlotOpeningBase = 10.8059;
+    AreaAirGapBase = 87.5057;
+    RemainingAreaBase = 2.8444e+04;
+    
+    airgapmesharea = round(0.6*AreaAirGap/AreaAirGapBase,2);
+    rotorironmesharea = round(3*AreaMoverIron/AreaMoverIronBase,2);
+    statorironmesharea = round(3*AreaStatorIron/AreaStatorIronBase,2);
+    coilmesharea = round(4*slot_area/slot_areaBase,2);
+    magnetmesharea = round(3*AreaPM/AreaPMBase,2);
+    slotopeningmesharea = round(3*AreaSlotOpening/AreaSlotOpeningBase,2);
+    maxmesharea = round(6*RemainingArea/RemainingAreaBase,2);
+    
     % Set other component parameters: group number (nodes, block labels),
     % maximum mesh area
     for i = 1:Q/2
@@ -671,8 +691,7 @@ if (DRAW_XFEMM)
 %     dist_center = (w_s*Q/2-w_r*p)/2;
     
     dist_center = (w_r*(2 - p) + w_s*(Q/2 - 2))/2;
-        
-    R = max(p/2*w_r+stroke/2+20,sqrt((max(Q/2,p)/2*max(w_s,w_r))^2+r_so^2)+20);
+      
     BoundaryCenterXY = DimMillimeter([0,-(max(Q/2,p)-2)*max(w_s,w_r)/2]);
     BoundaryStartXY = DimMillimeter([0,-R-(max(Q/2,p)-2)*max(w_s,w_r)/2]);
     BoundaryEndXY = DimMillimeter([0,R-(max(Q/2,p)-2)*max(w_s,w_r)/2]);
