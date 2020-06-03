@@ -63,6 +63,13 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
            % TODO:
            % Implement this...
         end
+        
+        function setCores(obj, numCores)
+            %SETCORES Sets the number of cores
+            %setCores(numCores) sets the numCores number of cores
+            cores = sprintf('Call getDocument().setNumberOfMultiCoreSolveThreads(%i)',numCores);           
+            invoke(obj.mn, 'processcommand', cores);
+        end
 
         function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line in the current MagNet document.
