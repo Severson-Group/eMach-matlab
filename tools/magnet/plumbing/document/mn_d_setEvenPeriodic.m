@@ -1,13 +1,22 @@
 function[status] = mn_d_setEvenPeriodic(mn, name, scaleFactor, rotationAngle, rotationAxis, mirrorNormal, shiftVector, center)
 %MN_D_SETEVENPERIODIC Makes the boundary condition even periodic
-%   mn_d_setEvenPeriodic(mn, name,scale_factor, rotation_angle, RotationAxis, MirrorNormal, ShiftVector, Center)
-%   name: name assigned to the boundary condition
-%   scaleFactor: set the scale_factor value
-%   rotationAngle: set the angle of rotation in degrees
-%   rotationAxis: rotation axis about which rotation_angle is set
-%   mirrorNormal: normal vector to the mirror plane
-%   shiftVector: coordinates of the shift vector in (mm)
-%   center: reference point coordinates in (mm)
+%   mn_d_setEvenPeriodic(mn, name, scaleFactor, rotationAngle, rotationAxis, mirrorNormal, shiftVector, center)
+%   
+%   name - name assigned to the boundary condition
+%
+%   scaleFactor - scaling factor
+%
+%   rotationAngle - angle of rotation in degrees
+%
+%   rotationAxis - rotation axis about which rotation_angle is set
+%
+%   mirrorNormal - normal vector to the mirror plane
+%
+%   shiftVector - coordinates of the shift vector
+%   
+%   center - reference point coordinates
+%   
+%   Return value - 1 if an error occured and 0 if command successfully executed
 %   This is a wrapper for Document::setEvenPeriodic
 
  if ~isempty(shiftVector)
