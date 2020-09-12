@@ -67,6 +67,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function setCores(obj, numCores)
             %SETCORES Sets the number of cores
             %setCores(numCores) sets the numCores number of cores
+            
             cores = sprintf('Call getDocument().setNumberOfMultiCoreSolveThreads(%i)',numCores);           
             invoke(obj.mn, 'processcommand', cores);
         end
