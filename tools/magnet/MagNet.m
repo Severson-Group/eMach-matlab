@@ -1,4 +1,4 @@
-classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
+classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %MAGNET Encapsulation for the MagNet FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -64,7 +64,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
            % Implement this...
         end
 
-        function [line] = drawLine(obj, startxy, endxy)
+        function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line in the current MagNet document.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
             %
@@ -79,11 +79,12 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
 
             if nargout > 0
                 invoke(obj.mn, 'processcommand', 'call setvariant(0, line, "matlab")')
-                line = invoke(obj.mn, 'getvariant', 0, 'matlab');    
+                line = invoke(obj.mn, 'getvariant', 0, 'matlab');
+                tokenDraw = TokenDraw(line, 0);
             end
         end
         
-        function [arc] = drawArc(obj, centerxy, startxy, endxy)
+        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current MagNet document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
@@ -99,7 +100,8 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
 
             if nargout > 0
                 invoke(obj.mn, 'processcommand', 'call setvariant(0, arc, "matlab")')
-                arc = invoke(obj.mn, 'getvariant', 0, 'matlab');    
+                arc = invoke(obj.mn, 'getvariant', 0, 'matlab');   
+                tokenDraw = TokenDraw(arc, 1);
             end   
         end
         
@@ -115,7 +117,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             % lines and surfaces that need to be selected
         end
         
-        function new = revolve(obj, name, material, center, axis, angle)
+        function new = revolve(obj, name, material, center, axis, angle, token)
             %REVOLVE Revolve a cross-section along an arc    
             %new = revolve(obj, name, material, center, axis, angle)
             %   name   - name of the newly extruded component
@@ -138,7 +140,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
                     angle.toDegrees(), name, material, flags);
         end
         
-        function new = extrude(obj, name, material, depth)
+        function new = extrude(obj, name, material, depth, token)
             validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});
@@ -213,7 +215,7 @@ classdef MagNet < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)

@@ -21,7 +21,7 @@ classdef MakeSolidBase
     end
     
     methods(Abstract = true)
-        run(obj, name, material, csToken, maker)
+        [tokenMake] = run(obj, name, material, csToken, maker)
     end
 end
 
