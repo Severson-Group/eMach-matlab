@@ -2,7 +2,7 @@
 
 This example draws and solves an equivalent 2D model of a coreless axial flux machine. More details about the 2D modeling technique can be found in [1].
 
-The parameterized geometry is available [here](/AFPM2DDrawing.pdf)
+The parameterized geometry is available [here](AFPM2DDrawing.pdf)
 
 ## Steps
 
