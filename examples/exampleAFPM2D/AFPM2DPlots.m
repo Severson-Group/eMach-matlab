@@ -1,14 +1,16 @@
 clear all;
 close all;
 clc;
-load('AFPMSolution.mat')
+load('AFPMSolution.mat') % load the solution data
+
+%% Make plots
 
 figure(1)
-plot(solutiondata.time,-solutiondata.torque,'color','r','linewidth',2.0);
-ylim([0,13])
+plot(solutiondata.time,-solutiondata.force,'color','r','linewidth',2.0);
+ylim([100,200])
 xlabel('Time [ms]');
-ylabel('Torque [Nm]');
-title('Torque from 2D-Equivalent Model');
+ylabel('Force [N]');
+title('Force in the x-direction');
 
 figure(2)
 plot(solutiondata.time,-solutiondata.flux_A,'color','r','linewidth',2.0);
