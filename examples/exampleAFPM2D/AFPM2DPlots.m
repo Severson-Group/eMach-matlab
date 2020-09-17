@@ -16,8 +16,8 @@ hold on
 plot(solutiondata.time,-solutiondata.flux_B,'color','m','linewidth',2.0);
 plot(solutiondata.time,-solutiondata.flux_C,'color','b','linewidth',2.0);
 xlabel('Time [ms]');
-ylabel('Flux Linkage [Wb]');
-title('Flux Linkage from 2D-Equivalent Model');
+ylabel('Flux linkage [Wb]');
+title('Flux linkage');
 legend(['Phase A'],['Phase B'],['Phase C']);
 
 figure(3)
@@ -27,7 +27,7 @@ plot(solutiondata.time,solutiondata.voltage_B,'color','m','linewidth',2.0);
 plot(solutiondata.time,solutiondata.voltage_C,'color','b','linewidth',2.0);
 xlabel('Time [ms]');
 ylabel('Back EMF [V]');
-title('Back EMF from 2D-Equivalent Model');
+title('Back EMF');
 legend(['Phase A'],['Phase B'],['Phase C']);
 ylim([-75,75]);
 
