@@ -6,8 +6,8 @@ The parameterized geometry is available [here](AFPM2DDrawing.pdf)
 
 ## Steps
 
-- Run `TransientSolveAFPM2DExample.m`. This creates the geometry, assigns materials, and runs the FEA solve. The FEA results are saved into a `.mat` file.
-- Run AFPM2DPlots.m to generate plots from the saved FEA results.
+- Run [TransientSolveAFPM2DExample.m](/TransientSolveAFPM2DExample.m). This creates the geometry, assigns materials, and runs the FEA solve. The FEA results are saved into a `.mat` file.
+- Run [AFPM2DPlots.m](/AFPM2DPlots.m) to generate plots from the saved FEA results.
 
 ## References
 
