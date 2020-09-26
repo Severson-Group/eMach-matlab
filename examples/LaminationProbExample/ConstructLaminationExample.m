@@ -90,6 +90,14 @@ condR.make(toolMn,toolMn);
 toolMn.viewAll();
 
 %% Laminations
+%REPLACE THE MATERIAL WITH A CONDUCTIVE STEEL MATERIAL MODEL
+new_material = 'M-19 24 Ga non-zero conductivity';
+old_material = 'M-19 24 Ga';
+old_material_category = 'Non-Oriented AISI Silicon Steel Materials';
+conductivity = 1900000;
+
+mn_copySystemMaterial(toolMn.mn,old_material_category,old_material,new_material)
+mn_setElectricConductivity(toolMn.mn,new_material,conductivity)
 
 for i = 1:n
     lamCS(i) = CrossSectSolidRect( ...
@@ -102,11 +110,10 @@ for i = 1:n
         ) ...
         );
     
-    %REPLACE THE MATERIAL WITH A CONDUCTIVE STEEL MATERIAL MODEL
     compLam(i) = Component( ...
         'name', ['Lam' num2str(i)], ...
         'crossSections', lamCS(i), ...
-        'material', MaterialGeneric('name', 'M-19 24 Ga non-zero conductivity'), ... %  Hiperco 50A 0.006 
+        'material', MaterialGeneric('name', new_material), ... %  Hiperco 50A 0.006 
         'makeSolid', MakeExtrude( ...
             'location', Location3D( ...
                 'anchor_xyz', DimMillimeter([0,0,0]), ...
