@@ -1,10 +1,9 @@
-clear all;
-close all;
-clc;
+clear
+close all
+clc
 load('AFPMSolution.mat') % load the solution data
 
 %% Make plots
-
 figure(1)
 plot(solutiondata.time,-solutiondata.force,'color','r','linewidth',2.0);
 ylim([100,200])
