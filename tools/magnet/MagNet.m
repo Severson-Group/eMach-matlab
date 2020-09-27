@@ -63,6 +63,14 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
            % TODO:
            % Implement this...
         end
+        
+        function setCores(obj, numCores)
+            %SETCORES Sets the number of cores
+            %setCores(numCores) sets the numCores number of cores
+            
+            cores = sprintf('Call getDocument().setNumberOfMultiCoreSolveThreads(%i)',numCores);           
+            invoke(obj.mn, 'processcommand', cores);
+        end
 
         function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line in the current MagNet document.
@@ -78,7 +86,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             );
 
             if nargout > 0
-                invoke(obj.mn, 'processcommand', 'call setvariant(0, line, "matlab")')
+                invoke(obj.mn, 'processcommand', 'call setvariant(0, line, "matlab")');
                 line = invoke(obj.mn, 'getvariant', 0, 'matlab');
                 tokenDraw = TokenDraw(line, 0);
             end
@@ -91,7 +99,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %
             %   This is a wrapper for the Document::View::newArc function.
 
-            invoke (obj.mn, 'processcommand', 'redim arc(0)')
+            invoke (obj.mn, 'processcommand', 'redim arc(0)');
             invoke (obj.mn, 'processcommand', sprintf(...
                 'call getDocument.getView.newArc(%f, %f, %f, %f, %f, %f, arc)', ...
                 centerxy(1), centerxy(2), ...
@@ -99,7 +107,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 endxy(1), endxy(2)));
 
             if nargout > 0
-                invoke(obj.mn, 'processcommand', 'call setvariant(0, arc, "matlab")')
+                invoke(obj.mn, 'processcommand', 'call setvariant(0, arc, "matlab")');
                 arc = invoke(obj.mn, 'getvariant', 0, 'matlab');   
                 tokenDraw = TokenDraw(arc, 1);
             end   
@@ -129,8 +137,8 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});            
-            validateattributes(center, {'numeric'}, {'size',[1,2]})
-            validateattributes(axis, {'numeric'}, {'size',[1,2]})
+            validateattributes(center, {'numeric'}, {'size',[1,2]});
+            validateattributes(axis, {'numeric'}, {'size',[1,2]});
             validateattributes(angle, {'DimAngular'}, {'nonempty'});
             flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
             
