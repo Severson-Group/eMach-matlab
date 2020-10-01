@@ -46,4 +46,10 @@ Several useful resources on the SOLIDD guidelines are assembled here:
 - [Matlab blog on inversion of control](https://blogs.mathworks.com/developer/2016/02/16/inversion-of-control/)
 - [Matlab blog on dependency inversion](https://blogs.mathworks.com/developer/2016/02/24/dependency-injection/)
 
+### In Function Documentation
+Providing clear and concise in-function documentation makes open source code easy to understand and hence more useful. Contributors to eMach should try to follow the Matlab function documentation style as closely as possible.
+The salient features of the Matlab documentation style are as follows
+
+- In the documentation, the function name is typed in upper case, i.e. `toInch()` as `TOINCH()`. If done so, Matlab renders the function name in bold face.
+- The documentation first provides a concise description of the functionality.
 
