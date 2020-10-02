@@ -63,9 +63,10 @@ If the snippets provided in each bullet point are all brought together, the func
 
 ![image](./exampleMatlabDocumentation.PNG)
 
-Notice the indentation in the above screenshot. This is consistent with Matlab style. Specifically, observe the following
+Notice the indentation in the above screenshot. This is consistent with Matlab style. Specifically, the following are to be noted
 - On the first line, the function name `MN_D_MAKEMOTIONCOMPONENT` has no indentation. However, there is a tab space between the function name and the one line description. 
 - In all other lines, the text is a tab away from `%`.
+- Follow the MATLAB editor's guidelines on maximum line length
 
 If formatted as above, typing `help mn_d_makeMotionComponent` in the Matlab command window, and hitting enter key gives the following output
 
