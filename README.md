@@ -60,6 +60,7 @@ The salient features of the Matlab documentation style are described with an exa
 - Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
  
 If the snippets provided in each bullet point are all brought together, the function documentation will look as follows
+
 ![image](./exampleMatlabDocumentation.PNG)
 
 Notice the indentation in the above screenshot. This is consistent with Matlab style. Specifically, observe the following
@@ -67,4 +68,5 @@ Notice the indentation in the above screenshot. This is consistent with Matlab s
 - In all other lines, the text is a tab away from `%`.
 
 If formatted as above, typing `help mn_d_makeMotionComponent` in the Matlab command window, and hitting enter key gives the following output
+
 ![image](./exampleMatlabHelp.PNG) 
