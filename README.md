@@ -67,4 +67,4 @@ Notice the indentation in the above screenshot. This is consistent with Matlab s
 - In all other lines, the text is a tab away from `%`.
 
 If formatted as above, typing `help mn_d_makeMotionComponent` in the Matlab command window, and hitting enter key gives the following output
-![image](./exampleMatlabDocumentation) 
+![image](./exampleMatlabHelp.PNG) 
