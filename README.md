@@ -60,5 +60,5 @@ The salient features of the Matlab documentation style are described with an exa
 - Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
  
 If the snippets provided in each bullet point are brought together, the function documentation will look as follows
-
+[!image](./exampleMatlabDocumentation.PNG)
  
