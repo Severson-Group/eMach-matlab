@@ -48,8 +48,17 @@ Several useful resources on the SOLIDD guidelines are assembled here:
 
 ### In Function Documentation
 Providing clear and concise in-function documentation makes open source code easy to understand and hence more useful. Contributors to eMach should try to follow the Matlab function documentation style as closely as possible.
-The salient features of the Matlab documentation style are as follows
+The salient features of the Matlab documentation style are described with an example below
 
-- In the documentation, the function name is typed in upper case, i.e. `toInch()` as `TOINCH()`. If done so, Matlab renders the function name in bold face.
-- The documentation first provides a concise description of the functionality.
+- Throughout the documentation, the function name should be typed in upper case, i.e. `mn_d_makeMotionComponent()` as `MN_D_MAKEMOTIONCOMPONENT()`. If done so, Matlab renders the function name in bold face.
+- A brief description of the function should be provided in the first line. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
+- The function signature is provided next. Example: `motion = MN_D_MAKEMOTIONCOMPONENT(mn, componentName) creates a motion component to move the geometry named componentName`
+- The function arguments are described for different use cases. Example: `mn is the MagNet object. componentName is a string containing the name of the geometry to be included in the motion component. If multiple components are to be moved, componentName will be a cell array of strings containing names of the geometries to be included in the motion component.`If there are optional arguments, each of those should be described.
+- The return value should be described. Example: `This function returns motion, which is a string containing name of the motion component created`
+- Provide example use cases. Be as descriptive as possible. Example: `For example, motion = MN_D_MAKEMOTIONCOMPONENT(mn, 'rotorIron'), creates a motion component to move the geometry 'rotorIron'. motion2 = MN_D_MAKEMOTIONCOMPONENT(mn, [{'rotorIron'},{'magnet1'},{'magnet2'}]), creates a motion component to move the geometries 'rotorIron', 'magnet1' and 'magnet2' as one single block.`
+- Iff applicable, specify what function in the FEA tool, this is a wrapper for. Example: `This is a wrapper for Document::makeMotionComponent` 
+- Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
+ 
+If the snippets provided in each bullet point are brought together, the function documentation will look as follows
 
+ 
