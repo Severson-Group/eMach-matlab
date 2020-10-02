@@ -59,6 +59,14 @@ The salient features of the Matlab documentation style are described with an exa
 - Iff applicable, specify what function in the FEA tool, this is a wrapper for. Example: `This is a wrapper for Document::makeMotionComponent` 
 - Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
  
-If the snippets provided in each bullet point are brought together, the function documentation will look as follows
+If the snippets provided in each bullet point are all brought together, the function documentation will look as follows
 
- 
+![image](./exampleMatlabDocumentation.PNG)
+
+Notice the indentation in the above screenshot. This is consistent with Matlab style. Specifically, observe the following
+- On the first line, the function name `MN_D_MAKEMOTIONCOMPONENT` has no indentation. However, there is a tab space between the function name and the one line description. 
+- In all other lines, the text is a tab away from `%`.
+
+If formatted as above, typing `help mn_d_makeMotionComponent` in the Matlab command window, and hitting enter key gives the following output
+
+![image](./exampleMatlabHelp.PNG) 
