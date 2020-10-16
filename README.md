@@ -57,10 +57,10 @@ The salient features of the Matlab documentation style are described with an exa
    1. *Function signature description:* The function signature is followed immediately by a brief one sentence description of what that function accomplishes with that function signature.
    2. *Argument description:* The function arguments are described for different use cases. This is expected to directly continue from the function signature. I.e., there is no whitespace vertically between the function signature and the description of arguments.
    3. *Return value description:* The return value should be described. This will be in a new paragraph following the argument description.
-   4. *Example use cases:* Provide example use cases, with each example in its own paragraph. Be as descriptive as possible. Example: `For example, motion = MN_D_MAKEMOTIONCOMPONENT(mn, 'rotorIron'), creates a motion component to move the geometry 'rotorIron'`
+   4. *Example use cases:* Provide example use cases, with each example in its own paragraph. Be as descriptive as possible.
    
    **Note:** If a function has multiple function signatures, all of them must be described, in order of fewest arguments provided to most arguments provided. Each subsequent function signature only adds additional information - there is no need to re-describe the arguments and return values previously described.
-3. **Related functions:** Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
+3. **Related functions:** Finally, list related functions that a user is likely to use along with this function.
  
 An example function documentation will look as follows
 
@@ -94,7 +94,7 @@ An example function documentation will look as follows
 Notice the indentation in the above screenshot. This is consistent with Matlab style. Specifically, the following are to be noted
 - On the first line, the function name `MN_D_MAKEMOTIONCOMPONENT` has no indentation. However, there is a tab space between the function name and the one line description. 
 - In all other lines, the text is a tab away from `%`.
-- Follow the MATLAB editor's guidelines on maximum line length
+- Follow the MATLAB editor guidelines on maximum line length
 
 If formatted as above, typing `help mn_d_makeMotionComponent` in the Matlab command window, and hitting enter key gives the following output
 
