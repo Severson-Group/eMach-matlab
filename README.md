@@ -47,21 +47,49 @@ Several useful resources on the SOLIDD guidelines are assembled here:
 - [Matlab blog on dependency inversion](https://blogs.mathworks.com/developer/2016/02/24/dependency-injection/)
 
 ### In Function Documentation
-Providing clear and concise in-function documentation makes open source code easy to understand and hence more useful. Contributors to eMach should try to follow the Matlab function documentation style as closely as possible.
+Providing clear and concise in-function documentation makes open source code easy to understand and more useful. Contributors to eMach should follow the MATLAB function documentation guidelines.
+Throughout the documentation, the function name should be typed in upper case, i.e. `mn_d_makeMotionComponent()` as `MN_D_MAKEMOTIONCOMPONENT()`. If done so, MATLAB renders the function name in bold face.
+
 The salient features of the Matlab documentation style are described with an example below
 
-- Throughout the documentation, the function name should be typed in upper case, i.e. `mn_d_makeMotionComponent()` as `MN_D_MAKEMOTIONCOMPONENT()`. If done so, Matlab renders the function name in bold face.
-- A brief description of the function should be provided in the first line. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
-- The function signature is provided next. Example: `motion = MN_D_MAKEMOTIONCOMPONENT(mn, componentName) creates a motion component to move the geometry named componentName`
-- The function arguments are described for different use cases. Example: `mn is the MagNet object. componentName is a string containing the name of the geometry to be included in the motion component. If multiple components are to be moved, componentName will be a cell array of strings containing names of the geometries to be included in the motion component.`If there are optional arguments, each of those should be described.
-- The return value should be described. Example: `This function returns motion, which is a string containing name of the motion component created`
-- Provide example use cases. Be as descriptive as possible. Example: `For example, motion = MN_D_MAKEMOTIONCOMPONENT(mn, 'rotorIron'), creates a motion component to move the geometry 'rotorIron'. motion2 = MN_D_MAKEMOTIONCOMPONENT(mn, [{'rotorIron'},{'magnet1'},{'magnet2'}]), creates a motion component to move the geometries 'rotorIron', 'magnet1' and 'magnet2' as one single block.`
-- If applicable, specify what function in the FEA tool, this is a wrapper for. Example: `This is a wrapper for Document::makeMotionComponent` 
-- Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
+1. **Function description:** A brief description of the function should be provided in the first line. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
+2. **Function signature:** The function signature is provided next, and has four main parts, as described below
+   1. *Function signature description:* The function signature is followed immediately by a brief one sentence description of what that function accomplishes with that function signature.
+   2. *Argument description:* The function arguments are described for different use cases. This is expected to directly continue from the function signature. I.e., there is no whitespace vertically between the function signature and the description of arguments.
+   3. *Return value description:* The return value should be described. This will be in a new paragraph following the argument description.
+   4. *Example use cases:* Provide example use cases, with each example in its own paragraph. Be as descriptive as possible. Example: `For example, motion = MN_D_MAKEMOTIONCOMPONENT(mn, 'rotorIron'), creates a motion component to move the geometry 'rotorIron'`
+   
+   **Note:** If a function has multiple function signatures, all of them must be described, in order of fewest arguments provided to most arguments provided. Each subsequent function signature only adds additional information - there is no need to re-describe the arguments and return values previously described.
+3. **Related functions:** Finally, list related functions. Example: `See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, MN_D_CREATEBOUNDARYCONDITION.`
  
-If the snippets provided in each bullet point are all brought together, the function documentation will look as follows
+An example function documentation will look as follows
 
-![image](./exampleMatlabDocumentation.PNG)
+```
+%MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet.
+%   motion = MN_D_MAKEMOTIONCOMPONENT(mn, componentName) creates a motion 
+%   component to move the geometry named componentName. mn is the MagNet 
+%   object. componentName is a string containing the name of the geometry 
+%   to be included in the motion component. If multiple components are to 
+%   be moved, componentName will be a cell array of strings containing 
+%   names of the geometries to be included in the motion component.
+%   
+%   This function returns motion, which is a string containing name of the 
+%   motion component created.
+%
+%   For example, motion = MN_D_MAKEMOTIONCOMPONENT(mn, 'rotorIron'), 
+%   creates a motion component to move the geometry 'rotorIron'. 
+%   
+%   motion2 = MN_D_MAKEMOTIONCOMPONENT(mn, [{'rotorIron'},{'magnet1'},...
+%   {'magnet2'}]), creates a motion component to move the geometries 
+%   'rotorIron', 'magnet1' and 'magnet2' as one single block.
+%
+%   This is a wrapper for Document::makeMotionComponent.
+%
+%   See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, 
+%   MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, 
+%   MN_D_CREATEBOUNDARYCONDITION.
+
+```
 
 Notice the indentation in the above screenshot. This is consistent with Matlab style. Specifically, the following are to be noted
 - On the first line, the function name `MN_D_MAKEMOTIONCOMPONENT` has no indentation. However, there is a tab space between the function name and the one line description. 
