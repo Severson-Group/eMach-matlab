@@ -208,7 +208,12 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         
         
         function setVisibility(obj, visibility)
-
+            % Set visibility of the JMAG application
+            if visibility == 1
+               obj.jd.Show();
+            else
+                obj.jd.Hide();
+            end
         end
         
         function new_region = regionMirrorCopy(obj, region, edge4ref, symmetry_type, bMerge)
