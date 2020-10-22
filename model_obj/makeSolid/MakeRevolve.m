@@ -17,23 +17,24 @@ classdef MakeRevolve < MakeSolidBase
             obj.validateProps();            
         end
                 
-        function run(obj, name, material, csToken, maker)
+        function [tokenMake] = run(obj, name, material, csToken, maker)
             %RUN Make the cross-section solid
             
             validateattributes(maker,{'MakerRevolveBase'},{'nonempty'})   
             
             %1. Prepare to extrude
             for i = 1:length(csToken)
-                maker.prepareSection(csToken);
+                token1 = maker.prepareSection(csToken);
             end
             
             %2. Make via revolution
-            maker.revolve(name, material, ...
-                    obj.dim_center, obj.dim_axis, obj.dim_angle);
+            token2 = maker.revolve(name, material, ...
+                    obj.dim_center, obj.dim_axis, obj.dim_angle, token1);
             
             %3. TO DO: Move to final location
             %maker.Move(name, obj.location);
             
+            tokenMake = TokenMake(csToken, token1, token2);
         end
     end
     

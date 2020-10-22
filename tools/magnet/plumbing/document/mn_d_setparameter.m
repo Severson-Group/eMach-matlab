@@ -14,6 +14,6 @@ function [] = mn_d_setparameter(doc, opath, param, value, ptype)
 %
 %   This is a wrapper for Document::setParameter
 
-invoke(doc, 'setParameter', opath, param, value, ptype)
+invoke(doc, 'setParameter', opath, param, value, ptype);
 
 end

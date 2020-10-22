@@ -26,7 +26,7 @@ classdef CrossSectLinearMotorStator < CrossSectBase
         end
                 
         function [csToken] = draw(obj, drawer)
-            validateattributes(drawer, {'Drawer2dBase'}, {'nonempty'});
+            validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             % linear motor stator parameters
             w_s = obj.dim_w_s;

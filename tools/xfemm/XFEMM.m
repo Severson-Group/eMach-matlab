@@ -1,4 +1,4 @@
-classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
+classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %XFEMM Encapsulation for the XFEMM FEA software
     %   TODO: add more description
     %   TODO: add more description
@@ -273,10 +273,10 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
                     % modifications so that the node in the 4th quadrant
                     % has larger angle (origin is arc center)
                     if (angle1 >= 90 && angle1 <= 180) && ...
-                            (angle3 >= - 180 && angle3 < - 90)
+                            (angle3 >= - 180 && angle3 <= - 90)
                         angle3 = angle3 + 360;
                     elseif (angle3 >= 90 && angle3 <= 180) && ...
-                            (angle1 >= - 180 && angle1 < - 90)
+                            (angle1 >= - 180 && angle1 <= - 90)
                         angle1 = angle1 + 360;
                     end
                     
@@ -380,29 +380,35 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             arcInfo = obj.arcInfo;
         end
         
-        function plot(obj)
+        function plot(obj,FemmProblem)
+            obj.FemmProblem = FemmProblem;
             plotfemmproblem(obj.FemmProblem);
         end
         
-        function [line] = drawLine(obj, startxy, endxy)
+        function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
-
+            
+            startxy = double(startxy);
+            endxy = double(endxy);
             [obj.FemmProblem, nodeinds, nodeids] = addnodes_mfemm(...
                 obj.FemmProblem, [startxy(1); endxy(1)],...
                 [startxy(2); endxy(2)]);
             
             [obj.FemmProblem, seginds] = addsegments_mfemm(obj.FemmProblem,...
                 nodeids(1), nodeids(2));
-            
-            line = seginds;
+
+            tokenDraw = TokenDraw(seginds, 0);
         end
         
-        function [arc] = drawArc(obj, centerxy, startxy, endxy)
+        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current XFEMM document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
+            centerxy = double(centerxy);
+            startxy = double(startxy);
+            endxy = double(endxy);
             R = sqrt((centerxy(1) - startxy(1))^2 + ...
                 (centerxy(2) - startxy(2))^2);
             L = sqrt((endxy(1) - startxy(1))^2 + ...
@@ -416,13 +422,15 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             [obj.FemmProblem, arcseginds] = addarcsegments_mfemm(...
                 obj.FemmProblem, nodeids(1), nodeids(2), angle);
             
-            arc = arcseginds;  
+            tokenDraw = TokenDraw(arcseginds, 1);            
+            
             obj.arcIndex = obj.arcIndex + 1;
             obj.arcInfo(obj.arcIndex,1:2) = [centerxy(1), centerxy(2)];
             obj.arcInfo(obj.arcIndex,3) = R;
         end
         
         function FemmProblem = removeOverlaps(obj)
+            
             % Remove one of the overlapping nodes
             obj.FemmProblem = removeExtraNodes(obj);
             
@@ -437,7 +445,7 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             
             % Remove partially overlapping arcs and make reconnections
             obj.FemmProblem = removePartiallyOverlappingArcSegments(obj);
-            
+
             % Return modified FemmProblem struct
             FemmProblem = obj.FemmProblem;
         end
@@ -447,17 +455,80 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
 
         end
         
-        function new = revolve(obj, name, material, center, axis, angle)
-
+        function addAirRegion(obj, Coord)
+            Coord = double(Coord);
+            obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
+                Coord(1), Coord(2), ...
+                                   'BlockType', 'Air');
         end
         
-        function extrude(obj, name, material, depth)
-
-        end
-        
-        function prepareSection(obj, csToken)
+        % Add block label and assign material
+        function token = revolve(obj, name, material, center, axis, angle, innerCoord)
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'});            
+            validateattributes(center, {'numeric'}, {'size',[1,2]})
+            validateattributes(axis, {'numeric'}, {'size',[1,2]})
+            validateattributes(angle, {'DimAngular'}, {'nonempty'});
             
-        end        
+            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
+            obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
+                innerCoord(1), innerCoord(2), ...
+                                   'BlockType', material);
+            token = []; 
+        end
+        % Add block label and assign material
+        function token = extrude(obj, name, material, depth, innerCoord)
+            validateattributes(depth, {'double'}, {'nonnegative', 'nonempty'});
+            validateattributes(material, {'char'}, {'nonempty'});
+            validateattributes(name, {'char'}, {'nonempty'}); 
+            
+            obj.FemmProblem = addmaterials_mfemm(obj.FemmProblem, material);
+            obj.FemmProblem = addblocklabel_mfemm(obj.FemmProblem, ...
+                innerCoord(1), innerCoord(2), ...
+                                   'BlockType', material);
+            token = [];
+        end
+        % Save information about inner coordinates of the cross-section
+        function innerCoord = prepareSection(obj,csToken)
+            innerCoord = double(csToken.innerCoord);
+        end
+        
+        % Set group number to nodes and block label
+        function setGroupNumber(obj, groupNumber, tokenComp)
+            lineToken = [];
+            arcToken = [];
+            for i = 1:length(tokenComp.csToken.token)
+                if tokenComp.csToken.token(1, i).geometryType == 0
+                    lineToken(end+1) = tokenComp.csToken.token(1, i).segmentIndices;
+                else
+                    arcToken(end+1) = tokenComp.csToken.token(1, i).segmentIndices;
+                end
+            end
+            % Set group number to nodes
+            for i = 1:length(lineToken)
+                n0 = obj.FemmProblem.Segments(lineToken(i)).n0 + 1;
+                obj.FemmProblem.Nodes(n0).InGroup = groupNumber;
+                n1 = obj.FemmProblem.Segments(lineToken(i)).n1 + 1;
+                obj.FemmProblem.Nodes(n1).InGroup = groupNumber;
+            end
+            
+            for i = 1:length(arcToken)
+                n0 = obj.FemmProblem.ArcSegments(arcToken(i)).n0 + 1;
+                obj.FemmProblem.Nodes(n0).InGroup = groupNumber;
+                n1 = obj.FemmProblem.ArcSegments(arcToken(i)).n1 + 1;
+                obj.FemmProblem.Nodes(n1).InGroup = groupNumber;
+            end
+            
+            % Set group number to block labels
+            givenCoord = double(tokenComp.csToken.innerCoord(1)) + 1i*...
+                double(tokenComp.csToken.innerCoord(2));
+            for i = 1:length(obj.FemmProblem.BlockLabels)
+                innerCoords(i) = obj.FemmProblem.BlockLabels(i).Coords(1) + ...
+                    1i*obj.FemmProblem.BlockLabels(i).Coords(2);
+            end
+            [x, n] = min(abs(givenCoord - innerCoords));
+            obj.FemmProblem.BlockLabels(n).InGroup = groupNumber;
+        end
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
 
@@ -479,7 +550,7 @@ classdef XFEMM < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)
