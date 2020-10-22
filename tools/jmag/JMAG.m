@@ -50,7 +50,7 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             %   the visibility of a new instance.
 
             if nargin <= 1
-                obj.jd = actxserver('designer.Application.171'); % Note: version 18 is available now
+                obj.jd = actxserver('designer.Application.171'); %JMAG version 17
             end
             
             % obj.jd now exists at this point
@@ -170,15 +170,29 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         function select(obj)
-
+           %SELECT Selects something from canvas (?)
+            %    select()
+            
+            % TODO:
+            % Implement this...
+            %
+            % This will need to take in arguments, or maybe
+            % CrossSect objects which then store internally all their
+            % lines and surfaces that need to be selected
         end
         
         function new = revolve(obj, name, material, center, axis, angle)
-
+            %REVOLVE Revolve a cross-section along an arc    
+            %new = revolve(obj, name, material, center, axis, angle)
+            %   name   - name of the newly extruded component
+            %   center - x,y coordinate of center point of rotation
+            %   axis   - x,y coordinate on the axis of ration (negative reverses
+            %             direction) (0, -1) to rotate clockwise about the y axis
+            %   angle  - Angle of rotation (dimAngular) 
         end
         
         function extrude(obj, name, material, depth)
-
+            
         end
         
         function prepareSection(obj, csToken)
