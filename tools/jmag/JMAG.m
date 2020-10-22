@@ -1,4 +1,4 @@
-classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
+classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %JMAG Encapsulation for the JMAG Designer of JSOL Corporation.
     %   TODO: add more description
     %   TODO: add more description
@@ -309,7 +309,7 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
              
             % Use the superclass method to validate the properties 
             validateProps@ToolBase(obj);   
-            validateProps@Drawer2dBase(obj);
+            validateProps@DrawerBase(obj);
          end
                   
          function obj = createProps(obj, len, args)
