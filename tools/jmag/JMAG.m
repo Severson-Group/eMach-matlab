@@ -124,7 +124,6 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
         
         function geomApp = checkGeomApp(obj)
             if ~isnumeric(obj.geomApp)
-                ;
             else
                 obj.app.LaunchGeometryEditor();
                 obj.geomApp = obj.app.CreateGeometryEditor(true);
