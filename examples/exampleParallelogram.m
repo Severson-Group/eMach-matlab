@@ -3,8 +3,9 @@ clear
 
 %This example draws a parallelogram.
 
-DRAW_MAGNET = 1;
+DRAW_MAGNET = 0;
 DRAW_TIKZ   = 0;
+DRAW_JMAG = 1;
 
 %% Define cross sections
 parallelogram = CrossSectParallelogram( ...
@@ -55,3 +56,11 @@ if (DRAW_TIKZ)
 
     toolTikz.close();
 end
+
+if (DRAW_JMAG)
+    toolJd = JMAG();
+    toolJd.open(0,0,true);
+    comp1.make(toolJd,toolJd);
+end
+
+tooljD.close();
