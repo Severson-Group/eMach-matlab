@@ -83,30 +83,30 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             obj.jd.Quit();
         end
         
-        function [line] = drawLine(self, startxy, endxy)
+        function [line] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
 
-            if isnumeric(self.sketch)
-                self.sketch = self.getSketch(0);
-                self.sketch.OpenSketch();
+            if isnumeric(obj.sketch)
+                obj.sketch = obj.getSketch(0);
+                obj.sketch.OpenSketch();
             end
             
             % Convert DimMillimeter to double
             startxy = double(startxy);
             endxy = double(endxy);
             
-            line = self.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
+            line = obj.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
         end
         
-        function [arc] = drawArc(self, centerxy, startxy, endxy)
+        function [arc] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current XFEMM document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
-            if isnumeric(self.sketch)
-                self.sketch = self.getSketch(0);
-                self.sketch.OpenSketch();
+            if isnumeric(obj.sketch)
+                obj.sketch = obj.getSketch(0);
+                obj.sketch.OpenSketch();
             end
             
             % Convert DimMillimeter to double
@@ -114,59 +114,59 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             startxy = double(startxy);
             endxy = double(endxy);
             
-            self.sketch.CreateVertex(startxy(1), startxy(2));
-            self.sketch.CreateVertex(endxy(1), endxy(2));
-            self.sketch.CreateVertex(centerxy(1), centerxy(2));
-            arc = self.sketch.CreateArc(centerxy(1), centerxy(2), ...
+            obj.sketch.CreateVertex(startxy(1), startxy(2));
+            obj.sketch.CreateVertex(endxy(1), endxy(2));
+            obj.sketch.CreateVertex(centerxy(1), centerxy(2));
+            arc = obj.sketch.CreateArc(centerxy(1), centerxy(2), ...
                                         startxy(1), startxy(2), ...
                                         endxy(1), endxy(2));
         end
         
-        function geomApp = checkGeomApp(self)
-            if ~isnumeric(self.geomApp)
+        function geomApp = checkGeomApp(obj)
+            if ~isnumeric(obj.geomApp)
                 ;
             else
-                self.app.LaunchGeometryEditor();
-                self.geomApp = self.app.CreateGeometryEditor(true);
-                self.doc = self.geomApp.NewDocument();                
+                obj.app.LaunchGeometryEditor();
+                obj.geomApp = obj.app.CreateGeometryEditor(true);
+                obj.doc = obj.geomApp.NewDocument();                
             end
-            geomApp = self.geomApp;
+            geomApp = obj.geomApp;
         end
         
-        function sketch = getSketch(self, iSketch, varargin)
+        function sketch = getSketch(obj, iSketch, varargin)
             if isnumeric(iSketch)
                 sketchName = strcat('mySketch', num2str(iSketch));
             else
                 sketchName = iSketch;
             end
 
-            for i = 1:length(self.sketchList)
-                if self.sketchList(i) == sketchName
-                    self.sketch = self.ass.GetItem(sketchName);
+            for i = 1:length(obj.sketchList)
+                if obj.sketchList(i) == sketchName
+                    obj.sketch = obj.ass.GetItem(sketchName);
                     % open sketch for drawing (must be closed before switch to another sketch)
-                    self.sketch.OpenSketch();
-                    sketch = self.sketch;
+                    obj.sketch.OpenSketch();
+                    sketch = obj.sketch;
                     return
                 end
             end
-            if i == length(self.sketchList)
-                self.sketchList(end) = sketchName;
+            if i == length(obj.sketchList)
+                obj.sketchList(end) = sketchName;
             end
             
-            self.geomApp = self.checkGeomApp();
-            self.doc = self.geomApp.GetDocument();
-            self.ass = self.doc.GetAssembly();
-            ref1 = self.ass.GetItem('XY Plane');
-            ref2 = self.doc.CreateReferenceFromItem(ref1);
-            self.sketch = self.ass.CreateSketch(ref2);
-            self.sketch.SetProperty('Name', sketchName)
+            obj.geomApp = obj.checkGeomApp();
+            obj.doc = obj.geomApp.GetDocument();
+            obj.ass = obj.doc.GetAssembly();
+            ref1 = obj.ass.GetItem('XY Plane');
+            ref2 = obj.doc.CreateReferenceFromItem(ref1);
+            obj.sketch = obj.ass.CreateSketch(ref2);
+            obj.sketch.SetProperty('Name', sketchName)
             if nargin>2
-                self.sketch.SetProperty('Color', varargin);
+                obj.sketch.SetProperty('Color', varargin);
             end
             
             % open sketch for drawing (must be closed before switch to another sketch)
-            self.sketch.OpenSketch();
-            sketch = self.sketch;
+            obj.sketch.OpenSketch();
+            sketch = obj.sketch;
         end
         
         function select(obj)
@@ -198,12 +198,12 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
 
         end
         
-        function new_region = regionMirrorCopy(self, region, edge4ref, symmetry_type, bMerge)
+        function new_region = regionMirrorCopy(obj, region, edge4ref, symmetry_type, bMerge)
             % Default: edge4ref=None, symmetry_type=None, bMerge=True
 
-            mirror = self.sketch.CreateRegionMirrorCopy();
+            mirror = obj.sketch.CreateRegionMirrorCopy();
             mirror.SetProperty('Merge', bMerge)
-            ref2 = self.doc.CreateReferenceFromItem(region);
+            ref2 = obj.doc.CreateReferenceFromItem(region);
             mirror.SetPropertyByReference('Region', ref2)
             
             if isempty(edge4ref)
@@ -213,22 +213,22 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
                     mirror.SetProperty('SymmetryType', symmetry_type)
                 end
             else
-                ref1 = self.sketch.GetItem(edge4ref.GetName()); % e.g., u"Line"
-                ref2 = self.doc.CreateReferenceFromItem(ref1);
+                ref1 = obj.sketch.GetItem(edge4ref.GetName()); % e.g., u"Line"
+                ref2 = obj.doc.CreateReferenceFromItem(ref1);
                 mirror.SetPropertyByReference('Symmetry', ref2);
             end
             
             if bMerge == false && strcmp(region.GetName(), 'Region')
-                new_region = self.ass.GetItem('Region.1');
+                new_region = obj.ass.GetItem('Region.1');
             end 
         end
 
-        function regionCircularPattern360Origin(self, region, Q_float, bMerge, do_you_have_region_in_the_mirror)
+        function regionCircularPattern360Origin(obj, region, Q_float, bMerge, do_you_have_region_in_the_mirror)
             % default: bMerge=True, do_you_have_region_in_the_mirror=False
-            circular_pattern = self.sketch.CreateRegionCircularPattern();
+            circular_pattern = obj.sketch.CreateRegionCircularPattern();
             circular_pattern.SetProperty('Merge', bMerge);
 
-            ref2 = self.doc.CreateReferenceFromItem(region);
+            ref2 = obj.doc.CreateReferenceFromItem(region);
             circular_pattern.SetPropertyByReference('Region', ref2);
             face_region_string = circular_pattern.GetProperty('Region');
             %face_region_string = face_region_string[0];
@@ -265,11 +265,11 @@ classdef JMAG < ToolBase & Drawer2dBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             if true
-                origin = self.sketch.CreateVertex(0,0);
+                origin = obj.sketch.CreateVertex(0,0);
                 origin_is = origin.GetName()
-                ref1 = self.ass.GetItem(self.sketch.GetName()).GetItem(origin.GetName());
-                ref1 = self.ass.GetItem(self.sketch.GetName()).GetItem('Vertex.3');
-                ref2 = self.doc.CreateReferenceFromItem(ref1);
+                ref1 = obj.ass.GetItem(obj.sketch.GetName()).GetItem(origin.GetName());
+                ref1 = obj.ass.GetItem(obj.sketch.GetName()).GetItem('Vertex.3');
+                ref2 = obj.doc.CreateReferenceFromItem(ref1);
                 circular_pattern.SetPropertyByReference('Center', ref2)
             elseif true
                 % Matlab's actxserver cannot pass integer to JMAG (the following 1)
