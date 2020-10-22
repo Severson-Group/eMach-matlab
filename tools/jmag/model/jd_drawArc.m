@@ -1,4 +1,4 @@
-function [ arc ] = drawArc( sketch, centerxy, startxy, endxy )
+function [ arc ] = jd_drawArc( sketch, centerxy, startxy, endxy )
 %DRAWARC Summary of this function goes here
 %   Detailed explanation goes here
 
