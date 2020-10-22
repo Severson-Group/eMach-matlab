@@ -194,8 +194,15 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
         end
         
-        function prepareSection(obj, csToken)
-            
+        function sketch = prepareSection(obj, csToken)
+%             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
+            obj.doc.GetSelection().Clear();
+            for i = 1:length(csToken.token)
+                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).GetName()));
+            end
+            obj.sketch.CreateRegions();
+            obj.sketch.CloseSketch();
+            sketch = 1;
         end        
         
         function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
