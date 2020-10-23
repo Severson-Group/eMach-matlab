@@ -13,6 +13,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         doc=0; % The document object in Geometry Editor
         ass=0; % The assemble object in Geometry Editor
         sketch=0; % The sketch object in Geometry Editor
+        part=0; % The part object in Geometry Editor
         model=0; % The model object in JMAG Designer
         study=0; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
@@ -161,10 +162,13 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.sketch.SetProperty('Name', sketchName)
             if nargin>2
                 obj.sketch.SetProperty('Color', varargin);
-            end
-            
+            end         
             % open sketch for drawing (must be closed before switch to another sketch)
             obj.sketch.OpenSketch();
+            ref1 = obj.ass.GetItem(sketchName);
+            ref2 = obj.doc.CreateReferenceFromItem(ref1);
+            obj.ass.MoveToPart(ref2);
+            obj.part = obj.ass.GetItem(sketchName);
             sketch = obj.sketch;
         end
         
@@ -190,17 +194,24 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   angle  - Angle of rotation (dimAngular) 
         end
         
-        function extrude(obj, name, material, depth)
-            
+        function extrudeSketch = extrude(obj, name, material, depth, csToken)
+            ref1 = obj.sketch;
+            obj.part.CreateExtrudeSolid(ref1,10)
+            obj.part.SetProperty('Name', name)
+            sketchName = strcat(name,'Sketch');
+            obj.sketch.SetProperty('Name', sketchName)
+            extrudeSketch = 1;
         end
         
         function sketch = prepareSection(obj, csToken)
-%             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
+            validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             obj.doc.GetSelection().Clear();
             for i = 1:length(csToken.token)
                 obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).GetName()));
             end
             obj.sketch.CreateRegions();
+            obj.doc.GetSelection().Add(obj.sketch.GetItem('Region.2'));
+            obj.doc.GetSelection().Delete()
             obj.sketch.CloseSketch();
             sketch = 1;
         end        
