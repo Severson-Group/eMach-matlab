@@ -21,7 +21,7 @@ classdef MakeExtrude < MakeSolidBase
             
             %1. Prepare to extrude
             for i = 1:length(csToken)
-                token1 = maker.prepareSection(csToken);
+                token1(i) = maker.prepareSection(csToken(i));
             end
             
             %2. Make via extrusion
