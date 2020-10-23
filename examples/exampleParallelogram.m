@@ -57,10 +57,14 @@ if (DRAW_TIKZ)
     toolTikz.close();
 end
 
+%% Draw via JMAG
+
 if (DRAW_JMAG)
     toolJd = JMAG();
     toolJd.open(0,0,true);
     comp1.make(toolJd,toolJd);
+    
+    tooljd.close();
 end
 
-tooljD.close();
+

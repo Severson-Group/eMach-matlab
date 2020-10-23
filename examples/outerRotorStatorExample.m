@@ -1,8 +1,9 @@
 clc
 clear
 
-DRAW_MAGNET = 1;
+DRAW_MAGNET = 0;
 DRAW_TIKZ   = 0;
+DRAW_JMAG = 1;
 
 %% Define cross sections
 
@@ -63,4 +64,14 @@ if (DRAW_TIKZ)
     comp1.draw(toolTikz);
 
     toolTikz.close();
+end
+
+%% Draw via JMAG
+
+if (DRAW_JMAG)
+    toolJd = JMAG();
+    toolJd.open(0,0,true);
+    comp1.make(toolJd,toolJd);
+    
+    tooljD.close();
 end
