@@ -19,18 +19,18 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.validateProps();            
         end
         
-        function obj = open(obj, iFilename, iMn, iVisible)
+        function obj = open(obj, fileName, mn, visible)
             %OPEN Open MagNet or a specific file.
             %   open() opens a new instance of MagNet with a new document.
             %
             %   open('filename') opens the file in a new instance of MagNet.
             %
-            %   open('filename', MN) opens the file in the MN MagNet instance
+            %   open('filename', mn) opens the file in the mn MagNet instance
             %
-            %   open('filename', MN, VISIBLE) opens the file in the MN MagNet
+            %   open('filename', mn, visible) opens the file in the mn MagNet
             %        instance with customizable visibility (true for visible)
             %
-            %   iMn and iFilename can be set to 0 to allow setting
+            %   mn and fileName can be set to 0 to allow setting
             %   the visibility of a new instance.
 
             if nargin < 2
@@ -38,15 +38,15 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             if nargin > 2
-                if isnumeric(iMn)
+                if isnumeric(mn)
                     obj.mn = actxserver('MagNet.Application');
                 end
                 
-                set(obj.mn, 'Visible', iVisible);
+                set(obj.mn, 'Visible', visible);
             end
 
-            if nargin > 0 && ~isnumeric(iFilename)
-                obj.doc = invoke(obj.mn, 'openDocument', iFilename);
+            if nargin > 0 && ~isnumeric(fileName)
+                obj.doc = invoke(obj.mn, 'openDocument', fileName);
             else
                 obj.doc = invoke(obj.mn, 'newDocument');
             end
