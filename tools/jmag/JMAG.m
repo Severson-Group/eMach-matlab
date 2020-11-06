@@ -267,68 +267,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 new_region = obj.ass.GetItem('Region.1');
             end 
         end
-
-        function regionCircularPattern360Origin(obj, region, Q_float, bMerge, do_you_have_region_in_the_mirror)
-            % default: bMerge=True, do_you_have_region_in_the_mirror=False
-            circular_pattern = obj.sketch.CreateRegionCircularPattern();
-            circular_pattern.SetProperty('Merge', bMerge);
-
-            ref2 = obj.doc.CreateReferenceFromItem(region);
-            circular_pattern.SetPropertyByReference('Region', ref2);
-            face_region_string = circular_pattern.GetProperty('Region');
-            %face_region_string = face_region_string[0];
-            
-            if do_you_have_region_in_the_mirror == true
-                % Those are python codes for plotting stator coils. The problem occurs
-                % because the left layer and right layer are not merged. The
-                % generation of face-reference in JMAG is crazy.
-                %             if do_you_have_region_in_the_mirror == true
-                %                 # 这里假设face_region_string最后两位是数字
-                %                 if face_region_string[-7:-3] == 'Item'
-                %                     number_plus_1 = str(int(face_region_string[-3:-1]) + 1)
-                %                     refarray = [0 for i in range(2)]
-                %                     refarray[0] = u"faceregion(TRegionMirrorPattern%s+%s_2)" % (number_plus_1, face_region_string)
-                %                     refarray[1] = face_region_string
-                %                     circular_pattern.SetProperty(u"Region", refarray)
-                %                     # print refarray[0]
-                %                     # print refarray[1]
-                %                 elif face_region_string[-6:-2] == 'Item'
-                %                     # 这里假设face_region_string最后一位是数字
-                %                     number_plus_1 = str(int(face_region_string[-2:-1]) + 1)
-                %                     refarray = [0 for i in range(2)]
-                %                     refarray[0] = u"faceregion(TRegionMirrorPattern%s+%s_2)" % (number_plus_1, face_region_string)
-                %                     refarray[1] = face_region_string
-                %                     circular_pattern.SetProperty(u"Region", refarray)
-                %                 elif face_region_string[-8:-4] == 'Item'
-                %                     # 这里假设face_region_string最后三位是数字
-                %                     number_plus_1 = str(int(face_region_string[-4:-1]) + 1)
-                %                     refarray = [0 for i in range(2)]
-                %                     refarray[0] = u"faceregion(TRegionMirrorPattern%s+%s_2)" % (number_plus_1, face_region_string)
-                %                     refarray[1] = face_region_string
-                %                     circular_pattern.SetProperty(u"Region", refarray)
-                %             end
-            end
-            
-            if true
-                origin = obj.sketch.CreateVertex(0,0);
-                origin_is = origin.GetName()
-                ref1 = obj.ass.GetItem(obj.sketch.GetName()).GetItem(origin.GetName());
-                ref1 = obj.ass.GetItem(obj.sketch.GetName()).GetItem('Vertex.3');
-                ref2 = obj.doc.CreateReferenceFromItem(ref1);
-                circular_pattern.SetPropertyByReference('Center', ref2)
-            elseif true
-                % Matlab's actxserver cannot pass integer to JMAG (the following 1)
-                circular_pattern.SetProperty('CenterType', 1);
-                circular_pattern.SetProperty('CenterPosX', 2.0);
-                circular_pattern.SetProperty('CenterPosY', 5.0);
-            else
-                % Matlab's actxserver cannot pass integer to JMAG (the following 2)
-                circular_pattern.SetProperty('CenterType', 2);
-            end
-            circular_pattern.SetProperty('Angle', sprintf('360/%d', Q_float));
-            circular_pattern.SetProperty('Instance', num2str(Q_float));
-        end
-    end
+   end
     
     methods(Access = protected)
          function validateProps(obj)
