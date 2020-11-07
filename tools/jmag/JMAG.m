@@ -219,7 +219,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).GetName()));
             end
             obj.sketch.CreateRegions();
-            obj.doc.GetSelection().Add(obj.sketch.GetItem('Region.2'));
+            obj.geomApp.View.SelectAtCoordinateDlg(0, 0, 0, 0, 0)
             obj.doc.GetSelection().Delete()
             obj.sketch.CloseSketch();
             sketch = 1;
