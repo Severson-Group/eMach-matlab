@@ -98,6 +98,6 @@ The indentation in the example code block above is consistent with MATLAB's styl
 - In all other lines, the text is three spaces away from `%`.
 - Follow the MATLAB editor guidelines on maximum line length.
 
-If formatted as above, typing `help mn_d_makeMotionComponent` in the Matlab command window, and hitting enter key gives the following output
+If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window, and hitting enter key gives the following output
 
 ![image](./exampleMatlabHelp.PNG) 
