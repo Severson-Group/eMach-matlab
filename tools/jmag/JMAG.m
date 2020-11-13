@@ -203,9 +203,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             % Import Model into Designer
             obj.doc.SaveModel(true)
             obj.model = obj.app.GetCurrentModel();
+            obj.model.SetUnitCollection('SI_units')
             obj.model.SetName(obj.projName)
             % Create study
-            obj.model.CreateStudy("Transient", obj.projName)
+            obj.model.CreateStudy('Transient', obj.projName)
             % Add material
             obj.model.GetStudy(obj.projName).SetMaterialByName(name, material)
             obj.app.Save()
