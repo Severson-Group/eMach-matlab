@@ -8,10 +8,10 @@ The `Crosssect` class implements cross-sections of standard geometry shapes that
 Although eMach currently supports several cross-sections and can draw most common geometries, there can be occassional need to add new cross-sections. 
 The following guidelines must be adhered to when adding a new cross-section
 
-- **Naming:** The name of the cross-section should be self descriptive and always begin with `CrossSect`. The name should start with upper case and move to camel case. Eg: `CrossSectOuterRotor`
+- **Naming:** The name of the cross-section should be self descriptive and always begin with `CrossSect`. The name should start with upper case and move to camel case. Eg: `CrossSectOuterRotor`.
 - **Function description:** A short one line description should be provided at the beginning of the function to describe the cross-section being implemented.
 - **Variable names:** Clear and self-descriptive variable names should be chosen for the input dimensions to the function. The variable names should not be too long. Use of underbar to denote subscripts is preferred. Eg: It is preferred to designate a variable that denotes the stator yoke thickness as `t_sy` rather than `t_syoke` or `t_statoryoke`. 
-- **Drawings:** A vectorized (`.svg`) drawing of the geometry should be provided. This drawing should clearly indicate the location of the origin and coordinate axes. More details [here](./#drawings)
+- **Drawings:** A vectorized (`.svg`) drawing of the geometry should be provided. This drawing should clearly indicate the location of the origin and coordinate axes. More details are provided [here](./#drawings).
 
 ## Location and expected content
 
