@@ -201,14 +201,25 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             sketchName = strcat(name,'Sketch');
             obj.sketch.SetProperty('Name', sketchName)
             % Import Model into Designer
+            obj.sketch = 0;
             obj.doc.SaveModel(true)
-            obj.model = obj.app.GetCurrentModel();
-            obj.model.SetUnitCollection('SI_units')
-            obj.model.SetName(obj.projName)
-            % Create study
-            obj.model.CreateStudy('Transient', obj.projName)
+            if obj.study == 0
+                obj.model = obj.app.GetCurrentModel();
+                obj.model.SetUnitCollection('SI_units')
+                obj.model.SetName(obj.projName)
+                % Create study
+                obj.study = obj.model.CreateStudy('Transient', obj.projName);
+            else
+                % Delete old model
+                obj.app.DeleteModel(obj.projName)
+                % Setup the new model
+                obj.model = obj.app.GetCurrentModel();
+                obj.model.SetUnitCollection('SI_units')
+                obj.model.SetName(obj.projName)
+                obj.study = obj.model.GetStudy(obj.projName);
+            end
             % Add material
-            obj.model.GetStudy(obj.projName).SetMaterialByName(name, material)
+            obj.study.SetMaterialByName(name, material)
             obj.app.Save()
             extrudeSketch = 0;
         end
