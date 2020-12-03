@@ -93,7 +93,7 @@ Here is an example of a function documentation block that follows this specifica
 ```
 **Indentation / Horizontal white spaces:**
 Indentation consistent with MATLAB style guidelines should be followed to ensure that the documentation is rendered just like the documentation of MATLAB built-in functions.
-The indentation in the example code block above is consistent with MATLAB's style. Specifically, the following are to be noted
+The indentation in the example code block above is consistent with MATLAB's style. Specifically, the following are to be noted:
 - On the first line, the function name `MN_D_MAKEMOTIONCOMPONENT` has no indentation. However, there are three spaces between the function name and the one line description. 
 - In all other lines, the text is three spaces away from `%`.
 - Follow the MATLAB editor guidelines on maximum line length.
