@@ -54,7 +54,7 @@ Throughout the documentation, the function name should be typed in upper case, i
 The function documentation block should consist of the following components:
 
 1. **Function description:** A brief description of the function should be provided in the first line. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
-2. **Function signature:** The function signature is provided next, and has four main parts, as listed below
+2. **Function signature:** The function signature is provided next, and has four main parts, as listed below:
    1. *Function signature description:* The function signature is followed immediately by a brief one sentence description of what that function accomplishes with that function signature.
    2. *Argument description:* The function arguments are described for different use cases. This is expected to directly continue from the function signature. I.e., there is no whitespace vertically between the function signature and the description of arguments.
    3. *Return value description:* The return value should be described. This will be in a new paragraph following the argument description.
@@ -98,6 +98,6 @@ The indentation in the example code block above is consistent with MATLAB's styl
 - In all other lines, the text is three spaces away from `%`.
 - Follow the MATLAB editor guidelines on maximum line length.
 
-If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window, and hitting enter key gives the following output
+If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window, and hitting enter key gives the following output:
 
 ![image](./exampleMatlabHelp.PNG) 
