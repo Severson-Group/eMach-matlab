@@ -68,7 +68,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             obj.workDir = './';
-            obj.projName = 'temp';
+            obj.projName = 'proj';
             if nargin >= 1 && ~isnumeric(iFilename)
                 obj.jd.Open(strcat(obj.workDir, iFilename, '.jproj'));
             else
