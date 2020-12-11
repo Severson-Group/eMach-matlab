@@ -18,7 +18,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         study=0; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
         consts; % Program constants
-        defaultLength = 'dimMillimeter'; % Default length unit is mm
+        defaultLength = 'Meter'; % Default length unit is mm
         workDir = './';
         sketchList;
     end
@@ -93,7 +93,11 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.sketch.OpenSketch();
             end
             
-            % Convert DimMillimeter to double
+            % Convert other units to DimMeter
+            startxy = DimMeter(startxy);
+            endxy = DimMeter(endxy); 
+            
+            % Convert DimMeter to double
             startxy = double(startxy);
             endxy = double(endxy);
             
@@ -110,7 +114,12 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.sketch.OpenSketch();
             end
             
-            % Convert DimMillimeter to double
+            % Convert other units to DimMeter
+            centerxy = DimMeter(centerxy);
+            startxy = DimMeter(startxy);
+            endxy = DimMeter(endxy);     
+            
+            % Convert DimMeter to double
             centerxy = double(centerxy);
             startxy = double(startxy);
             endxy = double(endxy);
@@ -196,7 +205,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         
         function extrudeSketch = extrude(obj, name, material, depth, csToken)
             ref1 = obj.sketch;
-            obj.part.CreateExtrudeSolid(ref1,10)
+            obj.part.CreateExtrudeSolid(ref1,double(DimMeter(depth)))
             obj.part.SetProperty('Name', name)
             sketchName = strcat(name,'Sketch');
             obj.sketch.SetProperty('Name', sketchName)
@@ -233,7 +242,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
             id2 = obj.sketch.NumItems();
-            obj.geomApp.View.SelectAtCoordinateDlg(double(csToken.innerCoord(1)), double(csToken.innerCoord(2)), 0, 1, 64);
+            obj.geomApp.View.SelectAtCoordinateDlg(double(DimMeter(csToken.innerCoord(1))), double(DimMeter(csToken.innerCoord(2))), 0, 1, 64);
             region = obj.doc.GetSelection.Item([0]);
             regionName = region.GetName;            
             
