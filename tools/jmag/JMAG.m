@@ -17,8 +17,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         model=0; % The model object in JMAG Designer
         study=0; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
-        consts; % Program constants (not used)
-        defaultLength = 'dimMillimeter'; % Default length unit is mm (not used)
+        consts; % Program constants
+        defaultLength = 'dimMillimeter'; % Default length unit is mm
         workDir = './';
         sketchList;
     end
@@ -40,9 +40,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %OPEN Open JMAG Designer or a specific file.
             %   open() opens a new instance of JMAG Designer with a new document.
             %
-            %   open('filename') opens the file in a new instance of MagNet.
+            %   open('filename') opens the file in a new instance of JMAG.
             %
-            %   open('filename', jd) opens the file in the MN MagNet instance
+            %   open('filename', jd) opens the file in the jd JMAG instance
             %
             %   open('filename', jd, VISIBLE) opens the file in the jd JMAG
             %   Designer instance with customizable visibility (true for visible)
@@ -101,7 +101,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         function [arc] = drawArc(obj, centerxy, startxy, endxy)
-            %DRAWARC Draw an arc in the current XFEMM document.
+            %DRAWARC Draw an arc in the current JMAG document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
