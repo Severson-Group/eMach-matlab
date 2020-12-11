@@ -13,6 +13,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         doc=0; % The document object in Geometry Editor
         ass=0; % The assemble object in Geometry Editor
         sketch=0; % The sketch object in Geometry Editor
+        regionItem = 0;
         part=0; % The part object in Geometry Editor
         model=0; % The model object in JMAG Designer
         study=0; % The study object in JMAG Designer
@@ -230,9 +231,25 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             for i = 1:length(csToken.token)
                 obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).GetName()));
             end
+            id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
+            id2 = obj.sketch.NumItems();
             obj.geomApp.View.SelectAtCoordinateDlg(double(csToken.innerCoord(1)), double(csToken.innerCoord(2)), 0, 1, 64);
-            obj.doc.GetSelection().Delete()
+            region = obj.doc.GetSelection.Item([0]);
+            regionName = region.GetName;            
+            regionList{1} = 'Region';
+            
+            for idx = 2:id2-id
+                regionList{idx} = sprintf('Region.%d',idx);
+            end
+            
+            for idx = 1:id2-id
+                if ~strcmp(regionList{idx}, regionName)
+                    obj.doc.GetSelection().Clear();
+                    obj.doc.GetSelection().Add(obj.sketch.GetItem(regionList{idx}));
+                    obj.doc.GetSelection().Delete();
+                end
+            end          
             obj.sketch.CloseSketch();
             sketch = 1;
         end        
