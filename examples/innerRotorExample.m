@@ -3,7 +3,7 @@ clear
 
 DRAW_MAGNET = 1;
 DRAW_TIKZ   = 0;
-
+DRAW_JMAG = 1;
 %% Define cross sections
 
 stator1 = CrossSectInnerRotorStator( ...
@@ -158,4 +158,12 @@ if (DRAW_TIKZ)
     comp1.draw(toolTikz);
 
     toolTikz.close();
+end
+
+
+if (DRAW_JMAG)
+    toolJd = JMAG();
+    toolJd.open(0,0,true);
+    comp1.make(toolJd,toolJd);
+    
 end

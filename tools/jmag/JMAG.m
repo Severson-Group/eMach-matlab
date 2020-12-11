@@ -236,8 +236,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.geomApp.View.SelectAtCoordinateDlg(double(csToken.innerCoord(1)), double(csToken.innerCoord(2)), 0, 1, 64);
             region = obj.doc.GetSelection.Item([0]);
             regionName = region.GetName;            
-            regionList{1} = 'Region';
             
+            regionList{1} = 'Region';
             for idx = 2:id2-id
                 regionList{idx} = sprintf('Region.%d',idx);
             end
