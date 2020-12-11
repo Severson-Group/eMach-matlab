@@ -252,15 +252,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.sketch.CloseSketch();
             sketch = 1;
         end        
-        
-        function setDefaultLengthUnit(obj, userUnit, makeAppDefault)
-
-        end
-        
-        function viewAll(obj)
-
-        end
-        
+              
         
         function setVisibility(obj, visibility)
             % Set visibility of the JMAG application
@@ -269,31 +261,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             else
                 obj.jd.Hide();
             end
-        end
-        
-        function new_region = regionMirrorCopy(obj, region, edge4ref, symmetry_type, bMerge)
-            % Default: edge4ref=None, symmetry_type=None, bMerge=True
-
-            mirror = obj.sketch.CreateRegionMirrorCopy();
-            mirror.SetProperty('Merge', bMerge)
-            ref2 = obj.doc.CreateReferenceFromItem(region);
-            mirror.SetPropertyByReference('Region', ref2)
-            
-            if isempty(edge4ref)
-                if isempty(symmetry_type)
-                    error('At least give one of edge4ref and symmetry_type')
-                else
-                    mirror.SetProperty('SymmetryType', symmetry_type)
-                end
-            else
-                ref1 = obj.sketch.GetItem(edge4ref.GetName()); % e.g., u"Line"
-                ref2 = obj.doc.CreateReferenceFromItem(ref1);
-                mirror.SetPropertyByReference('Symmetry', ref2);
-            end
-            
-            if bMerge == false && strcmp(region.GetName(), 'Region')
-                new_region = obj.assembly.GetItem('Region.1');
-            end 
         end
    end
     
