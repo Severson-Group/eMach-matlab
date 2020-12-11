@@ -11,9 +11,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         projName=0; % The name of JMAG Designer project (a string)
         geomApp=0; % The Geometry Editor object
         doc=0; % The document object in Geometry Editor
-        ass=0; % The assemble object in Geometry Editor
+        assembly=0; % The assembly object in Geometry Editor
         sketch=0; % The sketch object in Geometry Editor
-        regionItem = 0;
         part=0; % The part object in Geometry Editor
         model=0; % The model object in JMAG Designer
         study=0; % The study object in JMAG Designer
@@ -143,7 +142,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
 
             for i = 1:length(obj.sketchList)
                 if obj.sketchList(i) == sketchName
-                    obj.sketch = obj.ass.GetItem(sketchName);
+                    obj.sketch = obj.assembly.GetItem(sketchName);
                     % open sketch for drawing (must be closed before switch to another sketch)
                     obj.sketch.OpenSketch();
                     sketch = obj.sketch;
@@ -156,20 +155,20 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             obj.geomApp = obj.checkGeomApp();
             obj.doc = obj.geomApp.GetDocument();
-            obj.ass = obj.doc.GetAssembly();
-            ref1 = obj.ass.GetItem('XY Plane');
+            obj.assembly = obj.doc.GetAssembly();
+            ref1 = obj.assembly.GetItem('XY Plane');
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
-            obj.sketch = obj.ass.CreateSketch(ref2);
+            obj.sketch = obj.assembly.CreateSketch(ref2);
             obj.sketch.SetProperty('Name', sketchName)
             if nargin>2
                 obj.sketch.SetProperty('Color', varargin);
             end         
             % open sketch for drawing (must be closed before switch to another sketch)
             obj.sketch.OpenSketch();
-            ref1 = obj.ass.GetItem(sketchName);
+            ref1 = obj.assembly.GetItem(sketchName);
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
-            obj.ass.MoveToPart(ref2);
-            obj.part = obj.ass.GetItem(sketchName);
+            obj.assembly.MoveToPart(ref2);
+            obj.part = obj.assembly.GetItem(sketchName);
             sketch = obj.sketch;
         end
         
@@ -293,7 +292,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             if bMerge == false && strcmp(region.GetName(), 'Region')
-                new_region = obj.ass.GetItem('Region.1');
+                new_region = obj.assembly.GetItem('Region.1');
             end 
         end
    end
