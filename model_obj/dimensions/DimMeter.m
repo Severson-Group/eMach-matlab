@@ -1,14 +1,14 @@
-classdef DimInch < DimLinear
-    %DimInches Dimension in inches
+classdef DimMeter < DimLinear
+    %DimMeter Dimension in inches
     %   based off of the double class, this class implements required
     %   conversion methods.
      
    
     methods
-        function obj = DimInch(vargin)
+        function obj = DimMeter(vargin)
             % Allow constructor to take in a DimLinear
             if (isa(vargin, 'DimLinear'))
-                vargin = vargin.toInch();
+                vargin = vargin.toMeter();
             end
 
             obj = obj@DimLinear(vargin);
@@ -17,20 +17,20 @@ classdef DimInch < DimLinear
         function new = toMillimeter(obj)            
             %TOMILLIMETER Convert this dimension to mm
                         
-            new = DimMillimeter(25.4 * double(obj));
-        end
-        
-        function new = toMeter(obj)            
-            %TOMETER Convert this dimension to meters
-                        
-            new = DimMeter(25.4 * double(obj) / 1.0e3);
+            new = DimMillimeter(1.0e3 * double(obj));
         end
         
         function new = toInch(obj) 
             %TOINCHES Convert this dimension to inches
             
+           new = DimInch(1.0e3 * double(obj) / 25.4); 
+        end
+        
+        function new = toMeter(obj) 
+            %TOMETER Convert this dimension to meters
+            
            new = obj; 
-        end          
+        end
     end
 end
 
