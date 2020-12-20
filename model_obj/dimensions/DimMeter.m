@@ -1,5 +1,5 @@
 classdef DimMeter < DimLinear
-    %DimMeter Dimension in inches
+    %DimMeter Dimension in meters
     %   based off of the double class, this class implements required
     %   conversion methods.
      
@@ -8,7 +8,7 @@ classdef DimMeter < DimLinear
         function obj = DimMeter(vargin)
             % Allow constructor to take in a DimLinear
             if (isa(vargin, 'DimLinear'))
-                vargin = vargin.toMeter();
+                vargin = DimMeter(double(vargin.toMillimeter() * 1e-3));
             end
 
             obj = obj@DimLinear(vargin);

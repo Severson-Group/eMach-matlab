@@ -20,12 +20,6 @@ classdef DimInch < DimLinear
             new = DimMillimeter(25.4 * double(obj));
         end
         
-        function new = toMeter(obj)            
-            %TOMETER Convert this dimension to meters
-                        
-            new = DimMeter(25.4 * double(obj) / 1.0e3);
-        end
-        
         function new = toInch(obj) 
             %TOINCHES Convert this dimension to inches
             
