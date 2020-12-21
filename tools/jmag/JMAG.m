@@ -7,28 +7,20 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     
     properties (GetAccess = 'public', SetAccess = 'public')        
         jd;  % The activexserver object for JMAG Designer
-        app=0; % app = jd
-        projName=0; % The name of JMAG Designer project (a string)
-        geomApp=0; % The Geometry Editor object
-        doc=0; % The document object in Geometry Editor
-        assembly=0; % The assembly object in Geometry Editor
-        sketch=0; % The sketch object in Geometry Editor
-        part=0; % The part object in Geometry Editor
-        model=0; % The model object in JMAG Designer
-        study=0; % The study object in JMAG Designer
+        app = 0; % app = jd
+        projName = 0; % The name of JMAG Designer project (a string)
+        geomApp = 0; % The Geometry Editor object
+        doc = 0; % The document object in Geometry Editor
+        assembly = 0; % The assembly object in Geometry Editor
+        sketch = 0; % The sketch object in Geometry Editor
+        part = 0; % The part object in Geometry Editor
+        model = 0; % The model object in JMAG Designer
+        study = 0; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
-        consts; % Program constants
-        defaultLength = 'Meter'; % Default length unit is mm
+        defaultLength = 'meters'; % Default length unit is m
+        defaultAngle = 'degrees'; % Default angle unit is degrees
         workDir = './';
         sketchList;
-    end
-    
-    
-    methods (Access = 'private')
-        function c = almostEqual(~,a,b)
-            tol = 0.00001;
-            c = abs(a - b) < tol;
-        end
     end
     
     
@@ -78,7 +70,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             obj.view = obj.jd.View();
-            obj.consts = [];
             obj.app = obj.jd;
         end
         
@@ -96,13 +87,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.sketch.OpenSketch();
             end
             
-            % Convert other units to DimMeter
-            startxy = DimMeter(startxy);
-            endxy = DimMeter(endxy); 
-            
-            % Convert DimMeter to double
-            startxy = double(startxy);
-            endxy = double(endxy);
+            % Convert to default units
+            startxy = obj.convertLengthUnit(startxy,obj.defaultLength);
+            endxy = obj.convertLengthUnit(endxy,obj.defaultLength);             
             
             line = obj.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
         end
@@ -118,15 +105,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.sketch.OpenSketch();
             end
             
-            % Convert other units to DimMeter
-            centerxy = DimMeter(centerxy);
-            startxy = DimMeter(startxy);
-            endxy = DimMeter(endxy);     
-            
-            % Convert DimMeter to double
-            centerxy = double(centerxy);
-            startxy = double(startxy);
-            endxy = double(endxy);
+            % Convert to default units
+            centerxy = obj.convertLengthUnit(centerxy,obj.defaultLength);
+            startxy = obj.convertLengthUnit(startxy,obj.defaultLength);
+            endxy = obj.convertLengthUnit(endxy,obj.defaultLength);     
             
             obj.sketch.CreateVertex(startxy(1), startxy(2));
             obj.sketch.CreateVertex(endxy(1), endxy(2));
@@ -178,7 +160,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             if nargin>2
                 obj.sketch.SetProperty('Color', varargin);
             end         
-            % open sketch for drawing (must be closed before switch to another sketch)
+            % Creating part from sketch
             obj.sketch.OpenSketch();
             ref1 = obj.assembly.GetItem(sketchName);
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
@@ -236,8 +218,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.study = obj.model.GetStudy(obj.projName);
             end
             
-            % Set units to meters
-            obj.setDefaultLengthUnit('meters')
+            % Set to default units
+            obj.setDefaultLengthUnit(obj.defaultLength)
+            obj.setDefaultAngleUnit(obj.defaultAngle)
             % Add material
             obj.study.SetMaterialByName(name, material)
             obj.app.Save()
@@ -254,7 +237,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
             id2 = obj.sketch.NumItems();
-            obj.geomApp.View.SelectAtCoordinateDlg(double(DimMeter(csToken.innerCoord(1))), double(DimMeter(csToken.innerCoord(2))), 0, 1, 64);
+            obj.geomApp.View.SelectAtCoordinateDlg(double(DimMeter(csToken.innerCoord(1))), ...
+                double(DimMeter(csToken.innerCoord(2))), 0, 1, 64);
             region = obj.doc.GetSelection.Item([0]);
             regionName = region.GetName;            
             
@@ -279,11 +263,51 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %SETDEFAULTLENGTHUNIT Set the default unit for length.
             %   setDefaultLengthUnit(userUnit)
             %       Sets the units for length. 
-
             %   userUnit can be set to meters
   
             if strcmp(userUnit, 'meters')
                 obj.model.SetUnitCollection('SI_units')
+            else
+                error('unsupported length unit')
+            end
+        end
+        
+        function setDefaultAngleUnit(obj, userUnit)
+            %SETDEFAULTANGLEUNIT Set the default unit for angle.
+            %   setDefaultAngleUnit(userUnit)
+            %       Sets the units for angle. 
+            %   userUnit can be set to degrees
+  
+            if strcmp(userUnit, 'degrees')
+                obj.model.SetUnitCollection('SI_units')
+            else
+                error('unsupported angle unit')
+            end
+        end
+        
+        
+        function convertedLength = convertLengthUnit(obj, length, userUnit)
+            %CONVERTLENGTHUNIT Convert the units for length.
+            %   convertLengthUnit(length,userUnit)
+            %       Convert the units for length. 
+            %   userUnit can be set to meters
+  
+            if strcmp(userUnit, 'meters')
+                convertedLength = double(DimMeter(length));
+            else
+                error('unsupported length unit')
+            end
+        end
+        
+        
+        function convertedAngle = convertAngleUnit(obj, angle, userUnit)
+            %CONVERTANGLEUNIT Convert the units for angle.
+            %   convertAngleUnit(angle, userUnit)
+            %       Convert the units for angle. 
+            %   userUnit can be set to degrees
+  
+            if strcmp(userUnit, 'degrees')
+                convertedAngle = double(DimDegree(angle));
             else
                 error('unsupported length unit')
             end
@@ -298,8 +322,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.jd.Hide();
             end
         end
-   end
+    end
     
+   
     methods(Access = protected)
          function validateProps(obj)
             %VALIDATE_PROPS Validate the properties of this component
