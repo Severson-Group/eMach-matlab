@@ -32,6 +32,18 @@ class DimLinear(DimBase,ABC):
         if((isinstance(self,DimLinear))):
             mul = (other) * (self._to_dimesionless())
             return type(self)._from_dimesionless(mul)
+        
+    def __truediv__(self, other):
+        if (isinstance(other,DimLinear)):
+            div = self._to_dimesionless() / other._to_dimesionless()
+            return self.__class__(div)
+        else:
+            div = (self._to_dimesionless()) / (other)
+            print('hi')
+            return type(self)._from_dimesionless(div)
+
+    def __rtruediv__(self, other):
+        raise Exception('Division not valid')
 
     def __neg__(self):
         return self*-1
