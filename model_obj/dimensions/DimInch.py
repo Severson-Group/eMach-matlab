@@ -12,11 +12,11 @@ class DimInch(DimLinear):
     def to_inch(self):
         return self
 
-    def _to_dimes(self):
+    def _to_dimesionless(self):
 
         return float(self.data * 25.4)
 
-    def _from_dimes(num1):
+    def _from_dimesionless(num1):
         x = num1 / 25.4
         return DimInch(x)
 
