@@ -8,12 +8,12 @@ class DimLinear(DimBase,ABC):
         DimBase.__init__(self, data)
 
     def __add__(self, other):
-        add = self._to_dimes() + other._to_dimes()
-        return type(self)._from_dimes(add)
+        add = self._to_dimesionless() + other._to_dimesionless()
+        return type(self)._from_dimesionless(add)
 
     def __sub__(self, other):
-        sub = self._to_dimes() - other._to_dimes()
-        return type(self)._from_dimes(sub)
+        sub = self._to_dimesionless() - other._to_dimesionless()
+        return type(self)._from_dimesionless(sub)
 
 
     def __mul__(self, other):
@@ -22,16 +22,16 @@ class DimLinear(DimBase,ABC):
 
 
         if((isinstance(self,DimLinear))):
-            mul = (other) * (self._to_dimes())
-            return type(self)._from_dimes(mul)
+            mul = (other) * (self._to_dimesionless())
+            return type(self)._from_dimesionless(mul)
 
     def __rmul__(self, other):
         if (isinstance(self,DimLinear) and isinstance(other,DimLinear)):
             raise Exception ('Multiplication Not valid')
 
         if((isinstance(self,DimLinear))):
-            mul = (other) * (self._to_dimes())
-            return type(self)._from_dimes(mul)
+            mul = (other) * (self._to_dimesionless())
+            return type(self)._from_dimesionless(mul)
 
     def __neg__(self):
         return self*-1
@@ -56,9 +56,9 @@ class DimLinear(DimBase,ABC):
         pass
 
     @abstractmethod
-    def to_dimes(self):
+    def _to_dimesionless(self):
         pass
 
     @abstractmethod
-    def from_dimes(var):
+    def _to_dimesionless(var):
         pass
