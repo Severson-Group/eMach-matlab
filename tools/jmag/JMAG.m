@@ -237,8 +237,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
             id2 = obj.sketch.NumItems();
+            visItem = 1; % Set 1 to select only the visible (top layer) item
+            itemType = 64; % Set 64 for region.
             obj.geomApp.View.SelectAtCoordinateDlg(double(DimMeter(csToken.innerCoord(1))), ...
-                double(DimMeter(csToken.innerCoord(2))), 0, 1, 64);
+                double(DimMeter(csToken.innerCoord(2))), 0, visItem, itemType);
             region = obj.doc.GetSelection.Item([0]);
             regionName = region.GetName;            
             
