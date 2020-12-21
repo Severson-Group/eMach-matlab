@@ -39,7 +39,6 @@ class DimLinear(DimBase,ABC):
             return self.__class__(div)
         else:
             div = (self._to_dimesionless()) / (other)
-            print('hi')
             return type(self)._from_dimesionless(div)
 
     def __rtruediv__(self, other):
