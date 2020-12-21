@@ -13,8 +13,8 @@ classdef DrawerBase < handle
     end
    
     methods(Abstract = true)
-        new = drawLine(obj)
-        new = drawArc(obj)
+        new = drawLine(obj, startx, endx)
+        new = drawArc(obj, centerxy, startxy, endxy)
         new = select(obj)
     end
     
