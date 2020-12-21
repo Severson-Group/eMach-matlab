@@ -23,12 +23,14 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         sketchList;
     end
     
+    
     methods (Access = 'private')
         function c = almostEqual(~,a,b)
             tol = 0.00001;
             c = abs(a - b) < tol;
         end
     end
+    
     
     methods
         function obj = JMAG(varargin)
@@ -84,6 +86,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.jd.Quit();
         end
         
+        
         function [line] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
@@ -103,6 +106,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             line = obj.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
         end
+        
         
         function [arc] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current JMAG document.
@@ -132,6 +136,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                                         endxy(1), endxy(2));
         end
         
+        
         function geomApp = checkGeomApp(obj)
             if ~isnumeric(obj.geomApp)
             else
@@ -141,6 +146,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             geomApp = obj.geomApp;
         end
+        
         
         function sketch = getSketch(obj, iSketch, varargin)
             if isnumeric(iSketch)
@@ -181,6 +187,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             sketch = obj.sketch;
         end
         
+        
         function select(obj)
            %SELECT Selects something from canvas (?)
             %    select()
@@ -193,6 +200,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             % lines and surfaces that need to be selected
         end
         
+        
         function new = revolve(obj, name, material, center, axis, angle)
             %REVOLVE Revolve a cross-section along an arc    
             %new = revolve(obj, name, material, center, axis, angle)
@@ -203,6 +211,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   angle  - Angle of rotation (dimAngular) 
         end
         
+        
         function extrudeSketch = extrude(obj, name, material, depth, csToken)
             ref1 = obj.sketch;
             obj.part.CreateExtrudeSolid(ref1,double(DimMeter(depth)))
@@ -212,9 +221,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             % Import Model into Designer
             obj.sketch = 0;
             obj.doc.SaveModel(true)
+            
             if obj.study == 0
                 obj.model = obj.app.GetCurrentModel();
-                obj.model.SetUnitCollection('SI_units')
                 obj.model.SetName(obj.projName)
                 % Create study
                 obj.study = obj.model.CreateStudy('Transient', obj.projName);
@@ -223,15 +232,18 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.app.DeleteModel(obj.projName)
                 % Setup the new model
                 obj.model = obj.app.GetCurrentModel();
-                obj.model.SetUnitCollection('SI_units')
                 obj.model.SetName(obj.projName)
                 obj.study = obj.model.GetStudy(obj.projName);
             end
+            
+            % Set units to meters
+            obj.setDefaultLengthUnit('meters')
             % Add material
             obj.study.SetMaterialByName(name, material)
             obj.app.Save()
             extrudeSketch = 0;
         end
+        
         
         function sketch = prepareSection(obj, csToken)
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
@@ -261,7 +273,22 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.sketch.CloseSketch();
             sketch = 1;
         end        
-              
+        
+        
+        function setDefaultLengthUnit(obj, userUnit)
+            %SETDEFAULTLENGTHUNIT Set the default unit for length.
+            %   setDefaultLengthUnit(userUnit)
+            %       Sets the units for length. 
+
+            %   userUnit can be set to meters
+  
+            if strcmp(userUnit, 'meters')
+                obj.model.SetUnitCollection('SI_units')
+            else
+                error('unsupported length unit')
+            end
+        end
+        
         
         function setVisibility(obj, visibility)
             % Set visibility of the JMAG application

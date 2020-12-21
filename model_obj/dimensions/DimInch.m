@@ -24,7 +24,7 @@ classdef DimInch < DimLinear
             %TOINCHES Convert this dimension to inches
             
            new = obj; 
-        end          
+        end
     end
 end
 
