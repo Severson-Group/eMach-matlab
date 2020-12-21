@@ -28,3 +28,8 @@ octave-workspace
 *.eps
 *.log
 
+# python cache files
+*.pyc
+
+# python cache folder
+__pycache__/
