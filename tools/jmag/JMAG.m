@@ -78,7 +78,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function [line] = drawLine(obj, startxy, endxy)
+        function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
 
@@ -92,10 +92,11 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             endxy = obj.convertLengthUnit(endxy,obj.defaultLength);             
             
             line = obj.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
+            tokenDraw = TokenDraw(line, 0);
         end
         
         
-        function [arc] = drawArc(obj, centerxy, startxy, endxy)
+        function [tokenDraw] = drawArc(obj, centerxy, startxy, endxy)
             %DRAWARC Draw an arc in the current JMAG document.
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
@@ -116,6 +117,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             arc = obj.sketch.CreateArc(centerxy(1), centerxy(2), ...
                                         startxy(1), startxy(2), ...
                                         endxy(1), endxy(2));
+            tokenDraw = TokenDraw(arc, 1);
         end
         
         
@@ -232,7 +234,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             obj.doc.GetSelection().Clear();
             for i = 1:length(csToken.token)
-                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).GetName()));
+                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).segmentIndices.GetName()));
             end
             id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
