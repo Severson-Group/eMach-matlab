@@ -30,7 +30,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.validateProps();            
         end
         
-        function obj = open(obj, iFilename, iJd, iVisible)
+        function obj = open(obj, Filename, Jd, Visible)
             %OPEN Open JMAG Designer or a specific file.
             %   open() opens a new instance of JMAG Designer with a new document.
             %
@@ -41,7 +41,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   open('filename', jd, VISIBLE) opens the file in the jd JMAG
             %   Designer instance with customizable visibility (true for visible)
             %
-            %   iMn and iFilename can be set to 0 to allow setting
+            %   iMn and Filename can be set to 0 to allow setting
             %   the visibility of a new instance.
 
             if nargin <= 1
@@ -50,11 +50,11 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             % obj.jd now exists at this point
             if nargin > 2
-                if isnumeric(iJd)
+                if isnumeric(Jd)
                     obj.jd = actxserver('designer.Application.181');
                 end
 
-                if iVisible
+                if Visible
                     obj.jd.Show();
                 else
                     obj.jd.Hide();
@@ -63,8 +63,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             obj.workDir = './';
             obj.projName = 'proj';
-            if nargin >= 1 && ~isnumeric(iFilename)
-                obj.jd.Open(strcat(obj.workDir, iFilename, '.jproj'));
+            if nargin >= 1 && ~isnumeric(Filename)
+                obj.jd.Open(strcat(obj.workDir, Filename, '.jproj'));
             else
                 obj.jd.SaveAs(strcat(obj.workDir, obj.projName, '.jproj'));
             end
@@ -132,11 +132,11 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function sketch = getSketch(obj, iSketch, varargin)
-            if isnumeric(iSketch)
-                sketchName = strcat('mySketch', num2str(iSketch));
+        function sketch = getSketch(obj, Sketch, varargin)
+            if isnumeric(Sketch)
+                sketchName = strcat('mySketch', num2str(Sketch));
             else
-                sketchName = iSketch;
+                sketchName = Sketch;
             end
 
             for i = 1:length(obj.sketchList)
