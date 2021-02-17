@@ -38,8 +38,8 @@ Clear drawings are essential for the end user to understand how to use the cross
 
 - **Coordinate Axes:** The drawing origin and the coordinate axes should be clearly indicated in the drawing.
 
-- **Drawing file name:** The drawing file should have the same name as the cross-section and follow camel case. Eg: `InnerNotchedRotor.svg`.
+- **Drawing file name:** The drawing file should have the same name as the cross-section and follow camel case. Eg: `CrossSectTrapezoidDrawing.svg`.
 
-As an example, the `InnerNotchedRotor.svg` file is shown below:
-<img src="./innerNotchedRotor/InnerNotchedRotor.svg" width="900" height="900" />
+As an example, the `CrossSectTrapezoidDrawing.svg` file is shown below:
+<img src="./trapezoid/CrossSectTrapezoidDrawing.svg" width="500" height="500" />
 
