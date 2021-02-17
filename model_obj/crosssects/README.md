@@ -34,9 +34,12 @@ Clear drawings are essential for the end user to understand how to use the cross
   - Italicized `Times New Roman` font should be used.
   - Subscripts should appear as subscripts, not just smaller font.
   - Greek characters should be used where appropriate. Eg: An angular dimension maybe called `alpha_m` in the function. However, it should be denoted as <img src="https://latex.codecogs.com/gif.latex?\alpha_\text{m}" title="\alpha_\text{m}" /> in the drawing.
-  - Occassionally, some cross-sections may have variables that aren't dimensions. Eg: The `CrossSectInnerRotorStator` has `Q` - number of slots, as a variable. Such variables should also be indicated in the drawing.
+  - Occassionally, some cross-sections may have variables that aren't dimensions. Eg: The `innerNotchedRotor` has `p` - number of pole pairs, as a variable. Such variables should also be indicated in the drawing.
 
 - **Coordinate Axes:** The drawing origin and the coordinate axes should be clearly indicated in the drawing.
 
-- **Drawing file name:** The drawing file should have the same name as the function name that implements the cross-section. It begins with `CrossSect` and follows camel case. Eg: `CrossSectOuterRotor.svg`.
+- **Drawing file name:** The drawing file should have the same name as the cross-section and follow camel case. Eg: `InnerNotchedRotor.svg`.
+
+As an example, the `InnerNotchedRotor.svg` file is shown below:
+<img src="./innerNotchedRotor/InnerNotchedRotor.svg" width="900" height="900" />
 
