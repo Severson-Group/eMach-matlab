@@ -12,7 +12,7 @@ The geometry creation workflow in eMach is as follows:
 Although this workflow is consistent with the workflow in Infolytica MagNet, the workflow in JMAG has some additional steps to be followed. The JMAG workflow is as follows:
 1. Draw a cross section geometry
 2. Create regions
-3. If more than one regions are created in Step 2, delete unecessary regions
+3. If more than one region is created in Step 2, delete unecessary regions
 4. Extrude the region
 5. Create a study
 6. Add the geometry to the study
@@ -34,7 +34,7 @@ With this information, the following workaround was adopted to address the issue
 1. In the `prepareSection()` function, after drawing the cross section, the number of geometry items in the JMAG drawing is obtained. This is done using the `NumItems()` function.
 2. The JMAG geometry regions are created using the `CreateRegions()` function.
 3. The number of geometry items are again obtained by calling `NumItems()`.
-4. The difference between the number of geometry items in Stpe 3 and Step 1 gives the total number of regions created in Step 2.
+4. The difference between the number of geometry items in Step 3 and Step 1 gives the total number of regions created in Step 2.
 5. JMAG names regions in the format `region, region.2, region.3,......region.n` if there are `n` regions. So, knowing the number of regions created, an array of region names is populated.
 6. Using the `innerCoord` information, the `SelectAtCoordinateDlg()` function is used to select the desired region to be kept.
 7. The `GetSelection()` function is used to get the selected region object and its name is obtained.
