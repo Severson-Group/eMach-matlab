@@ -29,7 +29,7 @@ When adding a new cross-section, a new folder must be created in this path. The 
 Clear drawings are essential for the end user to understand how to use the cross-sections. The following guidelines must be adhered to:
 
 - **Dimension names:** 
-  - All dimensions that the function takes as an input, should be indicated in the drawings. 
+  - All dimensions that the function takes as an input should be indicated in the drawings. 
   - The dimension names should be the same as the variable names in the function.
   - Italicized `Times New Roman` font should be used.
   - Subscripts should appear as subscripts, not just smaller font.
@@ -41,5 +41,5 @@ Clear drawings are essential for the end user to understand how to use the cross
 - **Drawing file name:** The drawing file should have the same name as the cross-section and follow camel case. Eg: `CrossSectTrapezoidDrawing.svg`.
 
 As an example, the `CrossSectTrapezoidDrawing.svg` file is shown below:
-<img src="./trapezoid/CrossSectTrapezoidDrawing.svg" width="500" height="500" />
 
+<img src="./trapezoid/CrossSectTrapezoidDrawing.svg" width="500" height="500" />
