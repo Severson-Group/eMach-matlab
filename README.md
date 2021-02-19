@@ -14,7 +14,7 @@ A brief summary of guidelines for names includes:
 - **Class names:** start upper case and then move to camel case, i.e. `MaterialGeneric`
 
 
-Follow the MATLAB editor's guidelines on maximum line length. Wrapping to multiple lines is preferred over code that has excessively wide lines. This is for readibility and printability reasons.
+Follow the MATLAB editor's guidelines on maximum line length. Wrapping to multiple lines is preferred over code that has excessively wide lines. This is for readability and printability reasons.
 
 ### Object-Oriented Programming
 The reference manual for MATLAB OOP can be found [here](https://www.mathworks.com/help/pdf_doc/matlab/matlab_oop.pdf).
