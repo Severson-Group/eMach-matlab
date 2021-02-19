@@ -45,7 +45,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   the visibility of a new instance.
 
             if nargin <= 1
-                obj.jd = actxserver('designer.Application.181'); %JMAG version 17
+                obj.jd = actxserver('designer.Application.181'); %JMAG version 18
             end
             
             % obj.jd now exists at this point
