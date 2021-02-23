@@ -1,6 +1,6 @@
 # Specifications for `Crosssect` class implementation
 
-The `Crosssect` class implements cross-sections of standard geometry shapes that are usually encountered when using eMach. This document specifies the rules to be followed to add a new cross-section to eMach.
+The `Crosssect` class implements cross-sections of standard geometry shapes that are commonly encountered in electric machine design. This document specifies the rules to be followed to add a new cross-section to eMach.
 
 
 ## Creating a new cross-section
