@@ -6,7 +6,7 @@ An open source framework for modeling [electric] machinery.
 All contributors to eMach are asked to use specific MATLAB code style, use MATLAB's object oriented programming (OOP) capabilities, and follow the SOLIDD design principles&mdash;all of which are now outlined.
 
 ### Code Style
-Using a consist writing style makes shared code more maintainable, useful, and understandable. Contributors to eMach should follow the guidelines provided [here](https://www.mathworks.com/matlabcentral/fileexchange/46056-matlab-style-guidelines-2-0). 
+Using a consistent writing style makes shared code more maintainable, useful, and understandable. Contributors to eMach should follow the guidelines provided [here](https://www.mathworks.com/matlabcentral/fileexchange/46056-matlab-style-guidelines-2-0). 
 
 A brief summary of guidelines for names includes:
 - **Avoid using excessively short names:** instead, favor full words to convey meaning
