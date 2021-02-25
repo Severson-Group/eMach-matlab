@@ -50,7 +50,6 @@ If the data passed to the function is,
 The program will execute without errors. 
 
 However, if the data passed to the function is 
-or
 ```python
 {"slots": 12.5, "poles": 5.0, "phase": 3}
 ```
