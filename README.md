@@ -98,6 +98,6 @@ The key style requirements are summarized as follows:
 - All other lines: the documentation text should be indented from `%` by exactly three spaces.
 - Follow the MATLAB editor default guidelines on maximum line length (76 characters).
 
-If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window, and hitting enter key gives the following output:
+If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window gives the following output:
 
 ![image](./exampleMatlabHelp.PNG) 
