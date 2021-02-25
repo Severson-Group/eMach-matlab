@@ -38,8 +38,8 @@ Clear drawings are essential for the end user to understand how to use the cross
 
 - **Coordinate Axes:** The drawing origin and the coordinate axes should be clearly indicated in the drawing using a red coordinate system indicating the positive `x` and `y` directions. The origin of the coordinate system is the origin of the drawing, as interpretted by the cross-section class.
 
-- **Drawing file name:** The drawing filename should consist of the cross-section class name appended with `Drawing`. For example, `CrossSectTrapezoidDrawing.svg`.
+- **Drawing file name:** The drawing filename should consist of the cross-section class name. For example, `CrossSectTrapezoid.svg`.
 
-As an example, the `CrossSectTrapezoidDrawing.svg` file is shown below:
+As an example, the `CrossSectTrapezoid.svg` file is shown below:
 
 <img src="./trapezoid/CrossSectTrapezoidDrawing.svg" width="500" height="500" />
