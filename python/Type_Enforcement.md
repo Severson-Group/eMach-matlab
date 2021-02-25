@@ -1,5 +1,5 @@
 ### Type Enforcement ([JSON Schema](http://json-schema.org/understanding-json-schema/))
-- As discussed above, Type hinting can be used to enforce the data type of the object. 
+- Type hinting can be used to enforce the data type of the object. 
 - Enforcement beyond datatype like the range of values, multiple of values(multiple of 2's and 3's), length of the string, length of the array, etc. can be done using [JSON Schema](https://pynative.com/python-json-validation/).
 
 #### Example
