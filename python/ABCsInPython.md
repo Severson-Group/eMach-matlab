@@ -23,7 +23,7 @@ class Book(ABC):
         pass
 ```
 
-In the above example, Book has been defined as an abstract base class with `author` and `number_of_pages` decalred as its abstract methods using the `@abstractmethod` decorator. Any class inheriting Book has to uphold the contract that comes along with the class, i.e. they must have author and number_of_pages among their attributes. The below code snippet illustrates a child class of Book which does not implement the abstract methods specified by the parent class. Upon instantiating the class, Python raises a `TypeError`.
+In the above example, Book has been defined as an abstract base class with `author` and `number_of_pages` decalred as its abstract methods using the `@abstractmethod` decorator. Any class inheriting `Book` has to uphold the contract as specified by the class, i.e. they must have `author` and `number_of_pages` among their attributes. The below code snippet illustrates a child class of `Book` which does not implement the abstract methods specified by the parent class. Upon instantiating the class, Python raises a `TypeError`.
 
 ```python
 class HitchikersGuideToTheGalaxy(Book):
@@ -36,7 +36,7 @@ x = HitchikersGuideToTheGalaxy()
 TypeError: Can't instantiate abstract class HitchikersGuideToTheGalaxy with abstract methods author, number_of_pages
 ```
 
-An example of a properly defined child class of `Book` is provided below. As can be observed, this class implements both `author` and `number_of_page`s methods and therefore upholds the contract as specified by `Book`.
+An example of a properly defined child class of `Book` is provided below. As can be observed, this class implements both `author` and `number_of_pages` methods and therefore upholds the contract as specified by `Book`.
 
 ```python
 class FoucaultsPendulum(Book):
