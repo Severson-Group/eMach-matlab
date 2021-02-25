@@ -49,23 +49,23 @@ Several useful resources on the SOLIDD guidelines are assembled here:
 ### In Function Documentation
 Providing clear and concise in-function documentation makes open source code easy to understand and more useful. Contributors to eMach should follow the MATLAB function documentation guidelines.
 
-Throughout the documentation, the function name should be typed in upper case, i.e. `mn_d_makeMotionComponent()` as `MN_D_MAKEMOTIONCOMPONENT()`. If done so, MATLAB renders the function name in bold face.
+Throughout the documentation, the function name should be typed in upper case, i.e. `mn_d_makeMotionComponent` as `MN_D_MAKEMOTIONCOMPONENT`. Doing this causes MATLAB to render the function name in bold face.
 
 The function documentation block should consist of the following components:
 
-1. **Function description:** A brief description of the function should be provided in the first line. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
-2. **Function signature:** The function signature is provided next, and has four main parts, as listed below:
-   1. *Function signature description:* The function signature is followed immediately by a brief one sentence description of what that function accomplishes with that function signature.
-   2. *Argument description:* The function arguments are described for different use cases. This is expected to directly continue from the function signature. I.e., there is no whitespace vertically between the function signature and the description of arguments.
-   3. *Return value description:* The return value should be described. This will be in a new paragraph following the argument description.
+1. **Function summary:** The first line of the function documentation block should consist of the function name followed by a brief summary of the function. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
+2. **Function signatures:** Starting with the second line, all possible function signatures are provided along with their description. This should include the following information:
+   1. *Function signature and brief description:* The exact function signature should be provided and followed immediately by a one sentence description of what the function accomplishes when invoked with this signature.
+   2. *Argument descriptions:* A description of each argument should provided. This is expected to directly continue from the function signature description (no vertical whitespace is to be inserted).
+   3. *Return value description:* The return value should be described. This will be in a new paragraph following the argument descriptions.
    4. *Example use cases:* Provide example use cases, with each example in its own paragraph. Be as descriptive as possible.
    
-   **Note:** If a function has multiple function signatures, all of them must be described, in order of fewest arguments provided to most arguments provided. Each subsequent function signature only adds additional information - there is no need to re-describe the arguments and return values previously described.
-3. **Related functions:** Finally, list related functions that a user is likely to use along with this function.
+   **Note:** If a function has multiple function signatures, all of them must be described, in order of fewest arguments provided to most arguments provided. Each subsequent function signature should only add additional information. Do not re-describe the arguments and return values that were introduced by previous signatures.
+3. **Related functions:** Finally, list related functions that a user interested in this function is likely to use.
  
 Here is an example of a function documentation block that follows this specification:
 
-```
+```matlab
 %MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet.
 %   motion = MN_D_MAKEMOTIONCOMPONENT(mn, componentName) creates a motion 
 %   component to move the geometry named componentName. mn is the MagNet 
@@ -92,11 +92,11 @@ Here is an example of a function documentation block that follows this specifica
 
 ```
 **Indentation / Horizontal white spaces:**
-Indentation consistent with MATLAB style guidelines should be followed to ensure that the documentation is rendered just like the documentation of MATLAB built-in functions.
-The indentation in the example code block above is consistent with MATLAB's style. Specifically, the following are to be noted:
-- On the first line, the function name `MN_D_MAKEMOTIONCOMPONENT` has no indentation. However, there are three spaces between the function name and the one line description. 
-- In all other lines, the text is three spaces away from `%`.
-- Follow the MATLAB editor guidelines on maximum line length.
+Indentation consistent with MATLAB style guidelines should be followed.
+The key style requirements are summarized as follows:
+- First line: the function name `MN_D_MAKEMOTIONCOMPONENT` should have no indentation; three spaces should be placed between the function name and the brief summary. 
+- All other lines: the documentation text should be indented from `%` by exactly three spaces.
+- Follow the MATLAB editor default guidelines on maximum line length (76 characters).
 
 If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window, and hitting enter key gives the following output:
 
