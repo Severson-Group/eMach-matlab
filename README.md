@@ -6,7 +6,7 @@ An open source framework for modeling [electric] machinery.
 All contributors to eMach are asked to use specific MATLAB code style, use MATLAB's object oriented programming (OOP) capabilities, and follow the SOLIDD design principles&mdash;all of which are now outlined.
 
 ### Code Style
-Using a consist writing style makes shared code more maintainable, useful, and understandable. Contributors to eMach should follow the guidelines provided [here](styleGuidelines/matlabStyle2book.pdf). 
+Using a consistent writing style makes shared code more maintainable, useful, and understandable. Contributors to eMach should follow the guidelines provided [here](https://www.mathworks.com/matlabcentral/fileexchange/46056-matlab-style-guidelines-2-0). 
 
 A brief summary of guidelines for names includes:
 - **Avoid using excessively short names:** instead, favor full words to convey meaning
@@ -14,7 +14,7 @@ A brief summary of guidelines for names includes:
 - **Class names:** start upper case and then move to camel case, i.e. `MaterialGeneric`
 
 
-Follow the MATLAB editor's guidelines on maximum line length. Wrapping to multiple lines is preferred over code that has excessively wide lines. This is for readibility and printability reasons.
+Follow the MATLAB editor's guidelines on maximum line length. Wrapping to multiple lines is preferred over code that has excessively wide lines. This is for readability and printability reasons.
 
 ### Object-Oriented Programming
 The reference manual for MATLAB OOP can be found [here](https://www.mathworks.com/help/pdf_doc/matlab/matlab_oop.pdf).
@@ -46,4 +46,58 @@ Several useful resources on the SOLIDD guidelines are assembled here:
 - [Matlab blog on inversion of control](https://blogs.mathworks.com/developer/2016/02/16/inversion-of-control/)
 - [Matlab blog on dependency inversion](https://blogs.mathworks.com/developer/2016/02/24/dependency-injection/)
 
+### In Function Documentation
+Providing clear and concise in-function documentation makes open source code easy to understand and more useful. Contributors to eMach should follow the MATLAB function documentation guidelines.
 
+Throughout the documentation, the function name should be typed in upper case, i.e. `mn_d_makeMotionComponent` as `MN_D_MAKEMOTIONCOMPONENT`. Doing this causes MATLAB to render the function name in bold face.
+
+The function documentation block should consist of the following components:
+
+1. **Function summary:** The first line of the function documentation block should consist of the function name followed by a brief summary of the function. Example: `MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet`
+2. **Function signatures:** Starting with the second line, all possible function signatures are provided along with their description. This should include the following information:
+   1. *Function signature and brief description:* The exact function signature should be provided and followed immediately by a one sentence description of what the function accomplishes when invoked with this signature.
+   2. *Argument descriptions:* A description of each argument should provided. This is expected to directly continue from the function signature description (no vertical whitespace is to be inserted).
+   3. *Return value description:* The return value should be described. This will be in a new paragraph following the argument descriptions.
+   4. *Example use cases:* Provide example use cases, with each example in its own paragraph. Be as descriptive as possible.
+   
+   **Note:** If a function has multiple function signatures, all of them must be described, in order of fewest arguments provided to most arguments provided. Each subsequent function signature should only add additional information. Do not re-describe the arguments and return values that were introduced by previous signatures.
+3. **Related functions:** Finally, list related functions that a user interested in this function is likely to use.
+ 
+Here is an example of a function documentation block that follows this specification:
+
+```matlab
+%MN_D_MAKEMOTIONCOMPONENT   create a motion component in MagNet.
+%   motion = MN_D_MAKEMOTIONCOMPONENT(mn, componentName) creates a motion 
+%   component to move the geometry named componentName. mn is the MagNet 
+%   object. componentName is a string containing the name of the geometry 
+%   to be included in the motion component. If multiple components are to 
+%   be moved, componentName will be a cell array of strings containing 
+%   names of the geometries to be included in the motion component.
+%   
+%   This function returns motion, which is a string containing name of the 
+%   motion component created.
+%
+%   For example, motion = MN_D_MAKEMOTIONCOMPONENT(mn, 'rotorIron'), 
+%   creates a motion component to move the geometry 'rotorIron'. 
+%   
+%   motion2 = MN_D_MAKEMOTIONCOMPONENT(mn, [{'rotorIron'},{'magnet1'},...
+%   {'magnet2'}]), creates a motion component to move the geometries 
+%   'rotorIron', 'magnet1' and 'magnet2' as one single block.
+%
+%   This is a wrapper for Document::makeMotionComponent.
+%
+%   See also MN_FINDBODY, MN_GETPATHOFRADIALFACES, MN_D_MAKESIMPLECOIL, 
+%   MN_D_SETDEFAULTLENGTHUNIT, MN_D_SETPARAMETER, 
+%   MN_D_CREATEBOUNDARYCONDITION.
+
+```
+**Indentation / Horizontal white spaces:**
+Indentation consistent with MATLAB style guidelines should be followed.
+The key style requirements are summarized as follows:
+- First line: the function name `MN_D_MAKEMOTIONCOMPONENT` should have no indentation; three spaces should be placed between the function name and the brief summary. 
+- All other lines: the documentation text should be indented from `%` by exactly three spaces.
+- Follow the MATLAB editor default guidelines on maximum line length (76 characters).
+
+If formatted as above, typing `help mn_d_makeMotionComponent` in the MATLAB command window gives the following output:
+
+![image](./exampleMatlabHelp.PNG) 
