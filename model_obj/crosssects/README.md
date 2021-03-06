@@ -21,8 +21,8 @@ The folder specifications are as follows:
 - **Folder Name:** The folder name should be same as the cross-section name without the `CrossSect` prefix, and must follow camel case. For example, `CrossSectOuterRotor` will be in a folder named `outerRotor`.
 - **Folder Content:** The folder should contain the following files:
   - The MATLAB file containing the cross-section class.
-  - A vectorized drawing of the cross-section in either `.svg` (preferred) or `.pdf` format. The drawing filename should be identical to the cross-section class name.
-  - Source code used to create the drawings if not in `.svg` format (TikZ, Python, etc).
+  - A vectorized drawing of the cross-section in `.svg` format. The drawing filename should be identical to the cross-section class name.
+  - Source code used to create the drawings if not directly created from an `.svg` editor (i.e., if created using TikZ, Python, etc).
   - `README.md` file that has a header of `[class name] Cross Section` and renders the image (to facilitate browsing the repository through GitHub)
 
 ## Drawings
