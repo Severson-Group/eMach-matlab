@@ -269,7 +269,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %       Sets the units for length. 
             %   userUnit can be set to meters
   
-            if strcmp(userUnit, 'meters')
+            if strcmp(userUnit, 'DimMeter')
+                obj.defaultLength = userUnit;
                 obj.model.SetUnitCollection('SI_units')
             else
                 error('unsupported length unit')
@@ -282,7 +283,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %       Sets the units for angle. 
             %   userUnit can be set to degrees
   
-            if strcmp(userUnit, 'degrees')
+            if strcmp(userUnit, 'DimDegree')
+                obj.defaultAngle = userUnit;
                 obj.model.SetUnitCollection('SI_units')
             else
                 error('unsupported angle unit')
