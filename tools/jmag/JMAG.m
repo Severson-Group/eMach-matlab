@@ -17,8 +17,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         model = 0; % The model object in JMAG Designer
         study = 0; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
-        defaultLength = 'meters'; % Default length unit is m
-        defaultAngle = 'degrees'; % Default angle unit is degrees
+        defaultLength = 'DimMeter'; % Default length unit is m
+        defaultAngle = 'DimDegree'; % Default angle unit is degrees
         workDir = './';
         sketchList;
     end
