@@ -234,7 +234,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             obj.doc.GetSelection().Clear();
             for i = 1:length(csToken.token)
-                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).segmentIndices.GetName()));
+                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).drawToken.GetName()));
             end
             id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
