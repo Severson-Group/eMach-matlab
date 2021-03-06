@@ -88,8 +88,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             % Convert to default units
-            startxy = feval(obj.defaultLength, startxy);
-            endxy = feval(obj.defaultLength, endxy);             
+            startxy = double(feval(obj.defaultLength, startxy));
+            endxy = double(feval(obj.defaultLength, endxy));             
             
             line = obj.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
             tokenDraw = TokenDraw(line, 0);
@@ -107,9 +107,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             % Convert to default units
-            centerxy = feval(obj.defaultLength, centerxy);
-            startxy = feval(obj.defaultLength, startxy);
-            endxy = feval(obj.defaultLength, endxy);     
+            centerxy = double(feval(obj.defaultLength, centerxy));
+            startxy = double(feval(obj.defaultLength, startxy));
+            endxy = double(feval(obj.defaultLength, endxy));     
             
             obj.sketch.CreateVertex(startxy(1), startxy(2));
             obj.sketch.CreateVertex(endxy(1), endxy(2));
