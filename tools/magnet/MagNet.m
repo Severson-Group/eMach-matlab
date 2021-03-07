@@ -169,7 +169,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             seltype = get(obj.consts,'InfoSetSelection');
             objcode = get(obj.consts,'infoSliceSurface');
             
-            %TO DO: how to deal with the units of the coordinate?? 
+            csToken.innerCoord = feval(obj.defaultLength, csToken.innerCoord); 
             mn_dv_selectat(obj.mn, csToken.innerCoord, seltype, objcode);
             new = 1;
         end
