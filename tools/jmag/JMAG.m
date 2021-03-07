@@ -198,7 +198,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         
         function extrudeSketch = extrude(obj, name, material, depth, csToken)
             ref1 = obj.sketch;
-            obj.part.CreateExtrudeSolid(ref1,double(DimMeter(depth)))
+            depth = feval(obj.defaultLength, depth);
+            obj.part.CreateExtrudeSolid(ref1,double(depth))
             obj.part.SetProperty('Name', name)
             sketchName = strcat(name,'Sketch');
             obj.sketch.SetProperty('Name', sketchName)
@@ -241,8 +242,12 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             id2 = obj.sketch.NumItems();
             visItem = 1; % Set 1 to select only the visible (top layer) item
             itemType = 64; % Set 64 for region.
-            obj.geomApp.View.SelectAtCoordinateDlg(double(DimMeter(csToken.innerCoord(1))), ...
-                double(DimMeter(csToken.innerCoord(2))), 0, visItem, itemType);
+            innerCoord1 = csToken.innerCoord(1);
+            innerCoord2 = csToken.innerCoord(2);
+            innerCoord1 = feval(obj.defaultLength, innerCoord1);
+            innerCoord2 = feval(obj.defaultLength, innerCoord2);
+            obj.geomApp.View.SelectAtCoordinateDlg(double(innerCoord1), ...
+                double(innerCoord2), 0, visItem, itemType);
             region = obj.doc.GetSelection.Item([0]);
             regionName = region.GetName;            
             
