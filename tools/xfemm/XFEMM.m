@@ -499,9 +499,9 @@ classdef XFEMM < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             arcToken = [];
             for i = 1:length(tokenComp.csToken.token)
                 if tokenComp.csToken.token(1, i).geometryType == 0
-                    lineToken(end+1) = tokenComp.csToken.token(1, i).segmentIndices;
+                    lineToken(end+1) = tokenComp.csToken.token(1, i).drawToken;
                 else
-                    arcToken(end+1) = tokenComp.csToken.token(1, i).segmentIndices;
+                    arcToken(end+1) = tokenComp.csToken.token(1, i).drawToken;
                 end
             end
             % Set group number to nodes

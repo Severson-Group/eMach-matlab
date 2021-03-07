@@ -17,8 +17,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         model = 0; % The model object in JMAG Designer
         study = 0; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
-        defaultLength = 'meters'; % Default length unit is m
-        defaultAngle = 'degrees'; % Default angle unit is degrees
+        defaultLength = 'DimMeter'; % Default length unit is m
+        defaultAngle = 'DimDegree'; % Default angle unit is degrees
         workDir = './';
         sketchList;
     end
@@ -88,8 +88,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             % Convert to default units
-            startxy = obj.convertLengthUnit(startxy,obj.defaultLength);
-            endxy = obj.convertLengthUnit(endxy,obj.defaultLength);             
+            startxy = double(feval(obj.defaultLength, startxy));
+            endxy = double(feval(obj.defaultLength, endxy));             
             
             line = obj.sketch.CreateLine(startxy(1),startxy(2),endxy(1),endxy(2));
             tokenDraw = TokenDraw(line, 0);
@@ -107,9 +107,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             
             % Convert to default units
-            centerxy = obj.convertLengthUnit(centerxy,obj.defaultLength);
-            startxy = obj.convertLengthUnit(startxy,obj.defaultLength);
-            endxy = obj.convertLengthUnit(endxy,obj.defaultLength);     
+            centerxy = double(feval(obj.defaultLength, centerxy));
+            startxy = double(feval(obj.defaultLength, startxy));
+            endxy = double(feval(obj.defaultLength, endxy));     
             
             obj.sketch.CreateVertex(startxy(1), startxy(2));
             obj.sketch.CreateVertex(endxy(1), endxy(2));
@@ -234,7 +234,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             obj.doc.GetSelection().Clear();
             for i = 1:length(csToken.token)
-                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).segmentIndices.GetName()));
+                obj.doc.GetSelection().Add(obj.sketch.GetItem(csToken.token(i).drawToken.GetName()));
             end
             id = obj.sketch.NumItems();
             obj.sketch.CreateRegions();
@@ -269,7 +269,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %       Sets the units for length. 
             %   userUnit can be set to meters
   
-            if strcmp(userUnit, 'meters')
+            if strcmp(userUnit, 'DimMeter')
+                obj.defaultLength = userUnit;
                 obj.model.SetUnitCollection('SI_units')
             else
                 error('unsupported length unit')
@@ -282,38 +283,11 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %       Sets the units for angle. 
             %   userUnit can be set to degrees
   
-            if strcmp(userUnit, 'degrees')
+            if strcmp(userUnit, 'DimDegree')
+                obj.defaultAngle = userUnit;
                 obj.model.SetUnitCollection('SI_units')
             else
                 error('unsupported angle unit')
-            end
-        end
-        
-        
-        function convertedLength = convertLengthUnit(obj, length, userUnit)
-            %CONVERTLENGTHUNIT Convert the units for length.
-            %   convertLengthUnit(length,userUnit)
-            %       Convert the units for length. 
-            %   userUnit can be set to meters
-  
-            if strcmp(userUnit, 'meters')
-                convertedLength = double(DimMeter(length));
-            else
-                error('unsupported length unit')
-            end
-        end
-        
-        
-        function convertedAngle = convertAngleUnit(obj, angle, userUnit)
-            %CONVERTANGLEUNIT Convert the units for angle.
-            %   convertAngleUnit(angle, userUnit)
-            %       Convert the units for angle. 
-            %   userUnit can be set to degrees
-  
-            if strcmp(userUnit, 'degrees')
-                convertedAngle = double(DimDegree(angle));
-            else
-                error('unsupported length unit')
             end
         end
         

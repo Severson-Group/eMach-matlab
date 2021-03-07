@@ -1,9 +1,9 @@
 clc
 clear
 
-DRAW_MAGNET = 0;
+DRAW_MAGNET = 1;
 DRAW_TIKZ   = 0;
-DRAW_JMAG = 1;
+
 %% Define cross sections
 
 stator1 = CrossSectInnerRotorStator( ...
@@ -128,7 +128,7 @@ cs = [stator4];%, stator2, stator3, stator4, stator5, stator6];
 comp1 = Component( ...
         'name', 'comp1', ...
         'crossSections', cs, ...
-        'material', MaterialGeneric('name', '10JNEX900'), ...
+        'material', MaterialGeneric('name', 'M19: USS Transformer 72 -- 29 Gage'), ...
         'makeSolid', MakeExtrude( ...
             'location', Location3D( ...
                 'anchor_xyz', DimMillimeter([0,0,0]), ...
@@ -158,12 +158,4 @@ if (DRAW_TIKZ)
     comp1.draw(toolTikz);
 
     toolTikz.close();
-end
-
-
-if (DRAW_JMAG)
-    toolJd = JMAG();
-    toolJd.open(0,0,true);
-    comp1.make(toolJd,toolJd);
-    
 end
