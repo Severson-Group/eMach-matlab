@@ -10,7 +10,8 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         doc; % Document object
         view; %View object
         consts; %Program constants
-        defaultLength = 'dimMillimeter';
+        defaultLength = 'DimMillimeter';
+        defaultAngle  = 'DimDegree'
     end
     
     methods
@@ -77,7 +78,8 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
             %
             %   This is a wrapper for the Document::View::newLine function.
-  
+            startxy = feval(obj.defaultLength, startxy);
+            endxy = feval(obj.defaultLength, endxy);     
             invoke (obj.mn, 'processcommand', 'redim line(0)');
             invoke (obj.mn, 'processcommand', sprintf(...
                 'call getDocument.getView.newLine( %f, %f, %f, %f, line)', ...    
@@ -98,7 +100,10 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %       draws an arc
             %
             %   This is a wrapper for the Document::View::newArc function.
-
+            centerxy = feval(obj.defaultLength, centerxy);
+            startxy = feval(obj.defaultLength, startxy);
+            endxy = feval(obj.defaultLength, endxy);
+            endxy = feval(obj.defaultLength, endxy);     
             invoke (obj.mn, 'processcommand', 'redim arc(0)');
             invoke (obj.mn, 'processcommand', sprintf(...
                 'call getDocument.getView.newArc(%f, %f, %f, %f, %f, %f, arc)', ...
@@ -141,11 +146,11 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(axis, {'numeric'}, {'size',[1,2]});
             validateattributes(angle, {'DimAngular'}, {'nonempty'});
             flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
-            
-            %TODO: Convert center and axis to the appropriate default unit.
-            
+            axis = feval(obj.defaultLength, axis);
+            center = feval(obj.defaultLength, center);
+            angle = feval(obj.defaultAngle, angle);
             new = mn_dv_makeComponentInAnArc(obj.mn, center, axis, ...
-                    angle.toDegrees(), name, material, flags);
+                    angle, name, material, flags);
         end
         
         function new = extrude(obj, name, material, depth, token)
@@ -153,8 +158,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(material, {'char'}, {'nonempty'});
             validateattributes(name, {'char'}, {'nonempty'});
             flags(1) = get(obj.consts, 'infoMakeComponentRemoveVertices');  
-            
-            %TO DO: Convert center and axis to the appropriate default unit.
+            depth = feval(obj.defaultLength, depth);
             new = mn_dv_makeComponentInALine(obj.mn, depth, name, ...
                 material, flags); 
         end
