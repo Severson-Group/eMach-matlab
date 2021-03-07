@@ -168,8 +168,9 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             seltype = get(obj.consts,'InfoSetSelection');
             objcode = get(obj.consts,'infoSliceSurface');
-            %TO DO: how to deal with the units of the coordinate?? 
-            mn_dv_selectat(obj.mn, csToken.innerCoord, seltype, objcode);
+            innerCoord = csToken.innerCoord;
+            innerCoord = feval(obj.defaultLength, innerCoord);
+            mn_dv_selectat(obj.mn, innerCoord, seltype, objcode);
             new = 1;
         end
         
