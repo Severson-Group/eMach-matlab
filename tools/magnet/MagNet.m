@@ -11,7 +11,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         view; %View object
         consts; %Program constants
         defaultLength = 'DimMillimeter';
-        defaultAngle  = 'DimDegree'
+        defaultAngle  = 'DimDegree';
     end
     
     methods
