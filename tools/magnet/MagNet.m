@@ -8,35 +8,21 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     properties (GetAccess = 'public', SetAccess = 'private')
         mn;  % MagNet activexserver object
         doc; % Document object
-        view; %View object
+        view; % View object
         consts; %Program constants
         defaultLength = 'DimMillimeter';
         defaultAngle  = 'DimDegree';
+        visible = 1;% Default visibility
     end
     
     methods
         function obj = MagNet(varargin)
             obj = obj.createProps(nargin,varargin);            
-            obj.validateProps();            
+            obj.validateProps();        
+            obj.mn = actxserver('MagNet.Application');
+            set(obj.mn, 'Visible', obj.visible);
         end
-        
-        
-        function obj = create(obj, visible)
-            %CREATE Create a new MagNet instance 
-            %   create() creates a new instance of MagNet.
-            %
-            %   create(visible) sets the visibility of the created instance.
-            %   visible = 1 or 'true' for MagNet instance to be visible.
-            %   visible = 0 or 'false' for MagNet instace to be invisible.
-           obj.mn = actxserver('MagNet.Application');
-           if nargin > 1 && (visible  == 1 || visible == 0 ||...
-                   visible == 'true' || visible == 'false')
-              set(obj.mn, 'Visible', visible);
-           else
-              set(obj.mn, 'Visible', 1);
-           end
-        end
-
+                
          function open(obj, fileName)
             %OPEN Open MagNet
             %   open() opens a new instance of MagNet with a new document.

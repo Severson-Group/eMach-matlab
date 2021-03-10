@@ -35,17 +35,28 @@ comp1 = Component( ...
 
 %% Draw via MagNet
 path = pwd;
-fileName = 'test.mn';
+fileName = 'test1.mn';
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
-    toolMn.create();
     toolMn.open(0);
     comp1.make(toolMn,toolMn);
     toolMn.viewAll();
     toolMn.save(path, fileName);
     toolMn.close();
+    if isvalid(toolMn)
+        fprintf('Pre-destructor: toolMn exists\n');
+    else
+        fprintf('Pre-destructor: toolMn does not exist\n');
+    end
+    
     delete(toolMn);
+    
+    if isvalid(toolMn)
+        fprintf('Failure: toolMn exists\n');
+    else
+        fprintf('Success: toolMn is destroyed\n');
+    end
 end
 
 %% Draw via TikZ
