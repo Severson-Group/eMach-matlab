@@ -34,15 +34,18 @@ comp1 = Component( ...
         );
 
 %% Draw via MagNet
+path = pwd;
+fileName = 'test.mn';
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
-    toolMn.open(0,0,true);
-    toolMn.setDefaultLengthUnit('millimeters', false);
-
+    toolMn.create();
+    toolMn.open(0);
     comp1.make(toolMn,toolMn);
-
     toolMn.viewAll();
+    toolMn.save(path, fileName);
+    toolMn.close();
+    delete(toolMn);
 end
 
 %% Draw via TikZ
