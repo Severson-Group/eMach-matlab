@@ -20,32 +20,28 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.validateProps();            
         end
         
-        function obj = open(obj, fileName, mn, visible)
-            %OPEN Open MagNet or a specific file.
+        
+        function obj = create(obj, visible)
+            %CREATE Create a new MagNet instance 
+            %   create() creates a new instance of MagNet.
+            %
+            %   create(visible) sets the visibility of the created instance.
+            %   visible = 1 or 'true' for MagNet instance to be visible.
+            %   visible = 0 or 'false' for MagNet instace to be invisible.
+           obj.mn = actxserver('MagNet.Application');
+           if nargin > 1 && (visible  == 1 || visible == 0 ||...
+                   visible == 'true' || visible == 'false')
+              set(obj.mn, 'Visible', visible);
+           else
+              set(obj.mn, 'Visible', 1);
+           end
+        end
+
+         function open(obj, fileName)
+            %OPEN Open MagNet
             %   open() opens a new instance of MagNet with a new document.
             %
             %   open('filename') opens the file in a new instance of MagNet.
-            %
-            %   open('filename', mn) opens the file in the mn MagNet instance
-            %
-            %   open('filename', mn, visible) opens the file in the mn MagNet
-            %        instance with customizable visibility (true for visible)
-            %
-            %   mn and fileName can be set to 0 to allow setting
-            %   the visibility of a new instance.
-
-            if nargin < 2
-                obj.mn = actxserver('MagNet.Application');
-            end
-            
-            if nargin > 2
-                if isnumeric(mn)
-                    obj.mn = actxserver('MagNet.Application');
-                end
-                
-                set(obj.mn, 'Visible', visible);
-            end
-
             if nargin > 0 && ~isnumeric(fileName)
                 obj.doc = invoke(obj.mn, 'openDocument', fileName);
             else
