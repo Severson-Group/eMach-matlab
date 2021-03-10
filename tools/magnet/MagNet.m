@@ -51,14 +51,23 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.view = invoke(obj.doc, 'getview');
             obj.consts = invoke(obj.mn, 'getConstants');
             obj.setDefaultLengthUnit('millimeters', false);
+         end
+        
+         function save(obj, path, fileName)
+            % SAVE Saves the MagNet document in the specified path
+            filePath = fullfile(path, fileName);
+            invoke(obj.mn, 'processcommand',...
+                     sprintf('Call getDocument().save("%s")',filePath)); 
+         end
+         
+        function close(obj)
+           % CLOSE Closes the MagNet document
+           invoke (obj.mn, 'processcommand','Call getDocument().close(False)');
         end
         
-        function close(obj)
-           % CLOSE Closes MagNet application
-           %     close()
-           
-           % TODO:
-           % Implement this...
+        function delete(obj)
+           % DELETE Closes the MagNet application
+            invoke(obj.mn, 'processcommand','call close(False)');
         end
         
         function setCores(obj, numCores)
