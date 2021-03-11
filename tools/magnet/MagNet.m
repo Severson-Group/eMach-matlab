@@ -12,7 +12,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         consts; %Program constants
         defaultLength = 'DimMillimeter';
         defaultAngle  = 'DimDegree';
-        visible = 1;% Default visibility
+        defaultVisibility = 0;% Default visibility
     end
     
     methods
@@ -20,7 +20,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();        
             obj.mn = actxserver('MagNet.Application');
-            set(obj.mn, 'Visible', obj.visible);
+            set(obj.mn, 'Visible', obj.defaultVisibility);
         end
                 
          function open(obj, fileName)
