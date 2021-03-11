@@ -39,6 +39,7 @@ fileName = 'test1.mn';
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
+    toolMn.setVisibility(1);
     toolMn.open(0);
     comp1.make(toolMn,toolMn);
     toolMn.viewAll();
