@@ -1,3 +1,3 @@
 # Inner Rotor Stator Cross Section
 
-<img src="./CrossSectInnerRotorStator.svg" width="900" height="900" />
+<img src="./CrossSectInnerRotorStator.svg" width="950" height="950" />
