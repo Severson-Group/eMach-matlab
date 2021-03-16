@@ -1,3 +1,3 @@
-# Parallelogram Cross Section
+# Inner Notched Rotor Cross Section
 
-<img src="./CrossSectParallelogram.svg" width="500" height="500" />
+<img src="./CrossSectInnerNotchedRotor.svg" width="500" height="500" />
