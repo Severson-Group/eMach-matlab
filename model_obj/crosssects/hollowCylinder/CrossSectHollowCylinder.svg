@@ -161,9 +161,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.4"
-     inkscape:cx="118.98058"
-     inkscape:cy="57.041217"
+     inkscape:zoom="15.839192"
+     inkscape:cx="117.22212"
+     inkscape:cy="55.330052"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -288,19 +288,19 @@
     <text
        inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor mover (rotor).png"
        id="text15286"
-       y="16.477556"
-       x="36.667503"
+       y="17.062208"
+       x="38.120785"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        xml:space="preserve"
        inkscape:export-xdpi="1000"
        inkscape:export-ydpi="1000"><tspan
          style="font-style:italic;font-weight:normal;font-size:2.82222px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         y="16.477556"
-         x="36.667503"
+         y="17.062208"
+         x="38.120785"
          id="tspan15284"
          sodipodi:role="line">d<tspan
    style="font-size:65%;baseline-shift:sub"
-   id="tspan15288">a</tspan></tspan></text>
+   id="tspan936">a</tspan></tspan></text>
     <path
        style="fill:none;fill-opacity:1;stroke:none;stroke-width:0.0334087"
        d="m 25.272573,37.52784 c -2.854981,-0.29744 -5.397138,-1.497741 -7.384264,-3.486545 -2.027243,-2.028952 -3.248425,-4.661617 -3.492162,-7.528512 -0.05037,-0.592447 -0.02265,-1.977009 0.04998,-2.495433 0.328961,-2.348487 1.226521,-4.422201 2.664817,-6.15678 1.773534,-2.138876 4.233346,-3.609547 6.940081,-4.149326 0.862341,-0.171968 1.33014,-0.215201 2.340737,-0.216326 1.158143,-0.0013 1.864749,0.0802 2.896135,0.333986 1.681165,0.413679 3.310596,1.218576 4.670933,2.307323 0.477422,0.382106 1.462103,1.366488 1.834705,1.83415 1.242597,1.55961 2.08203,3.383629 2.455474,5.335548 0.233836,1.222221 0.264816,2.681586 0.08355,3.935362 -0.470953,3.25738 -2.267823,6.205566 -4.933588,8.094707 -1.718151,1.217599 -3.672874,1.957541 -5.754378,2.178265 -0.50759,0.05383 -1.908728,0.06185 -2.372018,0.01357 z m 1.703845,-1.468007 c 2.451878,-0.164991 4.618066,-1.069726 6.429219,-2.68524 1.71799,-1.532416 2.926328,-3.706005 3.326037,-5.982967 0.143087,-0.815113 0.193627,-2.045346 0.116173,-2.827846 -0.299495,-3.025695 -1.81991,-5.706514 -4.265139,-7.520365 -1.41384,-1.048774 -3.165231,-1.740086 -4.988231,-1.968963 -0.461823,-0.05798 -2.006809,-0.05828 -2.472243,-5.3e-4 -2.24273,0.27853 -4.349155,1.256089 -5.946746,2.7598 -0.967094,0.910262 -1.675376,1.865837 -2.255621,3.043158 -0.579596,1.176002 -0.888507,2.221574 -1.034658,3.50198 -0.06199,0.543066 -0.06992,1.649167 -0.01577,2.19968 0.503954,5.124061 4.668536,9.152662 9.800367,9.480365 0.594829,0.03799 0.753592,0.03809 1.306621,7.93e-4 z"
