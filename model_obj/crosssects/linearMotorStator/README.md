@@ -1,3 +1,3 @@
-# Linner Motor Stator Cross Section
+# Liner Motor Stator Cross Section
 
 <img src="./CrossSectLinearMotorStator.svg" width="600" height="600" />
