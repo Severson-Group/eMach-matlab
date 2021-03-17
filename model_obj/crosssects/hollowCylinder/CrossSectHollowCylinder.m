@@ -5,7 +5,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
     
     
     properties (GetAccess = 'public', SetAccess = 'protected')
-        dim_d_a;     %Thickness of the cylinder: class type dimLinear.
+        dim_t;     %Thickness of the cylinder: class type dimLinear.
         dim_r_o;     %Outer radius of the cylinder: class type dimLinear    
     end
     
@@ -19,7 +19,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
             validateattributes(drawer, {'DrawerBase'}, {'nonempty'});
             
             r = obj.dim_r_o;
-            t = obj.dim_d_a;                  
+            t = obj.dim_t;                  
             
             x_out = 0;
             x_in = 0;
@@ -37,7 +37,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
             [arc_in2] = drawer.drawArc(obj.location.anchor_xy, p(4,:), p(3,:));
             
             %calculate a coordinate inside the surface
-            rad = obj.dim_r_o - obj.dim_d_a/2;
+            rad = obj.dim_r_o - obj.dim_t/2;
             innerCoord = obj.location.transformCoords([rad, 0]);             
             
             segments = [arc_out1, arc_out2, arc_in1, arc_in2];  
@@ -54,7 +54,7 @@ classdef CrossSectHollowCylinder < CrossSectBase
             validateProps@CrossSectBase(obj); 
             
             %2. valudate the new properties that have been added here
-            validateattributes(obj.dim_d_a,{'DimLinear'},{'nonnegative','nonempty'})            
+            validateattributes(obj.dim_t,{'DimLinear'},{'nonnegative','nonempty'})            
             validateattributes(obj.dim_r_o,{'DimLinear'},{'nonnegative','nonempty'})
          end
                   
