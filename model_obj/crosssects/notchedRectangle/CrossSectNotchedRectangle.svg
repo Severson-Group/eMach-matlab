@@ -9,9 +9,9 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="125mm"
+   width="140mm"
    height="50mm"
-   viewBox="0 0 125 50"
+   viewBox="0 0 140 50"
    version="1.1"
    id="svg20342"
    inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
@@ -1472,9 +1472,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="-241.65389"
-     inkscape:cy="364.01911"
+     inkscape:zoom="2"
+     inkscape:cx="285.26369"
+     inkscape:cy="191.50145"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1522,13 +1522,13 @@
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        sodipodi:nodetypes="cccc"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker4256);marker-end:url(#marker5004)"
-       d="M 3.3131872,37.723374 H 60.529325 m 6.61458,0 h 55.231785"
+       d="m 10.721521,37.723374 h 57.216142 m 6.61458,0 h 55.231827"
        id="path4017"
        inkscape:connector-curvature="0" />
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="opacity:0;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 132.95901,33.225454 H -7.2701488"
+       d="M 140.36739,33.225454 H 0.13818491"
        id="path4019"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
@@ -1540,7 +1540,7 @@
        sodipodi:nodetypes="ccc"
        id="path4085"
        inkscape:connector-curvature="0"
-       d="m 4.1239315,18.256044 2.308737,-10e-6 2.34056,2e-5"
+       d="m 11.532266,18.256044 2.308738,-10e-6 2.340562,2e-5"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker9456)" />
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
@@ -1548,12 +1548,12 @@
        inkscape:export-xdpi="1000"
        inkscape:connector-curvature="0"
        id="path4095"
-       d="m 122.64027,33.225464 1e-5,5.02708"
+       d="m 130.04865,33.225464 1e-5,5.02708"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 3.0485972,33.225464 1e-5,5.02708"
+       d="m 10.456931,33.225464 10e-6,5.02708"
        id="path4097"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
@@ -1564,7 +1564,7 @@
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        inkscape:connector-curvature="0"
        id="path4113"
-       d="M 3.3131872,37.723374 H 60.529325 m 6.61458,0 h 55.231785"
+       d="m 10.721521,37.723374 h 57.216142 m 6.61458,0 h 55.231827"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker11645);marker-end:url(#marker12207)"
        sodipodi:nodetypes="cccc" />
     <path
@@ -1572,7 +1572,7 @@
        inkscape:export-xdpi="1000"
        inkscape:connector-curvature="0"
        id="path4115"
-       d="M 132.95901,33.225454 H -7.2701488"
+       d="M 140.36739,33.225454 H 0.13818491"
        style="opacity:0;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png" />
     <path
@@ -1580,12 +1580,12 @@
        inkscape:export-xdpi="1000"
        inkscape:connector-curvature="0"
        id="path4171"
-       d="m 20.618045,13.029742 h 4.861722"
+       d="m 28.026383,13.029742 h 4.861722"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png" />
     <path
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker12445)"
-       d="m 20.246524,18.256044 -2.579941,10e-6 -2.615513,-10e-6"
+       d="m 27.654862,18.256044 -2.579941,10e-6 -2.615513,-10e-6"
        inkscape:connector-curvature="0"
        id="path4183"
        sodipodi:nodetypes="ccc"
@@ -1595,7 +1595,7 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="8.7118216"
+       x="16.12015"
        y="19.394209"
        id="text4189"
        inkscape:export-xdpi="1000"
@@ -1603,14 +1603,14 @@
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"><tspan
          sodipodi:role="line"
          id="tspan4187"
-         x="8.7118216"
+         x="16.12015"
          y="19.394209"
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">w<tspan
    style="font-size:65%;baseline-shift:sub"
    id="tspan13209">n</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 122.64027,33.225464 1e-5,5.02708"
+       d="m 130.04865,33.225464 1e-5,5.02708"
        id="path4191"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
@@ -1621,13 +1621,13 @@
        inkscape:export-xdpi="1000"
        inkscape:connector-curvature="0"
        id="path4193"
-       d="m 3.0485972,33.225464 1e-5,5.02708"
+       d="m 10.456931,33.225464 10e-6,5.02708"
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="61.940731"
+       x="69.349068"
        y="38.720104"
        id="text4199"
        inkscape:export-xdpi="1000"
@@ -1635,7 +1635,7 @@
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"><tspan
          sodipodi:role="line"
          id="tspan4197"
-         x="61.940731"
+         x="69.349068"
          y="38.720104"
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">w<tspan
    id="tspan4195"
@@ -1643,7 +1643,7 @@
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 20.379249,20.387254 H 105.34841 V 12.775828"
+       d="M 27.787587,20.387254 H 112.75679 V 12.775828"
        id="path4213"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
@@ -1653,7 +1653,7 @@
        sodipodi:nodetypes="ccc"
        id="path4244"
        inkscape:connector-curvature="0"
-       d="m 24.0417,20.798314 10e-6,1.44524 -10e-6,1.46518"
+       d="m 31.450038,20.798314 10e-6,1.44524 -10e-6,1.46518"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker5868)"
        inkscape:export-xdpi="1000"
        inkscape:export-ydpi="1000" />
@@ -1661,14 +1661,14 @@
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        id="text4248"
        y="17.379187"
-       x="22.585442"
+       x="29.993782"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        xml:space="preserve"
        inkscape:export-xdpi="1000"
        inkscape:export-ydpi="1000"><tspan
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          y="17.379187"
-         x="22.585442"
+         x="29.993782"
          id="tspan4246"
          sodipodi:role="line">d<tspan
    style="font-size:65%;baseline-shift:sub"
@@ -1676,7 +1676,7 @@
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker11264)"
-       d="m 23.99973,12.757239 -10e-6,-1.44524 10e-6,-1.4651803"
+       d="m 31.408068,12.757239 -10e-6,-1.44524 10e-6,-1.4651803"
        inkscape:connector-curvature="0"
        id="path4250"
        sodipodi:nodetypes="ccc"
@@ -1685,7 +1685,7 @@
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="fill:none;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 20.618045,13.029742 v 7.187227"
+       d="m 28.026383,13.029742 v 7.187227"
        id="path4252"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
@@ -1693,7 +1693,7 @@
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 20.618045,13.029742 H 3.0485972 v 20.195722"
+       d="M 28.026383,13.029742 H 10.456931 v 20.195722"
        id="path5864"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
@@ -1705,7 +1705,7 @@
        sodipodi:nodetypes="ccc"
        id="path2120"
        inkscape:connector-curvature="0"
-       d="m 3.0485972,22.906714 v 5.12404 5.19471"
+       d="m 10.456931,22.906714 v 5.12404 5.19471"
        style="opacity:1;vector-effect:none;fill:#ff0000;fill-opacity:0.996764;stroke:#ff0000;stroke-width:0.3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker2124)" />
     <text
        inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png"
@@ -1713,18 +1713,18 @@
        inkscape:export-xdpi="1000"
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="-1.8824773"
+       x="5.525856"
        y="25.620535"
        id="text5026"><tspan
          sodipodi:role="line"
          id="tspan5024"
-         x="-1.8824773"
+         x="5.525856"
          y="25.620535"
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">y</tspan></text>
     <text
        id="text5030"
        y="30.717772"
-       x="8.965888"
+       x="16.374216"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        xml:space="preserve"
        inkscape:export-xdpi="1000"
@@ -1732,7 +1732,7 @@
        inkscape:export-filename="C:\Users\sulpak.kz\Downloads\UW-Madison\RA\Linear Motor\final parametrization\linear motor stator.png"><tspan
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          y="30.717772"
-         x="8.965888"
+         x="16.374216"
          id="tspan5028"
          sodipodi:role="line">x</tspan></text>
     <path
@@ -1740,20 +1740,20 @@
        inkscape:export-xdpi="1000"
        inkscape:connector-curvature="0"
        id="path12433"
-       d="m 105.07083,13.029742 h 17.56944 v 20.195722"
+       d="m 112.47921,13.029742 h 17.56944 v 20.195722"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png" />
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
        style="fill:none;stroke:#000000;stroke-width:0.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 3.0485972,33.225464 H 122.64027"
+       d="M 10.456931,33.225464 H 130.04865"
        id="path12435"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="1000"
        inkscape:export-ydpi="1000" />
     <path
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker14333)"
-       d="m 64.128015,20.666626 2e-5,1.683173 -3e-5,1.706375"
+       d="m 71.536353,20.666626 2e-5,1.683173 -3e-5,1.706375"
        inkscape:connector-curvature="0"
        id="path14321"
        sodipodi:nodetypes="ccc"
@@ -1766,12 +1766,12 @@
        inkscape:export-xdpi="1000"
        id="text14329"
        y="28.456182"
-       x="62.356083"
+       x="69.76442"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.64444px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        xml:space="preserve"><tspan
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          y="28.456182"
-         x="62.356083"
+         x="69.76442"
          id="tspan14327"
          sodipodi:role="line">d</tspan></text>
     <path
@@ -1781,11 +1781,11 @@
        sodipodi:nodetypes="ccc"
        id="path16145"
        inkscape:connector-curvature="0"
-       d="m 63.988155,32.871774 -10e-6,-1.73345 2e-5,-1.75734"
+       d="m 71.396493,32.871774 -1e-5,-1.73345 2e-5,-1.75734"
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker16149)" />
     <path
        style="opacity:1;vector-effect:none;fill:#ff0000;fill-opacity:0.996764;stroke:#ff0000;stroke-width:0.3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker17517)"
-       d="M 13.367347,33.225464 H 8.2433075 3.0485972"
+       d="M 20.775685,33.225464 H 15.651644 10.456931"
        inkscape:connector-curvature="0"
        id="path17513"
        sodipodi:nodetypes="ccc"
