@@ -1474,7 +1474,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="2"
      inkscape:cx="285.26369"
-     inkscape:cy="191.50145"
+     inkscape:cy="211.50145"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -1496,7 +1496,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1606,7 +1606,7 @@
          x="16.12015"
          y="19.394209"
          style="font-style:italic;font-weight:normal;font-size:5.64444px;line-height:1.25;stroke:#000000;stroke-width:0.065;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">w<tspan
-   style="font-size:65%;baseline-shift:sub"
+   style="font-size:65%;baseline-shift:sub;font-style:normal"
    id="tspan13209">n</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1671,7 +1671,7 @@
          x="29.993782"
          id="tspan4246"
          sodipodi:role="line">d<tspan
-   style="font-size:65%;baseline-shift:sub"
+   style="font-size:65%;baseline-shift:sub;font-style:normal"
    id="tspan14295">n</tspan></tspan></text>
     <path
        inkscape:export-filename="C:\Users\anvar\Downloads\UW-Madison\RA\Linear Motor\ECCE\selected_topologies\lm_model_1.png"
