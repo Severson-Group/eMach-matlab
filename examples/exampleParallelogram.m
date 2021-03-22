@@ -40,7 +40,7 @@ fileName = 'test1.mn';
 if (DRAW_MAGNET)
     toolMn = MagNet();
     toolMn.setVisibility(1);
-    toolMn.open(0);
+    toolMn.open();
     comp1.make(toolMn,toolMn);
     toolMn.viewAll();
     toolMn.save(path, fileName);
