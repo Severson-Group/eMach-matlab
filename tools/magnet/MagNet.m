@@ -26,10 +26,16 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
          function open(obj, fileName)
             %OPEN Open MagNet
             %   open() opens a new instance of MagNet with a new document.
-            obj.doc = invoke(obj.mn, 'newDocument');          
-            obj.view = invoke(obj.doc, 'getview');
-            obj.consts = invoke(obj.mn, 'getConstants');
-            obj.setDefaultLengthUnit('millimeters', false);
+            %   open(fileName) opens an existing MagNet document. fileName
+            %   is a string that has the full filepath and the file name.
+            if isempty(fileName)
+                obj.doc = invoke(obj.mn, 'newDocument');
+            else
+                obj.doc = invoke(obj.mn, 'openDocument', fileName);
+            end
+                obj.view = invoke(obj.doc, 'getview');
+                obj.consts = invoke(obj.mn, 'getConstants');
+                obj.setDefaultLengthUnit('millimeters', false);
          end
         
          function save(obj, path, fileName)
