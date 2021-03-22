@@ -678,9 +678,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.0000001"
-     inkscape:cx="-3.0321573"
-     inkscape:cy="202.34413"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="159.45305"
+     inkscape:cy="222.67493"
      inkscape:document-units="mm"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -716,7 +716,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1038,23 +1038,23 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.75131px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';baseline-shift:sub;fill:#000000;fill-opacity:1">ro</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="90.925079"
-       y="144.06049"
+       y="137.18141"
        id="text6703"><tspan
          sodipodi:role="line"
          id="tspan6701"
          x="90.925079"
-         y="144.06049"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';fill:#000000;stroke-width:0.264583;fill-opacity:1;">P = # of pole pairs</tspan></text>
+         y="137.18141"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';fill:#000000;fill-opacity:1;stroke-width:0.264583">P = # of pole pairs</tspan></text>
     <text
        id="text6727"
-       y="152.06049"
+       y="142.00645"
        x="90.925079"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;line-height:1.25;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05556px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';fill:#000000;stroke-width:0.264583;fill-opacity:1;"
-         y="152.06049"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:'Cambria Math';-inkscape-font-specification:'Cambria Math';fill:#000000;fill-opacity:1;stroke-width:0.264583"
+         y="142.00645"
          x="90.925079"
          id="tspan6725"
          sodipodi:role="line">S = # of segments / pole</tspan></text>
