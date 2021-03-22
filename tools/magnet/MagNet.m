@@ -12,7 +12,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         consts; %Program constants
         defaultLength = 'DimMillimeter';
         defaultAngle  = 'DimDegree';
-        defaultVisibility = 0;% Default visibility
+        visible = 0;% visibility
     end
     
     methods
@@ -20,20 +20,13 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();        
             obj.mn = actxserver('MagNet.Application');
-            set(obj.mn, 'Visible', obj.defaultVisibility);
+            set(obj.mn, 'Visible', obj.visible);
         end
                 
          function open(obj, fileName)
             %OPEN Open MagNet
             %   open() opens a new instance of MagNet with a new document.
-            %
-            %   open('filename') opens the file in a new instance of MagNet.
-            if nargin > 0 && ~isnumeric(fileName)
-                obj.doc = invoke(obj.mn, 'openDocument', fileName);
-            else
-                obj.doc = invoke(obj.mn, 'newDocument');
-            end
-            
+            obj.doc = invoke(obj.mn, 'newDocument');          
             obj.view = invoke(obj.doc, 'getview');
             obj.consts = invoke(obj.mn, 'getConstants');
             obj.setDefaultLengthUnit('millimeters', false);
@@ -204,11 +197,12 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function setVisibility(obj, visibility)
+        function setVisibility(obj, visible)
             %SETVISIBLE Sets visibility of MagNet application
-            %    setVisibility(true)
-            
-            set(obj.mn, 'Visible', visibility);
+            %    Set visible= 'true' or visible = 1 to make the MagNet
+            %    session visible. Set visible= 'false' or visible = 0 to 
+            %    make the MagNet session invisible.  
+            set(obj.mn, 'Visible', visible);
         end
     end
     
