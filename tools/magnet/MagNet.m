@@ -40,7 +40,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
                 obj.view = invoke(obj.doc, 'getview');
                 obj.consts = invoke(obj.mn, 'getConstants');
-                obj.setDefaultLengthUnit('millimeters', false);
+                obj.setDefaultLengthUnit(obj.defaultLength, false);
          end
         
          function save(obj, path, fileName)
@@ -173,31 +173,23 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %SETDEFAULTLENGTHUNIT Set the default unit for length.
             %   setDefaultLengthUnit(userUnit, makeAppDefault)
             %       Sets the units for length. 
-
             %   userUnit can be one of these options:
-            %       'kilometers'
-            %       'meters'
-            %       'centimeters'
-            %       'millimeters'
-            %		'microns'
-            %		'miles'
-            %		'yards'	
-            %		'feet'
-            %       'inches'
+            %       'DimMillimeter'
+            %       'DimInch'
             %
             %   This is a wrapper for Document::setDefaultLengthUnit
 
             %update length unit type, this is needed for unit conversions
             %in extruding/drawing/moving/etc. (not yet implemented).
-            if strcmp(userUnit, 'millimeters')
-                obj.defaultLength = 'DimMillimeter';
-            elseif strcmp(userUnit, 'inches')
-                obj.defaultLength = 'DimInches';
+            if strcmp(userUnit,'DimMillimeter')
+                appUnit = 'millimeters';
+            elseif strcmp(userUnit, 'DimInches')
+                appUnit = 'inches';
             else
                 error('unsupported length unit')
             end
             
-            invoke(obj.doc, 'setDefaultLengthUnit', userUnit, makeAppDefault);
+            invoke(obj.doc, 'setDefaultLengthUnit', appUnit, makeAppDefault);
         end
         
         function viewAll(obj)
