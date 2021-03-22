@@ -23,12 +23,17 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             set(obj.mn, 'Visible', obj.visible);
         end
                 
-         function open(obj, fileName)
+         function open(obj, varargin)
             %OPEN Open MagNet
             %   open() opens a new instance of MagNet with a new document.
-            %   open(fileName) opens an existing MagNet document. fileName
-            %   is a string that has the full filepath and the file name.
-            if isempty(fileName)
+            %   open('fileName', fileName) opens an existing MagNet document. 
+            %   fileName is a string that specifies the full filepath and 
+            %   the name of the file. It is specified as a key-value pair.
+            p = inputParser;
+            p.addParameter('fileName','');
+            p.parse(varargin{:});
+            fileName = p.Results.fileName;
+            if ~exist(fileName)
                 obj.doc = invoke(obj.mn, 'newDocument');
             else
                 obj.doc = invoke(obj.mn, 'openDocument', fileName);
