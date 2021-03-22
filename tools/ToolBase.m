@@ -13,8 +13,9 @@ classdef ToolBase < handle
     end
     
     methods(Abstract = true)
-        open(obj);
-        close(obj);
+        open(obj, fileName);
+        save(obj, path, fileName)
+        close(obj, fileName);
     end
     
      methods(Access = protected)
