@@ -208,6 +208,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.part.GetItem('Revolve').SetProperty('AxisPosY',center(2));
             obj.part.GetItem('Revolve').SetProperty('AxisVecX',axis(1));
             obj.part.GetItem('Revolve').SetProperty('AxisVecY',axis(2));
+            obj.part.GetItem('Revolve').SetProperty('AxisVecZ',0);
             obj.part.GetItem('Revolve').SetProperty('Angle',angle);
             obj.part.SetProperty('Name', name)
             sketchName = strcat(name,'Sketch');
