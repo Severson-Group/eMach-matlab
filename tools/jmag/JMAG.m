@@ -196,16 +196,19 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             % Convert to default units
             center = double(feval(obj.defaultLength, center));
+            axis = double(feval(obj.defaultLength, axis));
             angle = double(feval(obj.defaultAngle, angle));
             
             % Revolve
             ref1 = obj.sketch;
             revolvePart = obj.part.CreateRevolveSolid(ref1);
-            obj.part.SetProperty('AxisPosX',center(1));
-            obj.part.SetProperty('AxisPosY',center(2));
-            obj.part.SetProperty('AxisVecX',axis(1));
-            obj.part.SetProperty('AxisVecY',axis(2));
-            obj.part.SetProperty('Angle',angle);
+            obj.part.GetItem('Revolve').SetProperty('SpecifiedRatio', 1);
+            obj.part.GetItem('Revolve').SetProperty('AxisType','1');
+            obj.part.GetItem('Revolve').SetProperty('AxisPosX',center(1));
+            obj.part.GetItem('Revolve').SetProperty('AxisPosY',center(2));
+            obj.part.GetItem('Revolve').SetProperty('AxisVecX',axis(1));
+            obj.part.GetItem('Revolve').SetProperty('AxisVecY',axis(2));
+            obj.part.GetItem('Revolve').SetProperty('Angle',angle);
             obj.part.SetProperty('Name', name)
             sketchName = strcat(name,'Sketch');
             obj.sketch.SetProperty('Name', sketchName)
