@@ -41,17 +41,17 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   open('filename', jd, VISIBLE) opens the file in the jd JMAG
             %   Designer instance with customizable visibility (true for visible)
             %
-            %   iMn and Filename can be set to 0 to allow setting
+            %   Jd and Filename can be set to 0 to allow setting
             %   the visibility of a new instance.
 
             if nargin <= 1
-                obj.jd = actxserver('designer.Application.181'); %JMAG version 18
+                obj.jd = actxserver('designer.Application.191'); %JMAG version 18
             end
             
             % obj.jd now exists at this point
             if nargin > 2
                 if isnumeric(Jd)
-                    obj.jd = actxserver('designer.Application.181');
+                    obj.jd = actxserver('designer.Application.191');
                 end
 
                 if Visible
@@ -185,24 +185,31 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function new = revolve(obj, name, material, center, axis, angle)
+        function revolvePart = revolve(obj, name, material, center, axis, angle, csToken)
             %REVOLVE Revolve a cross-section along an arc    
             %new = revolve(obj, name, material, center, axis, angle)
-            %   name   - name of the newly extruded component
+            %   name  - name of the newly extruded component
             %   center - x,y coordinate of center point of rotation
             %   axis   - x,y coordinate on the axis of ration (negative reverses
             %             direction) (0, -1) to rotate clockwise about the y axis
             %   angle  - Angle of rotation (dimAngular) 
-        end
-        
-        
-        function extrudeSketch = extrude(obj, name, material, depth, csToken)
+            
+            % Convert to default units
+            center = double(feval(obj.defaultLength, center));
+            angle = double(feval(obj.defaultAngle, angle));
+            
+            % Revolve
             ref1 = obj.sketch;
-            depth = feval(obj.defaultLength, depth);
-            obj.part.CreateExtrudeSolid(ref1,double(depth))
+            revolvePart = obj.part.CreateRevolveSolid(ref1);
+            obj.part.SetProperty('AxisPosX',center(1));
+            obj.part.SetProperty('AxisPosY',center(2));
+            obj.part.SetProperty('AxisVecX',axis(1));
+            obj.part.SetProperty('AxisVecY',axis(2));
+            obj.part.SetProperty('Angle',angle);
             obj.part.SetProperty('Name', name)
             sketchName = strcat(name,'Sketch');
             obj.sketch.SetProperty('Name', sketchName)
+
             % Import Model into Designer
             obj.sketch = 0;
             obj.doc.SaveModel(true)
@@ -224,10 +231,55 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             % Set to default units
             obj.setDefaultLengthUnit(obj.defaultLength)
             obj.setDefaultAngleUnit(obj.defaultAngle)
+            
             % Add material
             obj.study.SetMaterialByName(name, material)
             obj.app.Save()
-            extrudeSketch = 0;
+
+        end
+        
+        
+        function extrudePart = extrude(obj, name, material, depth, csToken)
+            %EXTRUDE Extrude a cross-section    
+            %new = extrude(obj, name, material, depth, csToken)
+            %   name  - name of the newly extruded component
+            %   depth  - Depth of extrusion (dimLinear) 
+            
+           % Convert to default units
+           depth = feval(obj.defaultLength, depth);
+           
+           % Extrude
+            ref1 = obj.sketch;
+            extrudePart = obj.part.CreateExtrudeSolid(ref1,double(depth));
+            obj.part.SetProperty('Name', name)
+            sketchName = strcat(name,'Sketch');
+            obj.sketch.SetProperty('Name', sketchName)
+            
+            % Import Model into Designer
+            obj.sketch = 0;
+            obj.doc.SaveModel(true)
+            
+            if obj.study == 0
+                obj.model = obj.app.GetCurrentModel();
+                obj.model.SetName(obj.projName)
+                % Create study
+                obj.study = obj.model.CreateStudy('Transient', obj.projName);
+            else
+                % Delete old model
+                obj.app.DeleteModel(obj.projName)
+                % Setup the new model
+                obj.model = obj.app.GetCurrentModel();
+                obj.model.SetName(obj.projName)
+                obj.study = obj.model.GetStudy(obj.projName);
+            end
+            
+            % Set to default units
+            obj.setDefaultLengthUnit(obj.defaultLength)
+            obj.setDefaultAngleUnit(obj.defaultAngle)
+            
+            % Add material
+            obj.study.SetMaterialByName(name, material)
+            obj.app.Save()
         end
         
         
