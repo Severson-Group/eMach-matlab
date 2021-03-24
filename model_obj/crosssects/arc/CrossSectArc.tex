@@ -1,6 +1,6 @@
 
 \documentclass{standalone} %\documentclass[conference,10pt]{IEEEtran}
-\usepackage{amsmath}
+% \usepackage{amsmath}
 %\ifCLASSINFOpdf
   % \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
@@ -25,7 +25,7 @@
 
 \usepackage{color}	% required for `\textcolor' (yatex added)
 %%%ERIC REMOVED: \usepackage[dvipdfmx]{graphicx}
-\usepackage[dvips]{graphicx} %-->> for pdftex use: \usepackage[pdftex]{graphicx}
+% \usepackage[dvips]{graphicx} %-->> for pdftex use: \usepackage[pdftex]{graphicx}
 
 \usepackage{xcolor, tikz, pgfplots, ifthen}
 \usepackage[american,cuteinductors,smartlabels]{circuitikz}
@@ -49,8 +49,8 @@
 	%\input{DPNV_Phasors.tex}	
 	\begin{tikzpicture}[font=\small, >=stealth,scale=1.5]
 	%\draw ([shift=(start_coord)] center_x, center_y) arc (start_angle:end_angle:radius);
-	\draw[<->] (0,.5) node[above] {$y$} -- (0,0)
-			-- ++ (.5,0) node[right] {$x$};
+	\draw[red,<->] (0,.5) node[above] [black]{$y$}[red] -- (0,0)
+			-- ++ (.5,0) node[right] [black]{$x$};
 	
 	\draw[thick,fill=gray!25!white]([shift=(-30:1.5)] 0, 0) arc (-30:30:1.5) 
 		-- (30:1.25) 
@@ -59,18 +59,19 @@
 	
 	%dimensions
 		%arc span
-		\draw[gray!90!black] (30:1.6) -- (30:2);
-		\draw[gray!90!black] (-30:1.6) -- (-30:2);
-		\draw[<->,gray!90!black]([shift=(-30:1.8)] 0, 0) arc (-30:30:1.8) node[black, pos=0.5, right] {$\alpha$};
+		\draw[] (30:1.6) -- (30:2);
+		\draw[] (-30:1.6) -- (-30:2);
+		\draw[<->]([shift=(-30:1.8)] 0, 0) arc (-30:30:1.8) node[black, pos=0.5, right] {$\alpha$};
 
 		%outer radius
-		\draw[->,gray!90!black] (-40:.5) -- (-40:1.5) node [black, pos=1.25]{$r_o$};
-		\draw[gray!90!black]([shift=(-32:1.5)] 0, 0) arc (-32:-48:1.5);
+		\draw[dotted] (0:0) -- (-40:.5); 
+		\draw[->] (-40:.5) -- (-40:1.5) node [black, pos=1.25]{$r_o$};
+		\draw[]([shift=(-32:1.5)] 0, 0) arc (-32:-48:1.5);
 		
 		%thickness
-		\draw[<->,gray!90!black] (36:1.25) -- (36:1.5) node [black, pos=.75,above left]{$d_a$};
-		\draw[gray!90!black]([shift=(32:1.5)] 0, 0) arc (32:40:1.5);
-		\draw[gray!90!black]([shift=(32:1.25)] 0, 0) arc (32:40:1.25);
+		\draw[<->] (36:1.25) -- (36:1.5) node [black, pos=.75,above left]{$d_a$};
+		\draw[]([shift=(32:1.5)] 0, 0) arc (32:40:1.5);
+		\draw[]([shift=(32:1.25)] 0, 0) arc (32:40:1.25);
 	
 	\end{tikzpicture}
 
