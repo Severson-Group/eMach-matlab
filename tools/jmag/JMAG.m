@@ -194,7 +194,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function revolvePart = revolve(obj, name, material, center, axis, angle, csToken)
             %REVOLVE Revolve a cross-section along an arc    
             %new = revolve(obj, name, material, center, axis, angle)
-            %   name  - name of the newly extruded component
+            %   name  - name of the newly revolved component
             %   center - x,y coordinate of center point of rotation
             %   axis   - x,y coordinate on the axis of ration (negative reverses
             %             direction) (0, -1) to rotate clockwise about the y axis
@@ -294,9 +294,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         
         
         function sketch = prepareSection(obj, csToken)
-            % PREPARESECTION Prepares section from drawing
+            % PREPARESECTION Prepares section from drawing for extrude / revolve.
             % sketch = prepareSection(obj, csToken)
-            
+            % PREPARESECTION creates JMAG geometry regions using lines and arcs.
+            % Only the region to be extruded / revolved is retained, and the rest are deleted.
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             obj.doc.GetSelection().Clear();
             for i = 1:length(csToken.token)
