@@ -99,10 +99,16 @@ if (DRAW_TIKZ)
 end
 
 %% Draw via JMAG
+path = pwd;
+fileName = 'test1';
 
 if (DRAW_JMAG)
     toolJd = JMAG();
-    toolJd.open(0,0,true);
+    toolJd.setVisibility(true);
+    toolJd.open();
     comp1.make(toolJd,toolJd);
     comp2.make(toolJd,toolJd);
+    toolJd.save(path, fileName);
+    toolJd.close();
+    delete(toolJd);
 end

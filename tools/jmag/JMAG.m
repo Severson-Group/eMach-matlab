@@ -8,7 +8,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     properties (GetAccess = 'public', SetAccess = 'public')        
         jd;  % The activexserver object for JMAG Designer
         app = 0; % app = jd
-        projName = 0; % The name of JMAG Designer project (a string)
+        projName = 'proj'; % The name of JMAG Designer project (a string)
         geomApp = 0; % The Geometry Editor object
         doc = 0; % The document object in Geometry Editor
         assembly = 0; % The assembly object in Geometry Editor
@@ -19,7 +19,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         view;  % The view object in JMAG Designer
         defaultLength = 'DimMeter'; % Default length unit is m
         defaultAngle = 'DimDegree'; % Default angle unit is degrees
-        workDir = './';
+        visible = true; % Visibility
+        workDir = pwd;
         sketchList;
     end
     
@@ -27,56 +28,61 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     methods
         function obj = JMAG(varargin)
             obj = obj.createProps(nargin,varargin);            
-            obj.validateProps();            
+            obj.validateProps();
+            obj.jd = actxserver('designer.Application.191');
+            if obj.visible
+                obj.jd.Show();
+            else
+                obj.jd.Hide();
+            end
         end
         
-        function obj = open(obj, Filename, Jd, Visible)
+        function obj = open(obj, varargin)
             %OPEN Open JMAG Designer or a specific file.
             %   open() opens a new instance of JMAG Designer with a new document.
             %
-            %   open('filename') opens the file in a new instance of JMAG.
+            %   open('filename','path') opens the file called 'filename' at
+            %   'path' location.
+            %   
+            %   open('filename') opens the file called 'filename'
+            %   
             %
-            %   open('filename', jd) opens the file in the jd JMAG instance
-            %
-            %   open('filename', jd, VISIBLE) opens the file in the jd JMAG
-            %   Designer instance with customizable visibility (true for visible)
-            %
-            %   Jd and Filename can be set to 0 to allow setting
-            %   the visibility of a new instance.
-
-            if nargin <= 1
-                obj.jd = actxserver('designer.Application.191'); %JMAG version 18
-            end
-            
-            % obj.jd now exists at this point
+                   
             if nargin > 2
-                if isnumeric(Jd)
-                    obj.jd = actxserver('designer.Application.191');
-                end
-
-                if Visible
-                    obj.jd.Show();
-                else
-                    obj.jd.Hide();
-                end
+                obj.workDir = varargin{2};
+            elseif nargin > 1
+                fileName = strcat(obj.workDir, varargin{1}, '.jproj');
             end
-            
-            obj.workDir = './';
-            obj.projName = 'proj';
-            if nargin >= 1 && ~isnumeric(Filename)
-                obj.jd.Open(strcat(obj.workDir, Filename, '.jproj'));
+                         
+            if nargin > 1 && exist(fileName,'file')
+                obj.jd.Open(strcat(obj.workDir, fileName, '.jproj'));
             else
-                obj.jd.SaveAs(strcat(obj.workDir, obj.projName, '.jproj'));
+                obj.jd.NewProject(obj.projName);
+                save(obj, obj.workDir, obj.projName);
             end
             
             obj.view = obj.jd.View();
             obj.app = obj.jd;
         end
         
+        
         function obj = close(obj)
+            % CLOSE Closes the JMAG document
+            % close()
+        end
+        
+        function obj = delete(obj)
+            % DELETE Closes the JMAG application
+            % delete()
+            
             obj.jd.Quit();
         end
         
+        function save(obj, path, fileName)
+            % SAVE Saves the MagNet document in the specified path
+            
+            obj.jd.SaveAs(strcat(path, '\',fileName,'.jproj'));
+        end
         
         function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
@@ -288,6 +294,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         
         
         function sketch = prepareSection(obj, csToken)
+            % PREPARESECTION Prepares section from drawing
+            % sketch = prepareSection(obj, csToken)
+            
             validateattributes(csToken, {'CrossSectToken'}, {'nonempty'});
             obj.doc.GetSelection().Clear();
             for i = 1:length(csToken.token)
@@ -353,10 +362,14 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function setVisibility(obj, visibility)
-            % Set visibility of the JMAG application
-            if visibility == 1
-               obj.jd.Show();
+        function setVisibility(obj, visibile)
+            % SETVISIBILITY Set visibility of the JMAG application
+            % setVisibility(obj, visibile)
+            
+            obj.visible = visibile;
+            
+            if obj.visible
+                obj.jd.Show();
             else
                 obj.jd.Hide();
             end
