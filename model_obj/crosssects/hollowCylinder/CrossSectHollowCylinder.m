@@ -21,8 +21,8 @@ classdef CrossSectHollowCylinder < CrossSectBase
             r = obj.dim_r_o;
             t = obj.dim_t;                  
             
-            x_out = 0;
-            x_in = 0;
+            x_out = feval(class(t), 0);
+            x_in = feval(class(t), 0);
             x = [x_out, x_out, x_in, x_in];
             
             y_out = r;
