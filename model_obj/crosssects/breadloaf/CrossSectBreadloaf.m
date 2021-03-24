@@ -31,14 +31,14 @@ classdef CrossSectBreadloaf < CrossSectBase
             %calculate coordinates each point starting in bottom right
             %corner and moving counterclockwise around the breadloaf
             
-            p1 = [ w/2, 0 ];
+            p1 = [ w/2, feval(class(w), 0)];
             p2 = [ w/2 - l*cos(alpha),  l*sin(alpha) ];
             p3 = [-w/2 + l*cos(alpha),  l*sin(alpha) ];
-            p4 = [-w/2, 0 ];
+            p4 = [-w/2, feval(class(w), 0)];
             
             beta = asin(p2(1)/r);
             base = r*cos(beta);
-            arcCenter = [0, -(base - p2(2))];
+            arcCenter = [feval(class(w), 0), -(base - p2(2))];
             
             %transform coords
             p1 = obj.location.transformCoords(p1);
@@ -53,7 +53,7 @@ classdef CrossSectBreadloaf < CrossSectBase
             [leftSeg]   = drawer.drawLine(p3, p4);
             [baseSeg]  = drawer.drawLine(p4, p1);
             
-            innerCoord = obj.location.transformCoords( [0, l*sin(alpha)/2] );
+            innerCoord = obj.location.transformCoords([feval(class(w), 0), l*sin(alpha)/2] );
 
             segments = [rightSeg, arc, leftSeg, baseSeg];
             csToken = CrossSectToken(innerCoord, segments);
