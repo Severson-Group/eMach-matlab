@@ -42,9 +42,10 @@ if (DRAW_MAGNET)
     toolMn = MagNet();
     toolMn.setVisibility(1);
     toolMn.open();
+    toolMn.saveas(fileName);
     comp1.make(toolMn,toolMn);
     toolMn.viewAll();
-    toolMn.save(fileName);
+    toolMn.save();
     toolMn.close();
     if isvalid(toolMn)
         fprintf('Pre-destructor: toolMn exists\n');
