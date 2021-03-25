@@ -42,7 +42,7 @@ if (DRAW_MAGNET)
     toolMn = MagNet();
     toolMn.setVisibility(1);
     toolMn.open();
-    toolMn.saveas(fileName);
+    toolMn.saveAs(fileName);
     comp1.make(toolMn,toolMn);
     toolMn.viewAll();
     toolMn.save();
