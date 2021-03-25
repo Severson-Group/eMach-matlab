@@ -23,35 +23,26 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             set(obj.mn, 'Visible', obj.visible);
         end
                 
-         function open(obj, varargin)
+         function open(obj, fileName)
             %OPEN Open MagNet
             %   open() opens a new instance of MagNet with a new document.
-            %   open('path', path, 'fileName', fileName) opens an existing MagNet document. 
-            %   path is a string that specifies the file path.
-            %   fileName is a string that specifies the name of the file.  
-            %   Both path and fileName are specified as a key-value pair.
-            p = inputParser;
-            p.addParameter('fileName','');
-            p.addParameter('path','');
-            p.parse(varargin{:});
-            fileName = p.Results.fileName;
-            path = p.Results.path;
-            filePath = fullfile(path, fileName);
-            if ~exist(fileName)||~exist(path)
+            %   open(fileName) opens an existing MagNet document. 
+            %   fileName is a string that specifies the complete path to the file.  
+            if ~exist('fileName', 'var')
                 obj.doc = invoke(obj.mn, 'newDocument');
             else
-                obj.doc = invoke(obj.mn, 'openDocument', filePath);
+                obj.doc = invoke(obj.mn, 'openDocument', fileName);
             end
                 obj.view = invoke(obj.doc, 'getview');
                 obj.consts = invoke(obj.mn, 'getConstants');
                 obj.setDefaultLengthUnit(obj.defaultLength, false);
          end
         
-         function save(obj, path, fileName)
-            % SAVE Saves the MagNet document in the specified path
-            filePath = fullfile(path, fileName);
+         function save(obj, fileName)
+            % SAVE Save the MagNet document.
+            % fileName is a string that specifies the complete path to the file.
             invoke(obj.mn, 'processcommand',...
-                     sprintf('Call getDocument().save("%s")',filePath)); 
+                     sprintf('Call getDocument().save("%s")',fileName)); 
          end
          
         function close(obj)
