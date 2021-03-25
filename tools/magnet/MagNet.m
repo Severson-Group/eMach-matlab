@@ -44,9 +44,8 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
          function saveAs(obj, fileName)
             % SAVEAS Save the MagNet document.
             % fileName is a string that specifies the complete path to the file.
-            invoke(obj.mn, 'processcommand',...
-                     sprintf('Call getDocument().save("%s")',fileName));
             obj.fileName = fileName;
+            obj.save();
          end
          
          function save(obj)
@@ -216,6 +215,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %    session visible. Set visible= 'false' or visible = 0 to 
             %    make the MagNet session invisible.  
             set(obj.mn, 'Visible', visible);
+            obj.visible = visible;
         end
     end
     
