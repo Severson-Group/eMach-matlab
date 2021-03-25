@@ -13,7 +13,9 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         defaultLength = 'DimMillimeter';
         defaultAngle  = 'DimDegree';
         visible = 0;% visibility
+        fileName; % Name of the MagNet document
     end
+
     
     methods
         function obj = MagNet(varargin)
@@ -32,18 +34,27 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.doc = invoke(obj.mn, 'newDocument');
             else
                 obj.doc = invoke(obj.mn, 'openDocument', fileName);
+                obj.fileName = fileName;
             end
                 obj.view = invoke(obj.doc, 'getview');
                 obj.consts = invoke(obj.mn, 'getConstants');
                 obj.setDefaultLengthUnit(obj.defaultLength, false);
          end
         
-         function save(obj, fileName)
-            % SAVE Save the MagNet document.
+         function saveas(obj, fileName)
+            % SAVEAS Save the MagNet document.
             % fileName is a string that specifies the complete path to the file.
             invoke(obj.mn, 'processcommand',...
-                     sprintf('Call getDocument().save("%s")',fileName)); 
+                     sprintf('Call getDocument().save("%s")',fileName));
+            obj.fileName = fileName;
          end
+         
+         function save(obj)
+            % SAVE Save the MagNet document.
+            invoke(obj.mn, 'processcommand',...
+                     sprintf('Call getDocument().save("%s")',obj.fileName));
+         end
+         
          
         function close(obj)
            % CLOSE Closes the MagNet document
