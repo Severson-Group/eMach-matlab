@@ -1,8 +1,9 @@
 function [toolMn,coil_A,coil_B,coil_C] = ConstructAFPM2DExample(t_y, t_m, g, h, w_m, w_c, w, p, Q, linspeed)
 maxEleRemesh = 2; % max element size for remesh region
 toolMn = MagNet();
-toolMn.open(0,0,true); % open MagNet
-toolMn.setDefaultLengthUnit('millimeters', false); % set default length units
+toolMn.open();
+toolMn.setVisibility(1);
+toolMn.setDefaultLengthUnit('DimMillimeter', false); % set default length units
 
 %% Draw geometry
 
