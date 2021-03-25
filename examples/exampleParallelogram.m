@@ -35,7 +35,8 @@ comp1 = Component( ...
 
 %% Draw via MagNet
 path = pwd;
-fileName = 'test1.mn';
+modelName = 'test1.mn';
+fileName = fullfile(path, modelName);
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
@@ -43,7 +44,7 @@ if (DRAW_MAGNET)
     toolMn.open();
     comp1.make(toolMn,toolMn);
     toolMn.viewAll();
-    toolMn.save(path, fileName);
+    toolMn.save(fileName);
     toolMn.close();
     if isvalid(toolMn)
         fprintf('Pre-destructor: toolMn exists\n');
