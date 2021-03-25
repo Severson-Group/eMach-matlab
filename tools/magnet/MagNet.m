@@ -41,7 +41,7 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.setDefaultLengthUnit(obj.defaultLength, false);
          end
         
-         function saveas(obj, fileName)
+         function saveAs(obj, fileName)
             % SAVEAS Save the MagNet document.
             % fileName is a string that specifies the complete path to the file.
             invoke(obj.mn, 'processcommand',...
@@ -51,8 +51,12 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
          
          function save(obj)
             % SAVE Save the MagNet document.
+            if isempty(obj.fileName)
+                error('Unable to save file. Use the saveAs( ) function');
+            else
             invoke(obj.mn, 'processcommand',...
                      sprintf('Call getDocument().save("%s")',obj.fileName));
+            end
          end
          
          
