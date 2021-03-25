@@ -39,8 +39,9 @@ comp1 = Component( ...
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
-    toolMn.open(0,0,true);
-    toolMn.setDefaultLengthUnit('millimeters', false);
+    toolMn.open();
+    toolMn.setVisibility(1);
+    toolMn.setDefaultLengthUnit('DimMillimeter', false);
 
     comp1.make(toolMn, toolMn);
 
