@@ -14,7 +14,8 @@ classdef ToolBase < handle
     
     methods(Abstract = true)
         open(obj, fileName);
-        save(obj, fileName);
+        saveAs(obj, fileName);
+        save(obj);
         close(obj);
     end
     
