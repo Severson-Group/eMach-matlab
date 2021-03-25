@@ -13,8 +13,8 @@ classdef ToolBase < handle
     end
     
     methods(Abstract = true)
-        open(obj, path, fileName);
-        save(obj, path, fileName)
+        open(obj, fileName);
+        save(obj, fileName);
         close(obj);
     end
     
