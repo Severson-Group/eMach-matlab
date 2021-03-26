@@ -30,4 +30,5 @@ octave-workspace
 
 *.jproj
 *.jfiles
+*.mn
 

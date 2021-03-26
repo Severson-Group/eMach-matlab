@@ -13,8 +13,10 @@ classdef ToolBase < handle
     end
     
     methods(Abstract = true)
-        open(obj);
-        close(obj);
+        open(obj, fileName); % Open a file
+        save(obj); % Save the current file
+        saveAs(obj, fileName); % Save the current file with the specified name at the specified location
+        close(obj); % Close the file
     end
     
      methods(Access = protected)

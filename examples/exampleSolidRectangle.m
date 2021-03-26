@@ -6,7 +6,7 @@ DRAW_TIKZ   = 0;
 
 %% Define cross sections
    
-SolidRect = CrossSectSolidRect( ...
+SolidRect = CrossSectSolidRectangle( ...
         'name', 'SolidRect', ...
         'dim_w',DimMillimeter(20),....
         'dim_h',DimMillimeter(20),...
@@ -35,9 +35,9 @@ comp1 = Component( ...
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
-    toolMn.open(0,0,true);
-    toolMn.setDefaultLengthUnit('millimeters', false);
-
+    toolMn.open();
+    toolMn.setVisibility(1);
+    toolMn.setDefaultLengthUnit('DimMillimeter', false);
     comp1.make(toolMn,toolMn);
 
     toolMn.viewAll();

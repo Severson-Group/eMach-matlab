@@ -21,8 +21,9 @@ The folder specifications are as follows:
 - **Folder Name:** The folder name should be same as the cross-section name without the `CrossSect` prefix, and must follow camel case. For example, `CrossSectOuterRotor` will be in a folder named `outerRotor`.
 - **Folder Content:** The folder should contain the following files:
   - The MATLAB file containing the cross-section class.
-  - A vectorized drawing of the cross-section in either `.svg` (preferred) or `.pdf` format. 
-   - Source code used to create the drawings if not in `.svg` format (TikZ, Python, etc).
+  - A vectorized drawing of the cross-section in `.svg` format. The drawing filename should be identical to the cross-section class name.
+  - Source code used to create the drawings if not directly created from an `.svg` editor (i.e., if created using TikZ, Python, etc).
+  - `README.md` file that has a header of `[class name] Cross Section` and renders the image (to facilitate browsing the repository through GitHub)
 
 ## Drawings
 
@@ -38,8 +39,6 @@ Clear drawings are essential for the end user to understand how to use the cross
 
 - **Coordinate Axes:** The drawing origin and the coordinate axes should be clearly indicated in the drawing using a red coordinate system indicating the positive `x` and `y` directions. The origin of the coordinate system is the origin of the drawing, as interpretted by the cross-section class.
 
-- **Drawing file name:** The drawing filename should consist of the cross-section class name. For example, `CrossSectTrapezoid.svg`.
-
 As an example, the `CrossSectTrapezoid.svg` file is shown below:
 
-<img src="./trapezoid/CrossSectTrapezoidDrawing.svg" width="500" height="500" />
+<img src="./trapezoid/CrossSectTrapezoid.svg" width="500" height="500" />
