@@ -229,9 +229,10 @@ coil2Comp = Component( ...
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
-    toolMn.open(0,0,true);
-    toolMn.setDefaultLengthUnit('millimeters', false);
-
+    toolMn.open();
+    toolMn.setVisibility(1);
+    toolMn.setDefaultLengthUnit('DimMillimeter', false);
+    
     statorIronComp.make(toolMn, toolMn);
     moverIronComp.make(toolMn, toolMn);
     magnet1Comp.make(toolMn, toolMn);
