@@ -29,7 +29,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function obj = JMAG(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();
-            obj.jd = actxserver('designer.Application.191');
+            obj.jd = actxserver('designer.Application');
             if obj.visible
                 obj.jd.Show();
             else
