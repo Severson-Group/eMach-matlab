@@ -138,7 +138,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function sketch = getSketch(obj, Sketch, varargin)
+        function sketch = getSketch(obj, Sketch)
             if isnumeric(Sketch)
                 sketchName = strcat('mySketch', num2str(Sketch));
             else
@@ -164,10 +164,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             ref1 = obj.assembly.GetItem('XY Plane');
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
             obj.sketch = obj.assembly.CreateSketch(ref2);
-            obj.sketch.SetProperty('Name', sketchName)
-            if nargin>2
-                obj.sketch.SetProperty('Color', varargin);
-            end         
+            obj.sketch.SetProperty('Name', sketchName)   
             % Creating part from sketch
             obj.sketch.OpenSketch();
             ref1 = obj.assembly.GetItem(sketchName);
@@ -264,7 +261,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.sketch.SetProperty('Name', sketchName)
             
             % Import Model into Designer
-            obj.sketch = 0;
+            obj.sketch = [];   % Making sketch property empty
             obj.doc.SaveModel(true)
             
             if isempty(obj.study)
