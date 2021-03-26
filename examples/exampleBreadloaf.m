@@ -119,11 +119,13 @@ fileName = 'test1';
 if (DRAW_JMAG)
     toolJd = JMAG();
     toolJd.setVisibility(true);
-    toolJd.open();
+    toolJd.open(fileName);
+    
     comp1.make(toolJd,toolJd);
     comp2.make(toolJd,toolJd);
     comp3.make(toolJd,toolJd);
-    toolJd.save(path, fileName);
+    
+    toolJd.saveAs(fileName);
     toolJd.close();
     delete(toolJd);
 end
