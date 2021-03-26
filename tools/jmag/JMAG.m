@@ -177,6 +177,15 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             sketch = obj.sketch;
         end
         
+       
+        function saveAs(obj, fileName)
+        % TODO:
+        % Implement this...
+        
+        
+        
+        end
+        
         
         function select(obj)
            %SELECT Selects something from canvas (?)
