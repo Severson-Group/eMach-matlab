@@ -27,7 +27,7 @@ classdef CrossSectHollowRect < CrossSectBase
             t2=obj.dim_t2;
             t3=obj.dim_t3;
             t4=obj.dim_t4;
-            axis = [feval(class(w), 0),feval(class(w), 0)];
+            axis = feval(class(w), [0,0]);
          
             % Create inner and outer points
             points_i=[axis(1)+t3,axis(2)+t4; axis(1)+t3,axis(2)+h-t2;...
