@@ -19,9 +19,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         defaultLength = 'DimMeter'; % Default length unit is m
         defaultAngle = 'DimDegree'; % Default angle unit is degrees
         visible = true; % Visibility
-        workDirectory = pwd;
         fileName;
-        sketchList;
     end
     
 
@@ -40,16 +38,20 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         
         function obj = open(obj, fileName)
             %OPEN Open JMAG Designer or a specific file.
-            %   open() opens a new instance of JMAG Designer with a new document.
-            %   open(fileName) opens an existing JMAG document. 
-            %   fileName is a string that specifies the complete path to the file.          
+            %   open(fileName) opens an JMAG document. 
+            %   fileName is a string that specifies the complete path to the file.
             if ~exist('fileName', 'var')
+                error('Please specify a filename');
+            elseif ~exist(fileName, 'file')
                 obj.jd.NewProject(obj.projName);
-                obj.saveAs(strcat(obj.workDirectory, '\temp.jproj'));
+                obj.saveAs(fileName);
             else
-                obj.jd.Open(fileName);
+                obj.jd.Load(fileName);
             end
             obj.view = obj.jd.View();
+            obj.geometryEditor = obj.jd.CreateGeometryEditor(true);
+            obj.doc = obj.geometryEditor.NewDocument();
+            obj.assembly = obj.doc.GetAssembly();
         end
 
         
@@ -125,30 +127,17 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function geometryEditor = checkGeomEditor(obj)
-            if ~isnumeric(obj.geometryEditor)
-            else
-                obj.jd.LaunchGeometryEditor();
-                obj.geometryEditor = obj.jd.CreateGeometryEditor(true);
-                obj.doc = obj.geometryEditor.NewDocument();                
-            end
-            geometryEditor = obj.geometryEditor;
-        end
-        
-        
         function part = createPart(obj)
             %CREATEPART Creates a new part in geometry editor
             %part = createPart()
             
-             % Creating a new sketch
-            obj.geometryEditor = obj.checkGeomEditor();
-            obj.doc = obj.geometryEditor.GetDocument();
-            obj.assembly = obj.doc.GetAssembly();
+            % Creating a new sketch
             ref1 = obj.assembly.GetItem('XY Plane');
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
             obj.sketch = obj.assembly.CreateSketch(ref2);
             partName = 'partDrawing';
-            obj.sketch.SetProperty('Name', partName)   
+            obj.sketch.SetProperty('Name', partName)
+            
             % Creating part from sketch
             obj.sketch.OpenSketch();
             ref1 = obj.assembly.GetItem(partName);

@@ -100,12 +100,12 @@ end
 
 %% Draw via JMAG
 path = pwd;
-fileName = strcat(path,'test1.jproj');
+fileName = strcat(path,'\test1.jproj');
 
 if (DRAW_JMAG)
     toolJd = JMAG();
     toolJd.setVisibility(true);
-    toolJd.open();
+    toolJd.open(fileName);
     comp1.make(toolJd,toolJd);
     comp2.make(toolJd,toolJd);
     toolJd.saveAs(fileName);
