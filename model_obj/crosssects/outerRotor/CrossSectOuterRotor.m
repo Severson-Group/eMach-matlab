@@ -8,11 +8,11 @@ classdef CrossSectOuterRotor < CrossSectBase
     properties (GetAccess = 'public', SetAccess = 'protected')
         dim_alpha_rs; % span angle of magnet segment: class type DimAngular
         dim_alpha_rm; % span angle of entire magnet: class type DimAngular
-        dim_R_ro;     % outer radius of rotor: class type DimLinear.
+        dim_r_ro;     % outer radius of rotor: class type DimLinear.
         dim_d_rp;     % between pole depth: class type DimLinear
         dim_d_ri;     % back iron depth: class type DimLinear
         dim_d_rs;     % segment divider depth: class type DimLinear
-        dim_P;        % number of pole pairs (integer)
+        dim_p;        % number of pole pairs (integer)
         dim_S;        % number of segments / pole (integer)
         
     end
@@ -30,29 +30,29 @@ classdef CrossSectOuterRotor < CrossSectBase
             % for more readable code
             alpha_rs = obj.dim_alpha_rs.toRadians();
             alpha_rm = obj.dim_alpha_rm.toRadians();
-            R_ro = obj.dim_R_ro;
+            r_ro = obj.dim_r_ro;
             d_rp = obj.dim_d_rp;
             d_ri = obj.dim_d_ri;
             d_rs = obj.dim_d_rs;
-            P = obj.dim_P;
+            p = obj.dim_p;
             S = obj.dim_S;
                    
-            alpha_total = DimDegree(180/P).toRadians();
+            alpha_total = DimDegree(180/p).toRadians();
             
             % outer arc
-            r = R_ro;
+            r = r_ro;
             x1 = r * cos(alpha_total / 2);
             y1 = r * sin(alpha_total / 2);
             
             % inner arc between poles
-            r = R_ro - d_ri - d_rp;
+            r = r_ro - d_ri - d_rp;
             x2 = r * cos(alpha_rm / 2);
             y2 = r * sin(alpha_rm / 2);
             x3 = r * cos(alpha_total / 2);
             y3 = r * sin(alpha_total / 2);
             
             % line containing region between poles
-            r = R_ro - d_ri;
+            r = r_ro - d_ri;
             x4 = r * cos(alpha_rm / 2);
             y4 = r * sin(alpha_rm / 2);
             
@@ -64,7 +64,7 @@ classdef CrossSectOuterRotor < CrossSectBase
                error("S>1 not supported!"); 
             end
             
-            for i = 1 : (2*P)
+            for i = 1 : (2*p)
                 p = obj.location.transformCoords([x_arr',y_arr'], DimRadian((i-1)*alpha_total));
                 
                 x = p(:,1);
@@ -92,7 +92,7 @@ classdef CrossSectOuterRotor < CrossSectBase
                 arc4(i) = drawer.drawArc(obj.location.anchor_xy, p8, p7);
             end
             
-            rad = R_ro - (d_ri / 2);
+            rad = r_ro - (d_ri / 2);
             innerCoord = obj.location.transformCoords([rad, 0]); 
             segments = [arc1];%[arc1, seg1, seg2, seg3, arc2, arc3, arc4, seg4, seg5, seg6];
             csToken = CrossSectToken(innerCoord, segments);
@@ -110,11 +110,11 @@ classdef CrossSectOuterRotor < CrossSectBase
             %2. Validate the new properties that have been added here
             validateattributes(obj.dim_alpha_rs,{'DimAngular'},{'nonnegative', 'nonempty'});
             validateattributes(obj.dim_alpha_rm,{'DimAngular'},{'nonnegative', 'nonempty'});
-            validateattributes(obj.dim_R_ro,{'DimLinear'},{'nonnegative','nonempty'})  ;          
+            validateattributes(obj.dim_r_ro,{'DimLinear'},{'nonnegative','nonempty'})  ;          
             validateattributes(obj.dim_d_rp,{'DimLinear'},{'nonnegative','nonempty'});
             validateattributes(obj.dim_d_ri,{'DimLinear'},{'nonnegative','nonempty'});
             validateattributes(obj.dim_d_rs,{'DimLinear'},{'nonnegative','nonempty'});
-            validateattributes(obj.dim_P,{'double'},{'nonnegative','nonempty','integer'});
+            validateattributes(obj.dim_p,{'double'},{'nonnegative','nonempty','integer'});
             validateattributes(obj.dim_S,{'double'},{'nonnegative','nonempty','integer'});
          end
                   
