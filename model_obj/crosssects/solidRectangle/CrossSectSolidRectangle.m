@@ -1,4 +1,4 @@
-classdef CrossSectSolidRect  < CrossSectBase
+classdef CrossSectSolidRectangle  < CrossSectBase
     %COMPSOLIDRECT Describes a solid rectangle.
     %   Properties are set upon class creation and cannot be modified.
     %   The anchor point for this is the lower left corner of the rectangle.
@@ -9,7 +9,7 @@ classdef CrossSectSolidRect  < CrossSectBase
     end
     
   methods
-        function obj = CrossSectSolidRect(varargin)
+        function obj = CrossSectSolidRectangle(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();            
         end
