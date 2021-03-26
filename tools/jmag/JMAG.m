@@ -88,9 +88,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
 
-            if isempty(obj.sketch)
-                obj.sketch = obj.getSketch(0);
-                obj.sketch.OpenSketch();
+            if isempty(obj.part)
+                obj.part = obj.createPart();
             end
             
             % Convert to default units
@@ -107,9 +106,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
-            if isempty(obj.sketch)
-                obj.sketch = obj.getSketch(0);
-                obj.sketch.OpenSketch();
+            if isempty(obj.part)
+                obj.part = obj.createPart();
             end
             
             % Convert to default units
@@ -138,40 +136,25 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function sketch = getSketch(obj, Sketch)
-            if isnumeric(Sketch)
-                sketchName = strcat('mySketch', num2str(Sketch));
-            else
-                sketchName = Sketch;
-            end
-
-            for i = 1:length(obj.sketchList)
-                if obj.sketchList(i) == sketchName
-                    obj.sketch = obj.assembly.GetItem(sketchName);
-                    % open sketch for drawing (must be closed before switch to another sketch)
-                    obj.sketch.OpenSketch();
-                    sketch = obj.sketch;
-                    return
-                end
-            end
-            if i == length(obj.sketchList)
-                obj.sketchList(end) = sketchName;
-            end
+        function part = createPart(obj)
+            %CREATEPART Creates a new part in geometry editor
+            %part = createPart()
             
+             % Creating a new sketch
             obj.geometryEditor = obj.checkGeomEditor();
             obj.doc = obj.geometryEditor.GetDocument();
             obj.assembly = obj.doc.GetAssembly();
             ref1 = obj.assembly.GetItem('XY Plane');
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
             obj.sketch = obj.assembly.CreateSketch(ref2);
-            obj.sketch.SetProperty('Name', sketchName)   
+            partName = 'partDrawing';
+            obj.sketch.SetProperty('Name', partName)   
             % Creating part from sketch
             obj.sketch.OpenSketch();
-            ref1 = obj.assembly.GetItem(sketchName);
+            ref1 = obj.assembly.GetItem(partName);
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
             obj.assembly.MoveToPart(ref2);
-            obj.part = obj.assembly.GetItem(sketchName);
-            sketch = obj.sketch;
+            part = obj.assembly.GetItem(partName);
         end
         
         
@@ -260,8 +243,9 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             sketchName = strcat(name,'_sketch');
             obj.sketch.SetProperty('Name', sketchName)
             
+            % Making part property empty after creating component
+            obj.part = [];   
             % Import Model into Designer
-            obj.sketch = [];   % Making sketch property empty
             obj.doc.SaveModel(true)
             
             if isempty(obj.study)
