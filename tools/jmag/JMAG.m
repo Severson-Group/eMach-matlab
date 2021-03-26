@@ -7,7 +7,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     
     properties (GetAccess = 'public', SetAccess = 'public')        
         jd;  % The activexserver object for JMAG Designer
-        projName = 'proj'; % The name of JMAG Designer project (a string)
         geometryEditor; % The Geometry Editor object
         doc; % The document object in Geometry Editor
         assembly; % The assembly object in Geometry Editor
@@ -43,7 +42,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             if ~exist('fileName', 'var')
                 error('Please specify a filename');
             elseif ~exist(fileName, 'file')
-                obj.jd.NewProject(obj.projName);
+                obj.jd.NewProject('proj');
                 obj.saveAs(fileName);
             else
                 obj.jd.Load(fileName);
@@ -189,23 +188,15 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             sketchName = strcat(name,'_sketch');
             obj.sketch.SetProperty('Name', sketchName)
 
+            % Making part property empty after creating component
+            obj.part = [];
             % Import Model into Designer
-            obj.sketch = 0;
             obj.doc.SaveModel(true)
+            modelName = strcat(name,'_model');
+            studyName = strcat(name,'_study');
             
-            if obj.study == 0
-                obj.model = obj.jd.GetCurrentModel();
-                obj.model.SetName(obj.projName)
-                % Create study
-                obj.study = obj.model.CreateStudy('Transient', obj.projName);
-            else
-                % Delete old model
-                obj.jd.DeleteModel(obj.projName)
-                % Setup the new model
-                obj.model = obj.jd.GetCurrentModel();
-                obj.model.SetName(obj.projName)
-                obj.study = obj.model.GetStudy(obj.projName);
-            end
+            % Create a study
+            obj.study = obj.createStudy(studyName, modelName);
             
             % Set to default units
             obj.setDefaultLengthUnit(obj.defaultLength)
@@ -222,10 +213,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   name  - name of the newly extruded component
             %   depth  - Depth of extrusion (dimLinear) 
             
-           % Convert to default units
-           depth = feval(obj.defaultLength, depth);
+            % Convert to default units
+            depth = feval(obj.defaultLength, depth);
            
-           % Extrude
+            % Extrude
             ref1 = obj.sketch;
             extrudePart = obj.part.CreateExtrudeSolid(ref1,double(depth));
             obj.part.SetProperty('Name', name)
@@ -236,20 +227,11 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.part = [];   
             % Import Model into Designer
             obj.doc.SaveModel(true)
+            modelName = strcat(name,'_model');
+            studyName = strcat(name,'_study');
             
-            if isempty(obj.study)
-                obj.model = obj.jd.GetCurrentModel();
-                obj.model.SetName(obj.projName)
-                % Create study
-                obj.study = obj.model.CreateStudy('Transient', obj.projName);
-            else
-                % Delete old model
-                obj.jd.DeleteModel(obj.projName)
-                % Setup the new model
-                obj.model = obj.jd.GetCurrentModel();
-                obj.model.SetName(obj.projName)
-                obj.study = obj.model.GetStudy(obj.projName);
-            end
+            % Create a study
+            obj.study = obj.createStudy(studyName, modelName);
             
             % Set to default units
             obj.setDefaultLengthUnit(obj.defaultLength)
@@ -259,8 +241,27 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.study.SetMaterialByName(name, material)
         end
         
-        
-        function sketch = prepareSection(obj, csToken)
+        function study = createStudy(obj, studyName, modelName)
+            % CREATESTUDY Creates a new study
+            % study = createStudy(studyName, modelName)
+            % studyName - Name of the study to be created
+            % modelName - Model where the study will be created
+            if isempty(obj.study)
+                obj.model = obj.jd.GetCurrentModel();
+                obj.model.SetName(modelName)
+                % Create study
+                study = obj.model.CreateStudy('Transient', studyName);
+            else
+                % Delete old model
+                obj.jd.DeleteModel(modelName)
+                % Setup the new model
+                obj.model = obj.jd.GetCurrentModel();
+                obj.model.SetName(modelName)
+                study = obj.model.GetStudy(studyName);
+            end
+        end
+            
+        function region = prepareSection(obj, csToken)
             % PREPARESECTION Prepares section from drawing for extrude / revolve.
             % sketch = prepareSection(obj, csToken)
             % PREPARESECTION creates JMAG geometry regions using lines and arcs.
@@ -297,7 +298,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 end
             end          
             obj.sketch.CloseSketch();
-            sketch = 1;
         end        
         
         
