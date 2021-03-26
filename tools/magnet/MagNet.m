@@ -8,61 +8,65 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     properties (GetAccess = 'public', SetAccess = 'private')
         mn;  % MagNet activexserver object
         doc; % Document object
-        view; %View object
+        view; % View object
         consts; %Program constants
         defaultLength = 'DimMillimeter';
-        defaultAngle  = 'DimDegree'
+        defaultAngle  = 'DimDegree';
+        visible = 0;% visibility
+        fileName; % Name of the MagNet document
     end
+
     
     methods
         function obj = MagNet(varargin)
             obj = obj.createProps(nargin,varargin);            
-            obj.validateProps();            
+            obj.validateProps();        
+            obj.mn = actxserver('MagNet.Application');
+            set(obj.mn, 'Visible', obj.visible);
         end
-        
-        function obj = open(obj, fileName, mn, visible)
-            %OPEN Open MagNet or a specific file.
-            %   open() opens a new instance of MagNet with a new document.
-            %
-            %   open('filename') opens the file in a new instance of MagNet.
-            %
-            %   open('filename', mn) opens the file in the mn MagNet instance
-            %
-            %   open('filename', mn, visible) opens the file in the mn MagNet
-            %        instance with customizable visibility (true for visible)
-            %
-            %   mn and fileName can be set to 0 to allow setting
-            %   the visibility of a new instance.
-
-            if nargin < 2
-                obj.mn = actxserver('MagNet.Application');
-            end
-            
-            if nargin > 2
-                if isnumeric(mn)
-                    obj.mn = actxserver('MagNet.Application');
-                end
                 
-                set(obj.mn, 'Visible', visible);
-            end
-
-            if nargin > 0 && ~isnumeric(fileName)
-                obj.doc = invoke(obj.mn, 'openDocument', fileName);
-            else
+         function open(obj, fileName)
+            %OPEN Open MagNet
+            %   open() opens a new instance of MagNet with a new document.
+            %   open(fileName) opens an existing MagNet document. 
+            %   fileName is a string that specifies the complete path to the file.  
+            if ~exist('fileName', 'var')
                 obj.doc = invoke(obj.mn, 'newDocument');
+            else
+                obj.doc = invoke(obj.mn, 'openDocument', fileName);
+                obj.fileName = fileName;
             end
-            
-            obj.view = invoke(obj.doc, 'getview');
-            obj.consts = invoke(obj.mn, 'getConstants');
-            obj.setDefaultLengthUnit('millimeters', false);
+                obj.view = invoke(obj.doc, 'getview');
+                obj.consts = invoke(obj.mn, 'getConstants');
+                obj.setDefaultLengthUnit(obj.defaultLength, false);
+         end
+        
+         function saveAs(obj, fileName)
+            % SAVEAS Save the MagNet document.
+            % fileName is a string that specifies the complete path to the file.
+            obj.fileName = fileName;
+            obj.save();
+         end
+         
+         function save(obj)
+            % SAVE Save the MagNet document.
+            if isempty(obj.fileName)
+                error('Unable to save file. Use the saveAs( ) function');
+            else
+            invoke(obj.mn, 'processcommand',...
+                     sprintf('Call getDocument().save("%s")',obj.fileName));
+            end
+         end
+         
+         
+        function close(obj)
+           % CLOSE Closes the MagNet document
+           invoke (obj.mn, 'processcommand','Call getDocument().close(False)');
         end
         
-        function close(obj)
-           % CLOSE Closes MagNet application
-           %     close()
-           
-           % TODO:
-           % Implement this...
+        function delete(obj)
+           % DELETE Closes the MagNet application
+            invoke(obj.mn, 'processcommand','call close(False)');
         end
         
         function setCores(obj, numCores)
@@ -178,31 +182,23 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %SETDEFAULTLENGTHUNIT Set the default unit for length.
             %   setDefaultLengthUnit(userUnit, makeAppDefault)
             %       Sets the units for length. 
-
             %   userUnit can be one of these options:
-            %       'kilometers'
-            %       'meters'
-            %       'centimeters'
-            %       'millimeters'
-            %		'microns'
-            %		'miles'
-            %		'yards'	
-            %		'feet'
-            %       'inches'
+            %       'DimMillimeter'
+            %       'DimInch'
             %
             %   This is a wrapper for Document::setDefaultLengthUnit
 
             %update length unit type, this is needed for unit conversions
             %in extruding/drawing/moving/etc. (not yet implemented).
-            if strcmp(userUnit, 'millimeters')
-                obj.defaultLength = 'DimMillimeter';
-            elseif strcmp(userUnit, 'inches')
-                obj.defaultLength = 'DimInches';
+            if strcmp(userUnit,'DimMillimeter')
+                appUnit = 'millimeters';
+            elseif strcmp(userUnit, 'DimInches')
+                appUnit = 'inches';
             else
                 error('unsupported length unit')
             end
             
-            invoke(obj.doc, 'setDefaultLengthUnit', userUnit, makeAppDefault);
+            invoke(obj.doc, 'setDefaultLengthUnit', appUnit, makeAppDefault);
         end
         
         function viewAll(obj)
@@ -213,11 +209,13 @@ classdef MagNet < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function setVisibility(obj, visibility)
+        function setVisibility(obj, visible)
             %SETVISIBLE Sets visibility of MagNet application
-            %    setVisibility(true)
-            
-            set(obj.mn, 'Visible', visibility);
+            %    Set visible= 'true' or visible = 1 to make the MagNet
+            %    session visible. Set visible= 'false' or visible = 0 to 
+            %    make the MagNet session invisible.  
+            set(obj.mn, 'Visible', visible);
+            obj.visible = visible;
         end
     end
     

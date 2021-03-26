@@ -34,15 +34,32 @@ comp1 = Component( ...
         );
 
 %% Draw via MagNet
+path = pwd;
+modelName = 'test1.mn';
+fileName = fullfile(path, modelName);
 
 if (DRAW_MAGNET)
     toolMn = MagNet();
-    toolMn.open(0,0,true);
-    toolMn.setDefaultLengthUnit('millimeters', false);
-
+    toolMn.setVisibility(1);
+    toolMn.open();
+    toolMn.saveAs(fileName);
     comp1.make(toolMn,toolMn);
-
     toolMn.viewAll();
+    toolMn.save();
+    toolMn.close();
+    if isvalid(toolMn)
+        fprintf('Pre-destructor: toolMn exists\n');
+    else
+        fprintf('Pre-destructor: toolMn does not exist\n');
+    end
+    
+    delete(toolMn);
+    
+    if isvalid(toolMn)
+        fprintf('Failure: toolMn exists\n');
+    else
+        fprintf('Success: toolMn is destroyed\n');
+    end
 end
 
 %% Draw via TikZ

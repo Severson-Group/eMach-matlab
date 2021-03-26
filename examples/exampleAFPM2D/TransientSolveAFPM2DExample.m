@@ -81,4 +81,5 @@ close all
     save('AFPMSolution.mat','solutiondata');
 
 %% Close MagNet
-invoke(toolMn.mn, 'processcommand','CALL close(False)');
+toolMn.close();
+delete(toolMn);
