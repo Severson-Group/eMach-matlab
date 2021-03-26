@@ -104,12 +104,12 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
                 [inner_points]=obj.location.transformCoords(inner_points, DimRadian(2*pi/P));
                 for j=1:2*s+1
                     if mod(j,2)==0
-                     arc_c(j) = drawer.drawArc(obj.location.anchor_xy, points(j,:),...
+                     arcs(j) = drawer.drawArc(obj.location.anchor_xy, points(j,:),...
                                 points(j+1,:));
                       lines(j)= drawer.drawLine(points(j,:), inner_points(j,:)); 
                      end
                     if (mod(j,2)==1 && j<(2*s+1))
-                        arc(j) = drawer.drawArc(obj.location.anchor_xy,inner_points(j,:),...
+                        arcs(j) = drawer.drawArc(obj.location.anchor_xy,inner_points(j,:),...
                                 inner_points(j+1,:));
                         lines(j)= drawer.drawLine(points(j,:), inner_points(j,:));     
                     end           
@@ -119,7 +119,7 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
       if (r_ri == 0)
           point_i = obj.location.anchor_xy;
           innerCoord = obj.location.transformCoords(point_i);
-          csToken = CrossSectToken(innerCoord, arc_c);
+          csToken = CrossSectToken(innerCoord, arcs);
       else
 
          point_i = [r_ri,0]+obj.location.anchor_xy;
@@ -128,7 +128,7 @@ classdef CrossSectInnerNotchedRotor < CrossSectBase
          arc_i2 = drawer.drawArc(obj.location.anchor_xy, point_i2,point_i);
          rad = r_ri+d_ri;
          innerCoord = obj.location.transformCoords([rad, 0]);
-         segments = [arc_c,arc_i1,arc_i2];
+         segments = [arcs,arc_i1,arc_i2];
          csToken = CrossSectToken(innerCoord, segments);
       end               
         end
