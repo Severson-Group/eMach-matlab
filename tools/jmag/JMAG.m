@@ -88,7 +88,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %DRAWLINE Draw a line.
             %   drawLine([start_x, _y], [end_x, _y]) draws a line
 
-            if isnumeric(obj.sketch)
+            if isempty(obj.sketch)
                 obj.sketch = obj.getSketch(0);
                 obj.sketch.OpenSketch();
             end
@@ -107,7 +107,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   drawarc(mn, [center_x,_y], [start_x, _y], [end_x, _y])
             %       draws an arc
             
-            if isnumeric(obj.sketch)
+            if isempty(obj.sketch)
                 obj.sketch = obj.getSketch(0);
                 obj.sketch.OpenSketch();
             end
@@ -217,7 +217,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.part.GetItem('Revolve').SetProperty('AxisVecZ',0);
             obj.part.GetItem('Revolve').SetProperty('Angle',angle);
             obj.part.SetProperty('Name', name)
-            sketchName = strcat(name,'Sketch');
+            sketchName = strcat(name,'_sketch');
             obj.sketch.SetProperty('Name', sketchName)
 
             % Import Model into Designer
@@ -260,14 +260,14 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             ref1 = obj.sketch;
             extrudePart = obj.part.CreateExtrudeSolid(ref1,double(depth));
             obj.part.SetProperty('Name', name)
-            sketchName = strcat(name,'Sketch');
+            sketchName = strcat(name,'_sketch');
             obj.sketch.SetProperty('Name', sketchName)
             
             % Import Model into Designer
             obj.sketch = 0;
             obj.doc.SaveModel(true)
             
-            if obj.study == 0
+            if isempty(obj.study)
                 obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(obj.projName)
                 % Create study
