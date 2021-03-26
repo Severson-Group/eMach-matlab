@@ -7,24 +7,24 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     
     properties (GetAccess = 'public', SetAccess = 'public')        
         jd;  % The activexserver object for JMAG Designer
-        app = 0; % app = jd
         projName = 'proj'; % The name of JMAG Designer project (a string)
-        geomApp = 0; % The Geometry Editor object
-        doc = 0; % The document object in Geometry Editor
-        assembly = 0; % The assembly object in Geometry Editor
-        sketch = 0; % The sketch object in Geometry Editor
-        part = 0; % The part object in Geometry Editor
-        model = 0; % The model object in JMAG Designer
-        study = 0; % The study object in JMAG Designer
+        geometryEditor; % The Geometry Editor object
+        doc; % The document object in Geometry Editor
+        assembly; % The assembly object in Geometry Editor
+        sketch; % The sketch object in Geometry Editor
+        part; % The part object in Geometry Editor
+        model; % The model object in JMAG Designer
+        study; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
         defaultLength = 'DimMeter'; % Default length unit is m
         defaultAngle = 'DimDegree'; % Default angle unit is degrees
         visible = true; % Visibility
-        workDir = pwd;
+        workDirectory = pwd;
+        fileName;
         sketchList;
     end
     
-    
+
     methods
         function obj = JMAG(varargin)
             obj = obj.createProps(nargin,varargin);            
@@ -37,32 +37,37 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
         end
         
-        function obj = open(obj, varargin)
+        
+        function obj = open(obj, fileName)
             %OPEN Open JMAG Designer or a specific file.
             %   open() opens a new instance of JMAG Designer with a new document.
-            %
-            %   open('filename','path') opens the file called 'filename' at
-            %   'path' location.
-            %   
-            %   open('filename') opens the file called 'filename'
-            %   
-            %
-                   
-            if nargin > 2
-                obj.workDir = varargin{2};
-            elseif nargin > 1
-                fileName = strcat(obj.workDir, varargin{1}, '.jproj');
-            end
-                         
-            if nargin > 1 && exist(fileName,'file')
-                obj.jd.Open(strcat(obj.workDir, fileName, '.jproj'));
-            else
+            %   open(fileName) opens an existing JMAG document. 
+            %   fileName is a string that specifies the complete path to the file.          
+            if ~exist('fileName', 'var')
                 obj.jd.NewProject(obj.projName);
-                save(obj, obj.workDir, obj.projName);
+                obj.saveAs(strcat(obj.workDirectory, '\temp.jproj'));
+            else
+                obj.jd.Open(fileName);
             end
-            
             obj.view = obj.jd.View();
-            obj.app = obj.jd;
+        end
+
+        
+         function saveAs(obj, fileName)
+            % SAVEAS Save the JMAG document.
+            % fileName is a string that specifies the complete path to the file.
+            obj.fileName = fileName;
+            obj.save();
+         end
+         
+         
+        function save(obj)
+            % SAVE Saves the JMAG document in the specified path
+            if isempty(obj.fileName)
+                error('Unable to save file. Use the saveAs( ) function');
+            else
+                obj.jd.SaveAs(obj.fileName);
+            end        
         end
         
         
@@ -71,18 +76,13 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             % close()
         end
         
+        
         function obj = delete(obj)
             % DELETE Closes the JMAG application
             % delete()
-            
             obj.jd.Quit();
         end
         
-        function save(obj, path, fileName)
-            % SAVE Saves the MagNet document in the specified path
-            
-            obj.jd.SaveAs(strcat(path, '\',fileName,'.jproj'));
-        end
         
         function [tokenDraw] = drawLine(obj, startxy, endxy)
             %DRAWLINE Draw a line.
@@ -127,14 +127,14 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function geomApp = checkGeomApp(obj)
-            if ~isnumeric(obj.geomApp)
+        function geometryEditor = checkGeomEditor(obj)
+            if ~isnumeric(obj.geometryEditor)
             else
-                obj.app.LaunchGeometryEditor();
-                obj.geomApp = obj.app.CreateGeometryEditor(true);
-                obj.doc = obj.geomApp.NewDocument();                
+                obj.jd.LaunchGeometryEditor();
+                obj.geometryEditor = obj.jd.CreateGeometryEditor(true);
+                obj.doc = obj.geometryEditor.NewDocument();                
             end
-            geomApp = obj.geomApp;
+            geometryEditor = obj.geometryEditor;
         end
         
         
@@ -158,8 +158,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 obj.sketchList(end) = sketchName;
             end
             
-            obj.geomApp = obj.checkGeomApp();
-            obj.doc = obj.geomApp.GetDocument();
+            obj.geometryEditor = obj.checkGeomEditor();
+            obj.doc = obj.geometryEditor.GetDocument();
             obj.assembly = obj.doc.GetAssembly();
             ref1 = obj.assembly.GetItem('XY Plane');
             ref2 = obj.doc.CreateReferenceFromItem(ref1);
@@ -175,15 +175,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.assembly.MoveToPart(ref2);
             obj.part = obj.assembly.GetItem(sketchName);
             sketch = obj.sketch;
-        end
-        
-       
-        function saveAs(obj, fileName)
-        % TODO:
-        % Implement this...
-        
-        
-        
         end
         
         
@@ -234,15 +225,15 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.doc.SaveModel(true)
             
             if obj.study == 0
-                obj.model = obj.app.GetCurrentModel();
+                obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(obj.projName)
                 % Create study
                 obj.study = obj.model.CreateStudy('Transient', obj.projName);
             else
                 % Delete old model
-                obj.app.DeleteModel(obj.projName)
+                obj.jd.DeleteModel(obj.projName)
                 % Setup the new model
-                obj.model = obj.app.GetCurrentModel();
+                obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(obj.projName)
                 obj.study = obj.model.GetStudy(obj.projName);
             end
@@ -253,8 +244,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             % Add material
             obj.study.SetMaterialByName(name, material)
-            obj.app.Save()
-
         end
         
         
@@ -279,15 +268,15 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.doc.SaveModel(true)
             
             if obj.study == 0
-                obj.model = obj.app.GetCurrentModel();
+                obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(obj.projName)
                 % Create study
                 obj.study = obj.model.CreateStudy('Transient', obj.projName);
             else
                 % Delete old model
-                obj.app.DeleteModel(obj.projName)
+                obj.jd.DeleteModel(obj.projName)
                 % Setup the new model
-                obj.model = obj.app.GetCurrentModel();
+                obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(obj.projName)
                 obj.study = obj.model.GetStudy(obj.projName);
             end
@@ -298,7 +287,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             
             % Add material
             obj.study.SetMaterialByName(name, material)
-            obj.app.Save()
         end
         
         
@@ -321,7 +309,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             innerCoord2 = csToken.innerCoord(2);
             innerCoord1 = feval(obj.defaultLength, innerCoord1);
             innerCoord2 = feval(obj.defaultLength, innerCoord2);
-            obj.geomApp.View.SelectAtCoordinateDlg(double(innerCoord1), ...
+            obj.geometryEditor.View.SelectAtCoordinateDlg(double(innerCoord1), ...
                 double(innerCoord2), 0, visItem, itemType);
             region = obj.doc.GetSelection.Item([0]);
             regionName = region.GetName;            
@@ -375,9 +363,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function setVisibility(obj, visibile)
             % SETVISIBILITY Set visibility of the JMAG application
             % setVisibility(obj, visibile)
-            
             obj.visible = visibile;
-            
             if obj.visible
                 obj.jd.Show();
             else

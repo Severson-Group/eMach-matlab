@@ -100,7 +100,7 @@ end
 
 %% Draw via JMAG
 path = pwd;
-fileName = 'test1';
+fileName = strcat(path,'test1.jproj');
 
 if (DRAW_JMAG)
     toolJd = JMAG();
@@ -108,7 +108,7 @@ if (DRAW_JMAG)
     toolJd.open();
     comp1.make(toolJd,toolJd);
     comp2.make(toolJd,toolJd);
-    toolJd.save(path, fileName);
+    toolJd.saveAs(fileName);
     toolJd.close();
     delete(toolJd);
 end
