@@ -19,7 +19,7 @@ The workflow for geometry creation in JMAG is listed below:
 7. Assign materials.
 
 Although the geometry creation workflow in JMAG is quite consistent with the eMach workflow, one of the important differences is the creation of regions. 
-The JMAG function to create regions simply converts any closed geometry (bounded by lines and arcs) into a region. For example, if the stator cross-section of a radial flux machine is drawn, JMAG creates two regions: i) `region 1`: a region consisiting the stator teeth and yoke, and ii) `region 2`: a region with the stator bore and slots. If this geometry is extruded, it will result in a cylinder and not a stator with both regions extruded. So, the unecessary region (`region 2`) must be identified and deleted before extrusion.  
+The JMAG function to create regions simply converts any closed geometry (bounded by lines and arcs) into a region. For example, if the stator cross-section of a radial flux machine is drawn, JMAG creates two regions: i) `region 1`: a region consisiting the stator teeth and yoke, and ii) `region 2`: a region with the stator bore and slots. If this geometry is extruded, it will result in a solid cylinder. So, the unecessary region (`region 2`) must be identified and deleted before extrusion.  
 
 ## The solution
 If working with the JMAG's GUI, one can select the unecessary region and delete it manually. However, this is hard to do programmatically because of the following reasons:
