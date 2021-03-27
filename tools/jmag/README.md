@@ -6,7 +6,7 @@ This document briefly explains how the component creation workflow is handled in
 The geometry creation workflow in eMach is as follows:
 
 1. Draw a cross section geometry.
-2. Extrude the cross section - requires a coordinate that is inside the region to be extruded. 
+2. Extrude or revolve the cross section. This requires one geometric coordinate `innerCoord` present inside the corss section. 
 3. Assign materials.
 
 Although this workflow is consistent with the workflow in Infolytica MagNet, the workflow in JMAG has some additional steps to be followed. The JMAG workflow is as follows:
