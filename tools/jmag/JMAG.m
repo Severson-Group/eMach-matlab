@@ -29,7 +29,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             obj.validateProps();
             % Obtain instance of JMAG designer application
             obj.jdInstance = actxserver('designerstarter.InstanceManager');
-            obj.jd = obj.jdInstance.GetInstance();
+            obj.jd = obj.jdInstance.GetInstance(); % Creates a new instance and returns the handle
             if obj.visible
                 obj.jd.Show();
             else
