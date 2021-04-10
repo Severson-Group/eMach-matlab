@@ -2,8 +2,8 @@
 import sys
 sys.path.append("..")
 
-import tools.magnet as mn
-import model_obj as mo
+import emach.tools.magnet as mn
+import emach.model_obj as mo
 import numpy as np
 
 x = mo.DimMillimeter(4)
@@ -24,8 +24,8 @@ hollowCylinder2 = hollowCylinder1.clone(name = 'hollowCylinder2',
                                         dim_r_o = z)
 
 # create an instance of the MagNet class
-toolMn = mn.MagNet()
-toolMn.open(visible=True)
+toolMn = mn.MagNet(visible=True)
+toolMn.open()
 
 # draw hollowcylinders
 c1 = hollowCylinder1.draw(toolMn)
@@ -33,4 +33,4 @@ c2 = hollowCylinder2.draw(toolMn)
 
 toolMn.view_all()
 # select inner coordinate of a hollow cylinder
-toolMn.prepare_section(c2.inner_coord)
+toolMn.prepare_section(c2)
