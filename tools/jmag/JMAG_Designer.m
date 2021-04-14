@@ -1,4 +1,4 @@
-classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
+classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     %JMAG Encapsulation for the JMAG Designer of JSOL Corporation.
     %   TODO: add more description
     %   TODO: add more description
@@ -35,11 +35,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             jdInstance = actxserver('designerstarter.InstanceManager');
             obj.jd = jdInstance.GetNamedInstance(string(numInstance), 0); % Creates a new instance and returns the handle
             numInstance = numInstance + 1;
-            if obj.visible
-                obj.jd.Show();
-            else
-                obj.jd.Hide();
-            end
+            obj.setVisibility(obj.visible)
         end
         
         
@@ -339,10 +335,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         end
         
         
-        function setVisibility(obj, visibile)
+        function setVisibility(obj, visible)
             % SETVISIBILITY Set visibility of the JMAG application
             % setVisibility(obj, visibile)
-            obj.visible = visibile;
+            obj.visible = visible;
             if obj.visible
                 obj.jd.Show();
             else
