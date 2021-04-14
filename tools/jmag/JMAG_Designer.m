@@ -49,8 +49,10 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             elseif ~exist(fileName, 'file')
                 obj.jd.NewProject(fileName);
                 obj.saveAs(fileName);
+                obj.fileName = fileName;
             else
                 obj.jd.Load(fileName);
+                obj.fileName = fileName;
             end
             obj.view = obj.jd.View();
             obj.geometryEditor = obj.jd.CreateGeometryEditor(true);
