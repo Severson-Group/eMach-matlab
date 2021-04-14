@@ -27,9 +27,15 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
         function obj = JMAG(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();
+            % Keep track of number of instance called
+            persistent numInstance
+            if isempty(numInstance)
+                numInstance = 1;
+            end
             % Obtain instance of JMAG designer application
             obj.jdInstance = actxserver('designerstarter.InstanceManager');
-            obj.jd = obj.jdInstance.GetInstance(); % Creates a new instance and returns the handle
+            obj.jd = obj.jdInstance.GetNamedInstance(string(numInstance), 2); % Creates a new instance and returns the handle
+            numInstance = numInstance + 1;
             if obj.visible
                 obj.jd.Show();
             else
