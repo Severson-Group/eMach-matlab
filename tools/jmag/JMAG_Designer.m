@@ -23,7 +23,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
     
 
     methods
-        function obj = JMAG(varargin)
+        function obj = JMAG_Designer(varargin)
             obj = obj.createProps(nargin,varargin);            
             obj.validateProps();
             % Keep track of number of instance called
@@ -45,7 +45,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             %   fileName is a string that specifies the complete path to the file.
             if ~exist('fileName', 'var')
                 obj.jd.NewProject('untitled');
-                obj.saveAs('untitled');
+                obj.saveAs('untitled'); % JMAG requires it to be saved before creating geometry 
             elseif ~exist(fileName, 'file')
                 obj.jd.NewProject(fileName);
                 obj.saveAs(fileName);
@@ -79,7 +79,12 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         
         function obj = close(obj)
             % CLOSE Closes the JMAG document
-            % close()
+            % JMAG doesn't have the notion of document close()
+            % So close() prevents edits by any future function calls,
+            % so it opens a new untitled document.
+            %
+            % close() 
+            obj.open()
         end
         
         
