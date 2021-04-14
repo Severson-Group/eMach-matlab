@@ -18,16 +18,15 @@ The workflow for geometry creation in JMAG is listed below:
 6. Add the geometry to the study.
 7. Assign materials.
 
-Although the geometry creation workflow in JMAG is quite consistent with the eMach workflow, one of the important differences is the creation of regions. 
 The JMAG function to create regions simply converts any closed geometry (bounded by lines and arcs) into a region. For example, if the stator cross-section of a radial flux machine is drawn, JMAG creates two regions: i) `region 1`: a region consisting the stator teeth and yoke, and ii) `region 2`: a region with the stator bore and slots. If this geometry is extruded, it will result in a solid cylinder. So, the unnecessary region (`region 2`) must be identified and deleted before extrusion.  
 
-## The solution
+## Implementation in eMach
 If working with the JMAG's GUI, one can select the unnecessary region and delete it manually. However, this is hard to do programmatically because of the following reasons:
 
 1. The `CreateRegions()` function in JMAG takes no arguments. So, there is no way to specify where to create JMAG geometry regions. All closed geometries are simply converted to JMAG geometry regions.
 2. The `CreateRegions()` function does not return the name or any other information about the regions created. 
 
-The eMach workflow provides a coordinate `innerCoord` inside every cross section to be extruded. This `innerCoord` will be inside a geometry region that must be retained and extruded in JMAG. With this information, the following workaround was adopted to address the issue of multiple geometry regions:
+The eMach workflow provides a coordinate `innerCoord` inside every cross section to be extruded. This `innerCoord` will be inside a geometry region that must be retained and extruded in JMAG. With this information, the following approach is used to create only the desired geometry region:
 
 1. In the `prepareSection()` function, after drawing the cross section, the number of geometry items in the JMAG drawing is obtained. This is done using the `NumItems()` function.
 2. The JMAG geometry regions are created using the `CreateRegions()` function.
@@ -40,5 +39,5 @@ The eMach workflow provides a coordinate `innerCoord` inside every cross section
 
 The desired region is left behind and can then be extruded or revolved.
 
-**Note:** The steps listed above to delete the undesired regions heavily rely on JMAG's region naming convention. If future versions of JMAG updates the way geometry regions are named, this must be updated accordingly.
+**Note:** The steps listed above to delete the undesired regions rely on JMAG's region naming convention. If future versions of JMAG update the naming of geometry regions, the JMAG implementation will need to be revised.
 
