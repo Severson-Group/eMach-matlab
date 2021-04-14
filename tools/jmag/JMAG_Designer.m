@@ -39,7 +39,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         end
         
         
-        function obj = open(obj, fileName)
+        function open(obj, fileName)
             %OPEN Open JMAG Designer or a specific file.
             %   open(fileName) opens an JMAG document. 
             %   fileName is a string that specifies the complete path to the file.
@@ -78,7 +78,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         end
         
         
-        function obj = close(obj)
+        function close(obj)
             % CLOSE Closes the JMAG document
             % JMAG doesn't have the notion of document close()
             % So close() prevents edits by any future function calls,
@@ -89,7 +89,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         end
         
         
-        function obj = delete(obj)
+        function delete(obj)
             % DELETE Closes the JMAG application
             % delete()
             obj.jd.Quit();
