@@ -34,7 +34,7 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             end
             % Obtain instance of JMAG designer application
             obj.jdInstance = actxserver('designerstarter.InstanceManager');
-            obj.jd = obj.jdInstance.GetNamedInstance(string(numInstance), 2); % Creates a new instance and returns the handle
+            obj.jd = obj.jdInstance.GetNamedInstance(string(numInstance), 0); % Creates a new instance and returns the handle
             numInstance = numInstance + 1;
             if obj.visible
                 obj.jd.Show();
@@ -49,9 +49,10 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
             %   open(fileName) opens an JMAG document. 
             %   fileName is a string that specifies the complete path to the file.
             if ~exist('fileName', 'var')
-                error('Please specify a filename');
+                obj.jd.NewProject('untitled');
+                obj.saveAs('untitled');
             elseif ~exist(fileName, 'file')
-                obj.jd.NewProject('proj');
+                obj.jd.NewProject(fileName);
                 obj.saveAs(fileName);
             else
                 obj.jd.Load(fileName);
