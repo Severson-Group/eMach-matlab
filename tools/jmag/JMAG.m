@@ -7,7 +7,6 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
     
     properties (GetAccess = 'public', SetAccess = 'public')        
         jd;  % The activexserver object for JMAG Designer
-        jdInstance; % JMAG application instance
         geometryEditor; % The Geometry Editor object
         doc; % The document object in Geometry Editor
         assembly; % The assembly object in Geometry Editor
@@ -33,8 +32,8 @@ classdef JMAG < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
                 numInstance = 1;
             end
             % Obtain instance of JMAG designer application
-            obj.jdInstance = actxserver('designerstarter.InstanceManager');
-            obj.jd = obj.jdInstance.GetNamedInstance(string(numInstance), 0); % Creates a new instance and returns the handle
+            jdInstance = actxserver('designerstarter.InstanceManager');
+            obj.jd = jdInstance.GetNamedInstance(string(numInstance), 0); % Creates a new instance and returns the handle
             numInstance = numInstance + 1;
             if obj.visible
                 obj.jd.Show();
