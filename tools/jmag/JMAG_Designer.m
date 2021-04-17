@@ -44,11 +44,10 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             %   open(fileName) opens an JMAG document. 
             %   fileName is a string that specifies the complete path to the file.
             if ~exist('fileName', 'var')
-                obj.jd.NewProject('untitled');
-                obj.saveAs('untitled'); % JMAG requires it to be saved before creating geometry 
+                error('Please specify a filename');
             elseif ~exist(fileName, 'file')
                 obj.jd.NewProject(fileName);
-                obj.saveAs(fileName);
+                obj.saveAs(fileName); % JMAG requires it to be saved before creating geometry 
             else
                 obj.jd.Load(fileName);
                 obj.fileName = fileName;
