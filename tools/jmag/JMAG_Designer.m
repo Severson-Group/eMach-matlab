@@ -15,26 +15,23 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         model; % The model object in JMAG Designer
         study; % The study object in JMAG Designer
         view;  % The view object in JMAG Designer
+        fileName; % fileName is a string that specifies the complete path to the file.
+        studyType = 'Transient'; % The study type in JMAG Designer
         defaultLength = 'DimMeter'; % Default length unit is m
         defaultAngle = 'DimDegree'; % Default angle unit is degrees
         visible = true; % Visibility
-        fileName;
+
     end
     
 
     methods
-        function obj = JMAG_Designer(varargin)
-            obj = obj.createProps(nargin,varargin);            
+        function obj = JMAG_Designer(fileName, studyType, varargin)
+            obj = obj.createProps(nargin-2,varargin);            
             obj.validateProps();
-            % Keep track of number of instance called
-            persistent numInstance
-            if isempty(numInstance)
-                numInstance = 1;
-            end
             % Obtain instance of JMAG designer application
             jdInstance = actxserver('designerstarter.InstanceManager');
-            obj.jd = jdInstance.GetNamedInstance(string(numInstance), 0); % Creates a new instance and returns the handle
-            numInstance = numInstance + 1;
+            obj.jd = jdInstance.GetNamedInstance(fileName, 0); % Creates a new instance and returns the handle
+            obj.studyType = studyType;
             obj.setVisibility(obj.visible)
         end
         
@@ -47,7 +44,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
                 error('Please specify a filename');
             elseif ~exist(fileName, 'file')
                 obj.jd.NewProject(fileName);
-                obj.saveAs(fileName); % JMAG requires it to be saved before creating geometry 
+                obj.saveAs(fileName); % JMAG requires it to be saved before creating geometry
             else
                 obj.jd.Load(fileName);
                 obj.fileName = fileName;
@@ -256,19 +253,21 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             % study = createStudy(studyName, modelName)
             % studyName - Name of the study to be created
             % modelName - Model where the study will be created
+            persistent prevModelName
             if isempty(obj.study)
                 obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(modelName)
                 % Create study
-                study = obj.model.CreateStudy('Transient', studyName);
+                study = obj.model.CreateStudy(obj.studyType, studyName);
             else
                 % Delete old model
-                obj.jd.DeleteModel(modelName)
+                obj.jd.DeleteModel(prevModelName)
                 % Setup the new model
                 obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(modelName)
                 study = obj.model.GetStudy(studyName);
             end
+            prevModelName = modelName;
         end
             
         function region = prepareSection(obj, csToken)
