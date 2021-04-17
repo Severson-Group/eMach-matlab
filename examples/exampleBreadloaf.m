@@ -114,12 +114,11 @@ end
 
 %% Draw via JMAG
 path = pwd;
-fileName = strcat(path,'\test1.jproj');
+fileName = strcat(path,'\test_breadLoaf.jproj');
 
 if (DRAW_JMAG)
-    toolJd = JMAG_Designer();
+    toolJd = JMAG_Designer(fileName, 'Transient');
     toolJd.setVisibility(true);
-    toolJd.open(fileName);
     
     comp1.make(toolJd,toolJd);
     comp2.make(toolJd,toolJd);
@@ -127,5 +126,4 @@ if (DRAW_JMAG)
     
     toolJd.saveAs(fileName);
     toolJd.close();
-    delete(toolJd);
 end

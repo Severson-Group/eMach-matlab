@@ -106,12 +106,10 @@ fileName = strcat(path,'\test1.jproj');
 if (DRAW_JMAG)
     toolJd = JMAG_Designer(fileName, 'Transient');
     toolJd.setVisibility(true);
-    toolJd.open(fileName);
     
     comp1.make(toolJd,toolJd);
     comp2.make(toolJd,toolJd);
     
     toolJd.saveAs(fileName);
     toolJd.close();
-
 end
