@@ -113,5 +113,5 @@ if (DRAW_JMAG)
     
     toolJd.saveAs(fileName);
     toolJd.close();
-    delete(toolJd);
+
 end

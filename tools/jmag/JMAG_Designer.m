@@ -28,7 +28,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         function obj = JMAG_Designer(fileName, studyType, varargin)
             obj = obj.createProps(nargin-2,varargin);            
             obj.validateProps();
-            % Obtain instance of JMAG designer application
+            % Create a instance of JMAG designer application
             jdInstance = actxserver('designerstarter.InstanceManager');
             obj.jd = jdInstance.GetNamedInstance(fileName, 0); % Creates a new instance and returns the handle
             obj.studyType = studyType;
@@ -50,8 +50,9 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
                 obj.fileName = fileName;
             end
             obj.view = obj.jd.View();
+            obj.jd.GetCurrentModel.RestoreCadLink(true);
             obj.geometryEditor = obj.jd.CreateGeometryEditor(true);
-            obj.doc = obj.geometryEditor.NewDocument();
+            obj.doc = obj.geometryEditor.GetDocument();
             obj.assembly = obj.doc.GetAssembly();
         end
 
@@ -81,7 +82,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             % so it opens a new untitled document.
             %
             % close() 
-            obj.open()
+            obj.delete()
         end
         
         
@@ -235,9 +236,9 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             % Import Model into Designer
             obj.doc.SaveModel(true)
             modelName = strcat(name,'_model');
-            studyName = strcat(name,'_study');
             
             % Create a study
+            studyName = strcat(name,'_study');
             obj.study = obj.createStudy(studyName, modelName);
             
             % Set to default units
@@ -253,21 +254,23 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             % study = createStudy(studyName, modelName)
             % studyName - Name of the study to be created
             % modelName - Model where the study will be created
-            persistent prevModelName
-            if isempty(obj.study)
+            numModel = obj.jd.NumModels();
+            if numModel == 1
                 obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(modelName)
                 % Create study
                 study = obj.model.CreateStudy(obj.studyType, studyName);
             else
-                % Delete old model
-                obj.jd.DeleteModel(prevModelName)
+                % Delete old models
+                for i=0:(numModel-1)
+                    obj.jd.DeleteModel(i)
+                end
                 % Setup the new model
                 obj.model = obj.jd.GetCurrentModel();
                 obj.model.SetName(modelName)
+                obj.model.GetStudy(0).SetName(studyName);
                 study = obj.model.GetStudy(studyName);
             end
-            prevModelName = modelName;
         end
             
         function region = prepareSection(obj, csToken)
