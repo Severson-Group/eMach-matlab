@@ -24,26 +24,34 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
     
 
     methods
-        function obj = JMAG_Designer(fileName, studyType, varargin)
+        function obj = JMAG_Designer(fileName, varargin)
             %JMAG_DESIGNER constructor for JMAG designer.
             %   tooljd = JMAG_Designer(fileName) creates a new JMAG 
             %   designer application instance and opens a new document.
             %   If the JMAG file already exists it will open the file. fileName 
             %   is a string that specifies the complete path to the file.
             %
-            %   tooljd = JMAG_Designer(fileName, studyType) creates a new 
-            %   JMAG designer application instance and opens a new document. 
-            %   If the JMAG file already exists it will open the file. fileName is 
-            %   a string  that specifies the complete path to the file. studyType  
-            %   specifies the type of JMAG study, if studyType is not provided,  
-            %   'Transient' study type will be used
-            
-            obj = obj.createProps(nargin-2,varargin);            
+            %   tooljd = JMAG_Designer(fileName, 'studyType', 'Transient') 
+            %   creates a new JMAG designer application instance and opens 
+            %   a new document. If the JMAG file already exists it will open  
+            %   the file. fileName is a string  that specifies the complete path   
+            %   to the file. studyType specifies the type of JMAG study.
+            %   Some common study types are 'Transient', 'Static'.
+            %   if studyType is not provided, 'Transient' study type will be used.
+           
+            lenVarargin = length(varargin);
+            obj = obj.createProps(lenVarargin,varargin);            
             obj.validateProps();
+            
+            for k = 1:lenVarargin
+                if strcmpi(varargin{k},'studyType')
+                    obj.studyType = varargin{k+1}; 
+                end
+            end
+
             % Create a instance of JMAG designer application
             jdInstance = actxserver('designerstarter.InstanceManager');
             obj.jd = jdInstance.GetNamedInstance(fileName, 0); % Creates a new instance and returns the handle
-            obj.studyType = studyType;
             obj.setVisibility(obj.visible)
             % Open file
             obj.open(fileName)

@@ -104,7 +104,7 @@ path = pwd;
 fileName = strcat(path,'\test1.jproj');
 
 if (DRAW_JMAG)
-    toolJd = JMAG_Designer(fileName, 'Transient');
+    toolJd = JMAG_Designer(fileName, 'studyType', 'Transient');
     toolJd.setVisibility(true);
     
     comp1.make(toolJd,toolJd);
