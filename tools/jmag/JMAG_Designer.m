@@ -1,5 +1,5 @@
 classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolveBase
-    %JMAG Encapsulation for the JMAG Designer of JSOL Corporation.
+    %JMAG_DESIGNER encapsulation for the JMAG Designer of JSOL Corporation.
     %   TODO: add more description
     %   TODO: add more description
     %   TODO: add more description
@@ -19,7 +19,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
         studyType = 'Transient'; % The study type in JMAG Designer
         defaultLength = 'DimMeter'; % Default length unit is m
         defaultAngle = 'DimDegree'; % Default angle unit is degrees
-        visible = true; % Visibility
+        visible = true; % Application visibility
     end
     
 
@@ -35,9 +35,10 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             %   creates a new JMAG designer application instance and opens 
             %   a new document. If the JMAG file already exists it will open  
             %   the file. fileName is a string  that specifies the complete path   
-            %   to the file. studyType specifies the type of JMAG study.
-            %   Some common study types are 'Transient', 'Static'.
-            %   if studyType is not provided, 'Transient' study type will be used.
+            %   to the file. studyType specifies the type of JMAG study. This
+            %   can be specified using key value pair (using varargin). Some
+            %   common study types are 'Transient', 'Static'. if studyType is
+            %   not provided, 'Transient' study type will be used.
            
             lenVarargin = length(varargin);
             obj = obj.createProps(lenVarargin,varargin);            
