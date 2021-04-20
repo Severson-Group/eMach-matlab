@@ -43,12 +43,6 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             lenVarargin = length(varargin);
             obj = obj.createProps(lenVarargin,varargin);            
             obj.validateProps();
-            
-            for k = 1:lenVarargin
-                if strcmpi(varargin{k},'studyType')
-                    obj.studyType = varargin{k+1}; 
-                end
-            end
 
             % Create a instance of JMAG designer application
             jdInstance = actxserver('designerstarter.InstanceManager');
