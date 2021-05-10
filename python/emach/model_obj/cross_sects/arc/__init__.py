@@ -19,7 +19,7 @@ class CrossSectArc(CrossSectBase):
         **kwargs : any
             DESCRIPTION. Keyword arguments provided to the initialization funcntion.
             The following argument names have to be included in order for the code
-            to execute: name, dim_t, dim_r_o, location. 
+            to execute: name, dim_d_a, dim_r_o, dim_alpha, location. 
             
         Returns
         -------
