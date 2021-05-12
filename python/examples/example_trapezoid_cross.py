@@ -6,7 +6,7 @@ import emach.tools.magnet as mn
 import emach.model_obj as mo
 import numpy as np
 
-x = mo.DimMillimeter(60)
+x = mo.DimMillimeter(40)
 y = mo.DimMillimeter(80)
 z = mo.DimDegree(60)
 

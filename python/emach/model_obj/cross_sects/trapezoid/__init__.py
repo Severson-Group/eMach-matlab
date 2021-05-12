@@ -63,8 +63,8 @@ class CrossSectTrapezoid(CrossSectBase):
         left_seg = drawer.draw_line(p[0, :], p[1, :])
         right_seg = drawer.draw_line(p[2, :], p[3, :])
 
-        ic = [type(h)(0), h / 2]
-        inner_coord = self.location.transform_coords(0, np.array([ic]))
+        ic = np.array([[type(h)(0), h / 2]])
+        inner_coord = self.location.transform_coords(ic)
 
         segments = [top_seg, bottom_seg, left_seg, right_seg]
         cs_token = CrossSectToken(inner_coord[0, :], segments)
