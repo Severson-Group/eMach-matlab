@@ -32,22 +32,22 @@ class CrossSectTrapezoid(CrossSectBase):
 
     @property
     def dim_h(self):
-        return self.dim_h
+        return self._dim_h
 
     @property
     def dim_w(self):
-        return self.dim_w
+        return self._dim_w
 
     @property
     def dim_theta(self):
-        return self.dim_theta
+        return self._dim_theta
 
     def draw(self, drawer):
-        h = self.dim_h
-        w = self.dim_w
-        theta = DimRadian(self.dim_theta)
+        h = self.dim_h  # height of the trapezoid
+        w = self.dim_w  # width of the trapezoid
+        theta = DimRadian(self.dim_theta)  # angle of the trapezoid
 
-        x = [-(w / 2), -(w / 2) + (h / np.tan(theta)), (w / 2) - (h / tan(theta)), (w / 2)]
+        x = [-(w / 2), -(w / 2) + (h / np.tan(theta)), (w / 2) - (h / np.tan(theta)), (w / 2)]
 
         y = [0, h, h, 0]
 
@@ -58,29 +58,26 @@ class CrossSectTrapezoid(CrossSectBase):
         p = self.location.transform_coords(coords)
 
         # Draw segments
-        top_seg = drawer.drawLine(p[1, :], p[2, :])
-        bottom_seg = drawer.drawLine(p[0, :], p[3, :])
-        left_seg = drawer.drawLine(p[0, :], p[1, :])
-        right_seg = drawer.drawLine(p[2, :], p[3, :])
+        top_seg = drawer.draw_line(p[1, :], p[2, :])
+        bottom_seg = drawer.draw_line(p[0, :], p[3, :])
+        left_seg = drawer.draw_line(p[0, :], p[1, :])
+        right_seg = drawer.draw_line(p[2, :], p[3, :])
 
-        inner_coord = self.location.transform_coords(np.array([0, h/2]))
+        ic = [type(h)(0), h / 2]
+        inner_coord = self.location.transform_coords(0, np.array([ic]))
 
         segments = [top_seg, bottom_seg, left_seg, right_seg]
-        cs_token = CrossSectToken(inner_coord[0,:], segments)
+        cs_token = CrossSectToken(inner_coord[0, :], segments)
 
         return cs_token
 
     def _validate_attr(self):
 
-        if not isinstance(self.dim_w, DimLinear):
+        if not isinstance(self._dim_w, DimLinear):
             raise TypeError('dim_w is not of DimLinear')
 
-        if not isinstance(self.dim_h, DimLinear):
+        if not isinstance(self._dim_h, DimLinear):
             raise TypeError('dim_h is not of DimLinear')
 
-        if not isinstance(self.dim_theta, DimAngular):
+        if not isinstance(self._dim_theta, DimAngular):
             raise TypeError('dim_theta is not of DimAngular')
-
-
-
-
