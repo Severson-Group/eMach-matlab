@@ -2,6 +2,7 @@
 import numpy as np
 
 from ...dimensions.dim_linear import DimLinear
+from ...dimensions.dim_angular import DimAngular
 from ...dimensions import DimRadian
 from ..cross_sect_base import CrossSectBase, CrossSectToken
 
@@ -27,7 +28,7 @@ class CrossSectInnerNotchedRotor(CrossSectBase):
         self._create_attr(kwargs)  
         
         super()._validate_attr()
-        # self._validate_attr()
+        self._validate_attr()
     
     @property
     def dim_alpha_rm(self):
@@ -187,12 +188,47 @@ class CrossSectInnerNotchedRotor(CrossSectBase):
         
     def _validate_attr(self):
         
-        if isinstance(self._dim_r_o, DimLinear):
+        if isinstance(self._dim_alpha_rm, DimAngular):
             pass
         else:
-            raise TypeError("dim_r_o not of type DimLinear")
+            raise TypeError("dim_alpha_rm not of type DimAngular")
             
-        if isinstance(self._dim_t, DimLinear):
+        if isinstance(self._dim_alpha_rs, DimAngular):
             pass
         else:
-            raise TypeError("dim_t not of type DimLinear")     
+            raise TypeError("dim_alpha_rs not of type DimAngular")
+            
+        if isinstance(self._dim_r_ri, DimLinear):
+            pass
+        else:
+            raise TypeError("dim_r_ri not of type DimLinear")
+            
+        if isinstance(self._dim_d_ri, DimLinear):
+            pass
+        else:
+            raise TypeError("dim_d_ri not of type DimLinear")    
+        
+        if isinstance(self._dim_d_rp, DimLinear):
+            pass
+        else:
+            raise TypeError("dim_d_rp not of type DimLinear")    
+            
+        if isinstance(self._dim_d_rs, DimLinear):
+            pass
+        else:
+            raise TypeError("dim_d_rs not of type DimLinear")
+        
+        if isinstance(self._s, int):
+            pass
+        else:
+            raise TypeError("s not of type int")
+            
+        if isinstance(self._p, int):
+            pass
+        else:
+            raise TypeError("p not of type int")
+            
+            
+            
+            
+            
