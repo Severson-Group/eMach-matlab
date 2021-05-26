@@ -44,7 +44,11 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             obj = obj.createProps(lenVarargin,varargin);            
             obj.validateProps();
 
-            % Create the absolute path
+            % check for JMAG extension and create the absolute path
+            [filepath,name,ext] = fileparts(fileName);
+             if ~strcmp(ext, '.jproj')
+                error('Please specify a filename with a valid JMAG extension (.jproj)');
+             end
             fileName = which(fileName);
             
             % Create a instance of JMAG designer application
@@ -62,9 +66,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             %   doesn't exist it will open a new document. fileName is 
             %   a string that specifies the complete path to the file.
             
-            if ~exist('fileName', 'var')
-                error('Please specify a filename');
-            elseif ~exist(fileName, 'file')
+            if ~exist(fileName, 'file')
                 obj.jd.NewProject(fileName);
                 obj.saveAs(fileName); % JMAG requires it to be saved before creating geometry
             else
