@@ -67,7 +67,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             
             if ~exist(fileName, 'file')
                 if ~isfolder(filepath)
-                    fileName = strcat(pwd, '\', fileName); % If only file name provided, store in current folder
+                    fileName = strcat(pwd, '\', fileName); % If file path is not specified for new file, use current folder as the file path
                 end
                 obj.jd.NewProject(fileName);
                 obj.saveAs(fileName); % JMAG requires it to be saved before creating geometry
