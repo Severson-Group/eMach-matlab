@@ -43,13 +43,6 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             lenVarargin = length(varargin);
             obj = obj.createProps(lenVarargin,varargin);            
             obj.validateProps();
-
-            % check for JMAG extension and create the absolute path
-            [filepath,name,ext] = fileparts(fileName);
-             if ~strcmp(ext, '.jproj')
-                error('Please specify a filename with a valid JMAG extension (.jproj)');
-             end
-            fileName = which(fileName);
             
             % Create a instance of JMAG designer application
             jdInstance = actxserver('designerstarter.InstanceManager');
@@ -65,6 +58,13 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             %   open(fileName) opens an existing JMAG file. If the file 
             %   doesn't exist it will open a new document. fileName is 
             %   a string that specifies the complete path to the file.
+            
+            % check for JMAG extension and create the absolute path
+            [filepath,name,ext] = fileparts(fileName);
+             if ~strcmp(ext, '.jproj')
+                error('Please specify a filename with a valid JMAG extension (.jproj)');
+             end
+            fileName = which(fileName);
             
             if ~exist(fileName, 'file')
                 obj.jd.NewProject(fileName);
