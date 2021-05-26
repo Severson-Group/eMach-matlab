@@ -45,7 +45,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
             obj.validateProps();
 
             % Create the absolute path
-            fileName = strcat(dir(fileName).folder, '\', dir(fileName).name);
+            fileName = which(fileName);
             
             % Create a instance of JMAG designer application
             jdInstance = actxserver('designerstarter.InstanceManager');
