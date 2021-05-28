@@ -72,7 +72,7 @@ classdef JMAG_Designer < ToolBase & DrawerBase & MakerExtrudeBase & MakerRevolve
                 obj.jd.NewProject(fileName);
                 obj.saveAs(fileName); % JMAG requires it to be saved before creating geometry
             else
-                fileName = which(fileName); % Create the absolute path for JMAG
+                fileName = strcat(dir(fileName).folder, '\', dir(fileName).name); % Create the absolute path for JMAG
                 obj.jd.Load(fileName);
                 obj.fileName = fileName;
             end
