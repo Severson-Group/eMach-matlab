@@ -28,4 +28,7 @@ octave-workspace
 *.eps
 *.log
 
+*.jproj
+*.jfiles
 *.mn
+
