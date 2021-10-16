@@ -32,3 +32,4 @@ octave-workspace
 *.pyc
 __pycache__/
 .idea/workspace.xml
+.idea/
