@@ -33,3 +33,7 @@ octave-workspace
 __pycache__/
 .idea/workspace.xml
 .idea/
+
+#JMAG Files
+python/examples/one.jfiles/assembly/one.jmdl
+*.jmdl
