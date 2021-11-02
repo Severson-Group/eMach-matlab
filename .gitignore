@@ -35,5 +35,5 @@ __pycache__/
 .idea/
 
 #JMAG Files
-python/examples/one.jfiles/assembly/one.jmdl
+*.jproj
 *.jmdl
