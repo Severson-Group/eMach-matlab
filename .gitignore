@@ -32,3 +32,8 @@ octave-workspace
 *.pyc
 __pycache__/
 .idea/workspace.xml
+.idea/
+
+#JMAG Files
+*.jproj
+*.jmdl
