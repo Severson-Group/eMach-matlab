@@ -11,13 +11,11 @@ from .inner_rotor_stator import *
 from .inner_notched_rotor import *
 from .hollow_rectangle import *
 from .breadloaf import *
-from .arc import*
-
-
+from .arc import *
+from .inner_rotor_stator_coil import *
 
 __all__ = []
 __all__ += hollow_cylinder.__all__
-#
 __all__ += notched_rectangle.__all__
 __all__ += trapezoid.__all__
 __all__ += solid_rectangle.__all__
@@ -30,3 +28,4 @@ __all__ += inner_notched_rotor.__all__
 __all__ += hollow_rectangle.__all__
 __all__ += breadloaf.__all__
 __all__ += arc.__all__
+__all__ += inner_rotor_stator_coil.__all__

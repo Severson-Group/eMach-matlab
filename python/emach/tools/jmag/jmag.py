@@ -235,7 +235,6 @@ class JmagDesigner(abc.ToolBase, abc.DrawerBase, abc.MakerExtrudeBase, abc.Maker
 
         innerCoord1 = eval(self.default_length)(innerCoord1)
         innerCoord2 = eval(self.default_length)(innerCoord2)
-
         self.geometry_editor.View().SelectAtCoordinateDlg(innerCoord1, innerCoord2, 0, visItem, itemType)
         region = self.doc.GetSelection().Item(0)
         regionName = region.GetName()
@@ -304,7 +303,7 @@ class JmagDesigner(abc.ToolBase, abc.DrawerBase, abc.MakerExtrudeBase, abc.Maker
         self.set_default_length_unit(self.default_length)
         self.set_default_angle_unit(self.default_angle)
 
-        self.study.SetMaterialByName(name, material)
+        self.study.SetMaterialByName(name, material.name)
         return extrude_part
 
     def set_default_length_unit(self, user_unit):
@@ -380,5 +379,5 @@ class JmagDesigner(abc.ToolBase, abc.DrawerBase, abc.MakerExtrudeBase, abc.Maker
         self.set_default_length_unit(self.default_length)
         self.set_default_angle_unit(self.default_angle)
 
-        self.study.SetMaterialByName(name, material)
+        self.study.SetMaterialByName(name, material.name)
         return revolve_part

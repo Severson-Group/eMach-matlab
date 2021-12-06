@@ -32,7 +32,7 @@ class Component:
 
     def make(self, drawer: 'DrawerBase', maker: 'MakerBase'):
         cs = self.draw(drawer)
-        token_make = self.make_solid.run(self.name, self.material.name, cs, maker)
+        token_make = self.make_solid.run(self.name, self.material, cs, maker)
         return token_make
 
     def draw(self, drawer: 'DrawerBase'):

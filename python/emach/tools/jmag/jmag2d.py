@@ -7,7 +7,7 @@ __all__ += ["JmagDesigner2D"]
 
 class JmagDesigner2D(JmagDesigner):
 
-    def extrude(self, name, material: str, depth: float, token=None) -> any:
+    def extrude(self, name, material, depth: float, token=None) -> any:
         """ Extrudes a cross-section by extending the model
 
         Args:
@@ -22,6 +22,7 @@ class JmagDesigner2D(JmagDesigner):
         depth = eval(self.default_length)(depth)
 
         self.sketch.SetProperty('Name', name)
+        self.sketch.SetProperty('Color', material.color)
         self.sketch = None
         self.doc.SaveModel(True)
         model_name = name + '_model'
@@ -33,7 +34,10 @@ class JmagDesigner2D(JmagDesigner):
 
         self.set_default_length_unit(self.default_length)
         self.set_default_angle_unit(self.default_angle)
-        self.study.SetMaterialByName(name, material)
+        self.study.SetMaterialByName(name, material.name)
 
         extrude_part = self.study.GetMaterial(name)
         return extrude_part
+
+    def revolve(self, name, material: str, center: 'Location2D', axis: 'Location2D', angle: float) -> any:
+        pass

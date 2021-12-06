@@ -1,8 +1,5 @@
-
-
 class TokenMake:
-    
-    def __init__(self, cs_token = [], prep_sect_token = [], make_solid_token = []):
+    def __init__(self, cs_token, prep_sect_token, make_solid_token):
         self._cs_token = cs_token
         self._prep_sect_token = prep_sect_token
         self._make_solid_token = make_solid_token
