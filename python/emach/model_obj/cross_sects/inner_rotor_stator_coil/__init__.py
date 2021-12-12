@@ -12,19 +12,16 @@ class CrossSectInnerRotorStatorCoil(CrossSectBase):
 
     def __init__(self, **kwargs: any) -> None:
         """
-        Initialization function for HollowCylinder class. This function takes in
-        arguments and saves the information passed to private variable to make
-        them read-only
-        Parameters
-        ----------
-        **kwargs : any
-            DESCRIPTION. Keyword arguments provided to the initialization function.
-            The following argument names have to be included in order for the code
-            to execute: name, dim_t, dim_r_o, location.
+        Initialization function for CrossSectInnerRotorStatorCoil class. This function takes in a set of keyword
+        arguments and saves the information passed to protected variables.
 
-        Returns
-        -------
-        None
+        Args:
+            **kwargs: Keyword arguments provided to the initialization function. The following argument names have to
+            be included in order for the code to execute: name, location, dim_r_si, dim_d_sp, dim_d_st, dim_w_st,
+            dim_r_st, dim_r_sf, dim_r_sb, Q, num_of_layers, layer, slot.
+
+        Raises:
+            TypeError: If type of arguments passed is incorrect.
         """
         self._create_attr(kwargs)
 
