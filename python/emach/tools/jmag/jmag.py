@@ -26,7 +26,7 @@ class JmagDesigner(abc.ToolBase, abc.DrawerBase, abc.MakerExtrudeBase, abc.Maker
         self.study_type = None  # The study type in JMAG Designer
         self.default_length = None  # Default length unit is m
         self.default_angle = None  # Default angle unit is degrees
-        self.visible = True  # Application visibility
+        self.visible = False  # Application visibility
 
     # def __del__(self):
     #     self.jd.Quit()
