@@ -34,6 +34,7 @@ __pycache__/
 .idea/workspace.xml
 .idea/
 
-#JMAG Files
+# JMAG Files
 *.jproj
 *.jmdl
+*.jfiles
