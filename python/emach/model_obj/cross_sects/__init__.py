@@ -15,11 +15,8 @@ from .arc import*
 from .flux_barrier_rotor import*
 from .inner_reluctance_rotor import*
 
-
-
 __all__ = []
 __all__ += hollow_cylinder.__all__
-#
 __all__ += notched_rectangle.__all__
 __all__ += trapezoid.__all__
 __all__ += solid_rectangle.__all__

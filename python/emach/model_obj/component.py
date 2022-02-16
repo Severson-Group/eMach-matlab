@@ -8,7 +8,8 @@ __all__ = ['Component']
 
 
 class Component:
-    """ A logical group of cross sections that make up a component """
+    """A logical group of cross sections that make up a component"""
+
 
     def __init__(self, **kwargs):
         self._create_attr(kwargs)
@@ -31,19 +32,45 @@ class Component:
         return self._make_solid
 
     def make(self, drawer: 'DrawerBase', maker: 'MakerBase'):
+        """Draw and make a Component
+
+        Function to draw and make a component in DrawerBase and MakerBase supported tools of choice. In most cases, both
+        arguments will be the same.
+        Args:
+            drawer: Handle to tool used to draw 2D cross-section
+            maker: Handle to tool used to make 3D components
+        Returns:
+            token_make: Object of type TokenMake holding return values/handles to cross-sections/components obtained
+            from the tool upon performing the requested operations
+        """
         cs = self.draw(drawer)
         token_make = self.make_solid.run(self.name, self.material.name, cs, maker)
         return token_make
 
     def draw(self, drawer: 'DrawerBase'):
+        """Draw a cross-section in drawer tool
+
+        Args:
+            drawer: Handle to tool used to draw 2D cross-section
+        Returns:
+            cs: List of CrossSectToken objects holding information on inner coordinate and lines/arcs that make up a
+            cross-section
+        """
         cs = []
         for i in range(len(self.cross_sections)):
             cs.append(self.cross_sections[i].draw(drawer))
-
         return cs
 
     def clone(self, name: str, **kwargs):
-        if (self.name == name):
+        """Create clone of an already existing component
+
+        Args:
+            name: Name that the cloned component takes
+            kwargs: List of arguments describing how cloned component is different from the original
+        Returns:
+            cln: Object of Component class representing cloned component
+        """
+        if self.name == name:
             raise AttributeError("A new name must be specified for the cloned object")
         cln = deepcopy(self)
         cln._name = name

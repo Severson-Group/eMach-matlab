@@ -5,11 +5,12 @@ from ..dimensions.dim_linear import DimLinear
 __all__ = ['MakeExtrude']
 
 
-class MakeExtrude(MakeSolidBase):
 
+class MakeExtrude(MakeSolidBase):
+    """Class defining how cross-sections are extruded"""
     def __init__(self, **kwargs: any) -> None:
         self._create_attr(kwargs)
-
+        # validate attributes using parent class and this class's _validate_attr method
         super()._validate_attr()
         self._validate_attr()
 
@@ -23,7 +24,15 @@ class MakeExtrude(MakeSolidBase):
                              DimLinear. Instead it was of type " + \
                             str(type(self._dim_depth)))
 
+
     def run(self, name, material, cs_token, maker):
+        """Extrude cross-section to create component
+        Args:
+            name: Name given to component
+            material: Material of component
+            cs_token: List of CrossSectTokens from drawing component cross-section
+            maker: Tool used to make 3D component
+        """
         token1 = []
         for i in range(len(cs_token)):
             token1.append(maker.prepare_section(cs_token[i]))
