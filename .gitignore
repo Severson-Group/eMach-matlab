@@ -31,5 +31,13 @@ octave-workspace
 # Python files
 *.pyc
 __pycache__/
-*.jmdl
+
+
+.idea/workspace.xml
+.idea/
+
+# JMAG Files
 *.jproj
+*.jmdl
+*.jfiles
+
